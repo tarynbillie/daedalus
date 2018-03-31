@@ -146,6 +146,9 @@ cd installers
     then retry 5 nix-shell -p awscli --run "aws s3 cp --region eu-central-1 s3://iohk-private/${key} macos.p12"
     fi
     retry 5 $(nix-build -j 2)/bin/make-installer
+    if [ -n "${BUILDKITE_JOB_ID:-}" ]; then
+      buildkite-agent artifact upload "dist/Daedalus${INSTALLER_POSTFIX}-installer-${DAEDALUS_VERSION}.pkg" --job $BUILDKITE_JOB_ID
+    fi
     mkdir -p dist
     if test -n "${upload_s3}"
     then
