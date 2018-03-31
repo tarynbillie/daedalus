@@ -3,3 +3,5 @@ steps:
     command: 'scripts/build-installer-unix.sh "1.0" "none" --build-id $BUILDKITE_BUILD_NUMBER --travis-pr 0 --api etc'
     env:
       API: etc
+    agents:
+      system: x86_64-darwin
