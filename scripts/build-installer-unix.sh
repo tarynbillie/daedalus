@@ -8,6 +8,8 @@
 set -e
 set -x
 
+source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+
 usage() {
     test -z "$1" || { echo "ERROR: $*" >&2; echo >&2; }
     cat >&2 <<EOF
