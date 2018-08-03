@@ -1,34 +1,176 @@
 Changelog
 =========
 
-## vNEXT
+## vNext
+
+### Features
+
+- Improved the loading UX ([PR 723](https://github.com/input-output-hk/daedalus/pull/723))
+- Implemented a switch instead of a link for “hide used” addresses on the Receive screen ([PR 935](https://github.com/input-output-hk/daedalus/pull/935))
+- Enabled submitting forms on Enter key press ([PR 981](https://github.com/input-output-hk/daedalus/pull/981))
+
+### Fixes
+
+- Refactored about window to normal UI dialog to save resources ([PR 965](https://github.com/input-output-hk/daedalus/pull/965))
+- Fixes mocked ETC wallet data injection in Cardano Daedalus builds ([PR 955](https://github.com/input-output-hk/daedalus/pull/955))
+- Fixes huge build file sizes ([PR 886](https://github.com/input-output-hk/daedalus/pull/886))
+- Fixed text wrapping within wallet navigation tabs ([PR 911](https://github.com/input-output-hk/daedalus/pull/911))
+- Disabled dragging of static UI images elements ([PR 910](https://github.com/input-output-hk/daedalus/pull/910))
+- Fixed storybook config issues ([PR 928](https://github.com/input-output-hk/daedalus/pull/928))
+- Fixed broken translation on create wallet dialog ([PR 930](https://github.com/input-output-hk/daedalus/pull/930))
+- Fixed a bug related to rendering of transactions with duplicated ids ([PR 947](https://github.com/input-output-hk/daedalus/pull/947))
+- Fixed 633 npm audit issues by upgrading dependencies ([PR 944](https://github.com/input-output-hk/daedalus/pull/944))
+- Disabled webview tags to prevent XSS attacks ([PR 946](https://github.com/input-output-hk/daedalus/pull/946))
+- Fixed Linux Kanji characters support ([PR 971](https://github.com/input-output-hk/daedalus/pull/971))
+- Removed the Ada Redemption link from the 'app bar' menu and added it to system menu ([PR 972](https://github.com/input-output-hk/daedalus/pull/972))
+- Fixed the button outline color on special buttons. ([PR 990](https://github.com/input-output-hk/daedalus/pull/990))
+- Fixed broken Export wallet to file dialog and improved Wallet settings dialogs file structure and namings ([PR 998](https://github.com/input-output-hk/daedalus/pull/998))
+- Prevented wallet data polling during wallet deletion ([PR 996]https://github.com/input-output-hk/daedalus/pull/996)
+- Fixed bug that allowed to submit invalid send form via ENTER key ([PR 1002](https://github.com/input-output-hk/daedalus/pull/1002))
+
+### Chores
+
+- Created new Storybook stories for the Wallet screens ([942](https://github.com/input-output-hk/daedalus/pull/942))
+- Added flow checks and linting for storybook code ([PR 938](https://github.com/input-output-hk/daedalus/pull/938))
+- Refactored npm scripts to use colon style ([PR 939](https://github.com/input-output-hk/daedalus/pull/939))
+- Added PR template with PR review checlist ([PR 882](https://github.com/input-output-hk/daedalus/pull/882))
+- Added acceptance tests for displaying transactions in various contexts ([PR 870](https://github.com/input-output-hk/daedalus/pull/870))
+- Refactored various magic numbers & strings into constants ([PR 881](https://github.com/input-output-hk/daedalus/pull/881))
+- Fixed wallet restoration and import fragile acceptance tests steps definitions ([PR 885](https://github.com/input-output-hk/daedalus/pull/885))
+- Improved request body length calculation ([PR 892](https://github.com/input-output-hk/daedalus/pull/892))
+- Added "Author" and "Status" information to all Daedalus README files ([PR 901](https://github.com/input-output-hk/daedalus/pull/901))
+- Improves re-build times with caching ([PR 915](https://github.com/input-output-hk/daedalus/pull/915))
+- Log expected errors as debug messages only ([PR 916](https://github.com/input-output-hk/daedalus/pull/916))
+- Created hide show used addresses acceptance test ([PR 957](https://github.com/input-output-hk/daedalus/pull/957))
+- Improved text display by reducing letter-spacing ([PR 973](https://github.com/input-output-hk/daedalus/pull/973))
+- Added aceptance tests for wallets, transactions and addresses ordering ([PR 976](https://github.com/input-output-hk/daedalus/pull/976))
+- Added acceptance tests for node update notification with apply and postpone update scenarios ([PR 977](https://github.com/input-output-hk/daedalus/pull/977))
+- Added acceptance tests for maximum wallets limit ([PR 979](https://github.com/input-output-hk/daedalus/pull/979))
+- Added acceptance tests for the About dialog ([PR 975](https://github.com/input-output-hk/daedalus/pull/975))
+- Improved compress/download logs handling ([PR 995](https://github.com/input-output-hk/daedalus/pull/995))
+
+## 0.10.1
+=======
+
+### Fixes
+
+- Fixed issues with printing paper wallet certificate PDFs on printers with low amount of memory by replacing the SVG assets with transparent PNG images ([PR 951](https://github.com/input-output-hk/daedalus/pull/951))
+- Fixed presentation bug that caused only ten wallets to be shown in the wallets list, even though there were more than ten wallets in the application ([PR 958](https://github.com/input-output-hk/daedalus/pull/958))
+- Fixed reporting server URL used for submitting support requests for the Linux build of Daedalus ([PR 959](https://github.com/input-output-hk/daedalus/pull/959))
+- Fixed missing launcher log file ([PR 963](https://github.com/input-output-hk/daedalus/pull/963))
+- Fixed issue with multiple cardano-node processes running and windows allowing skipping of files in installer ([PR 953](https://github.com/input-output-hk/daedalus/pull/953))
+- Limit maximum number of wallets to 20 ([PR 966](https://github.com/input-output-hk/daedalus/pull/966))
+
+## 0.10.0
 =======
 
 ### Features
 
-- Start and stop Mantis Client from Daedalus main process ([PR 568](https://github.com/input-output-hk/daedalus/pull/568))
-- Add ADA and Mantis logo to loader screens ([PR 584](https://github.com/input-output-hk/daedalus/pull/584))
+- Asynchronous wallet restoration ([PR 849](https://github.com/input-output-hk/daedalus/pull/849))
+- Added wallet restore indicator in the sidebar ([PR 862](https://github.com/input-output-hk/daedalus/pull/862))
+- Added Daedalus version in application title ([PR 826](https://github.com/input-output-hk/daedalus/pull/826))
+- Added "Show more transactions" button on the summary screen ([PR 848](https://github.com/input-output-hk/daedalus/pull/848))
+- Added "Recovery - regular" and "Recovery - force vended" tabs on "Ada redemption" screen ([PR 933](https://github.com/input-output-hk/daedalus/pull/933))
+- Setting spending password to "ON" by default ([PR 856](https://github.com/input-output-hk/daedalus/pull/856))
+- Paper wallet certificate generation ([PR 779](https://github.com/input-output-hk/daedalus/pull/779))
+- Paper wallet certificate restoration ([PR 794](https://github.com/input-output-hk/daedalus/pull/794))
+- Update paper wallet certificate generation to use more random bits ([PR 871](https://github.com/input-output-hk/daedalus/pull/871))
 
 ### Fixes
 
+- Fixed color of ADA logo color on the loading screen (logo was too transparent) ([PR 850](https://github.com/input-output-hk/daedalus/pull/850))
+- Fixed styling of "click to upload" text on Ada redemption screen (text was too bold) ([PR 850](https://github.com/input-output-hk/daedalus/pull/850))
+- Fixed node syncing state bubble background color in Dark blue theme ([PR 850](https://github.com/input-output-hk/daedalus/pull/850))
+- Fixed cropped log list within the support request dialog ([PR 850](https://github.com/input-output-hk/daedalus/pull/850))
+- Fixed submit button flicker within the support request dialog ([PR 850](https://github.com/input-output-hk/daedalus/pull/850))
+- Fixed "Download logs" button bug where it would throw Javascript error in case user does not select destination directory for saving logs file ([PR 850](https://github.com/input-output-hk/daedalus/pull/850))
+- Updated moment.js dependency to the latest version which fixes ReDOS vulnerability ([PR 782](https://github.com/input-output-hk/daedalus/pull/782))
+- Updated Electron dependency to the latest version which fixes vulnerability issues ([PR 855](https://github.com/input-output-hk/daedalus/pull/855))
+- Extended About dialog size in order to display increased team members list ([PR 880](https://github.com/input-output-hk/daedalus/pull/880))
+- Created screen for Ada redemption in case there are no wallets ([PR 970](https://github.com/input-output-hk/daedalus/pull/970))
+
+### Chores
+
+- Improved build system ([PR 692](https://github.com/input-output-hk/daedalus/pull/692))
+- Added instructions for accessing FAQ, reporting a problem and downloading logs on the support page in general settings ([PR 818](https://github.com/input-output-hk/daedalus/pull/818))
+- Removed sending logs to remote server feature ([PR 818](https://github.com/input-output-hk/daedalus/pull/818))
+- Improved support dialog by default switching the "Attach logs" switch to active ([PR 829](https://github.com/input-output-hk/daedalus/pull/829))
+- Improved support dialog logs list (logs are now alphabetically ordered) ([PR 828](https://github.com/input-output-hk/daedalus/pull/828))
+- Improved manual bug report submission dialog text color in Dark blue theme ([PR 824](https://github.com/input-output-hk/daedalus/pull/824))
+- Improved transaction element addresses: addresses and hashes now act like linkes to Cardano Explorer ([PR 850](https://github.com/input-output-hk/daedalus/pull/850))
+- Improved transaction element toggling: click on the white areas should collapse view (not only click on the top part) ([PR 850](https://github.com/input-output-hk/daedalus/pull/850))
+- Improved transaction element transaction state handling: transaction with 0 confirmations is now shown in pending state ([PR 825](https://github.com/input-output-hk/daedalus/pull/825))
+- Improved wallet creation dialogs handling: clicking outside of the dialogs should not close them ([PR 832](https://github.com/input-output-hk/daedalus/pull/832))
+- Improved Dark blue theme styling of update and restoration notifications ([PR 827](https://github.com/input-output-hk/daedalus/pull/827))
+- Improved About dialog (team members are updated and alphabetically ordered) ([PR 830](https://github.com/input-output-hk/daedalus/pull/830))
+- Improved copy icons visibility on Receive screen ([PR 850](https://github.com/input-output-hk/daedalus/pull/850))
+- Improved error message on the NTP time synchronisation error screen ([PR 852](https://github.com/input-output-hk/daedalus/pull/852))
+- Improved Loading screen timeouts logic ([PR 860](https://github.com/input-output-hk/daedalus/pull/860))
+- Updated sidebar bug icon action to open Settings Support page instead of Support Request dialog ([PR 858](https://github.com/input-output-hk/daedalus/pull/858))
+- Updated the way parallel restore/imports are explaned to the user by disabling the restore/import buttons on the Add wallet dialog and presenting a user friendly message ([PR 861](https://github.com/input-output-hk/daedalus/pull/861))
+- Updated main and acceptance tests readme files with new acceptance tests setup information ([PR 831](https://github.com/input-output-hk/daedalus/pull/831))
+- Paper wallet certificate generation and wallet restoration from a paper wallet certificate acceptance tests ([PR 807](https://github.com/input-output-hk/daedalus/pull/807))
+- Use UTC time in Daedalus logs ([PR 833](https://github.com/input-output-hk/daedalus/pull/833))
+- Disabled text selection on static UI elements ([PR 868](https://github.com/input-output-hk/daedalus/pull/868))
+- Updated Daedalus and Cardano team members on the about dialog ([PR 872](https://github.com/input-output-hk/daedalus/pull/872))
+
+## 0.9.1
+=======
+
+### Features
+- New Edit section in system menu with copy & paste and related actions ([PR 817](https://github.com/input-output-hk/daedalus/pull/817))
+
+### Fixes
+
+- A presentation bug has been fixed that caused only five recent transactions to be shown on the transaction list, even though there were more than five transactions in the wallet. ([PR 778](https://github.com/input-output-hk/daedalus/pull/778))
+- An issue has been fixed that stopped copy and paste operations from working when initiated using the right-click context menu. ([PR 817](https://github.com/input-output-hk/daedalus/pull/817))
+- On Windows, the desktop icon was not showing the Daedalus image; this has now been fixed. ([837](https://github.com/input-output-hk/daedalus/pull/837))
+- An error has been fixed that in some cases prevented users creating a wallet with a name containing non-latin characters, like Japanese Kanji or Chinese. ([PR 840](https://github.com/input-output-hk/daedalus/pull/840))
+
+## 0.9.0
+=======
+
+### Features
+
+- Do not block the UI while wallet is being restored/imported ([PR 457](https://github.com/input-output-hk/daedalus/pull/457))
+- Start and stop Mantis Client from Daedalus main process ([PR 568](https://github.com/input-output-hk/daedalus/pull/568))
+- Add ADA and Mantis logo to loader screens ([PR 584](https://github.com/input-output-hk/daedalus/pull/584))
+- New Edit section in system menu with copy & paste and related actions ([PR 817](https://github.com/input-output-hk/daedalus/pull/817))
+
+### Fixes
+
+- Use correct Daedalus version in bug reports ([PR 948](https://github.com/input-output-hk/daedalus/pull/948))
 - Fixed about dialog for ETC build ([PR 586](https://github.com/input-output-hk/daedalus/pull/586))
 - Made `Light Blue` theme the default for ETC build ([PR 586](https://github.com/input-output-hk/daedalus/pull/586))
 - Fixed a bug related to gas limit when sending transactions ([PR 586](https://github.com/input-output-hk/daedalus/pull/586))
 - Remove transactions sorting ([PR 587](https://github.com/input-output-hk/daedalus/pull/587))
 - Improve ETC transaction amount validation ([PR 590](https://github.com/input-output-hk/daedalus/pull/590))
+- Fixed storybook and resolver issues ([PR 617](https://github.com/input-output-hk/daedalus/pull/617))
+- Time of your machine is different from global time. You are 0 seconds behind. ([PR 678](https://github.com/input-output-hk/daedalus/pull/678))
+- Updated copy for the sync error screen ([PR 657](https://github.com/input-output-hk/daedalus/pull/657))
+- Detect when wallet is disconnected ([PR 689](https://github.com/input-output-hk/daedalus/pull/689))
+- Improve connecting/reconnecting messages on Loading screen ([PR 696](https://github.com/input-output-hk/daedalus/pull/696))
+- Send bug reports with logs from Daedalus ([PR 691](https://github.com/input-output-hk/daedalus/pull/691))
+- Poll local time difference every 1 hour, only when connected ([PR 719](https://github.com/input-output-hk/daedalus/pull/719))
+- Fixed various styling issues and updated to react-polymorph 0.6.2 ([PR 726](https://github.com/input-output-hk/daedalus/pull/726))
+- Fixed async restore/import dialogs logic ([PR 735](https://github.com/input-output-hk/daedalus/pull/735))
+- Fixed minor UI issue on receive screen when generating wallet addresses with spending password ([PR 738](https://github.com/input-output-hk/daedalus/pull/738))
+- Fixed `Time sync error notification` not showing up in case blocks syncing has not started ([PR 752](https://github.com/input-output-hk/daedalus/pull/752))
+- Properly wait for node update request ([PR 949](https://github.com/input-output-hk/daedalus/pull/949))
 
 ### Chores
 
 - Update DLL package and cleanup translation files ([PR 566](https://github.com/input-output-hk/daedalus/pull/566))
 - Replace electron-json-storage with electron-storage ([PR 579](https://github.com/input-output-hk/daedalus/pull/579))
 - Update terms of use for ETC version ([PR 606](https://github.com/input-output-hk/daedalus/pull/606))
+- Update Electron to version 1.7.11 which resolves security issues ([PR 677](https://github.com/input-output-hk/daedalus/pull/677))
+- Document Cardano SL build ([PR 654](https://github.com/input-output-hk/daedalus/pull/654))
+- Update about dialog content ([PR 680](https://github.com/input-output-hk/daedalus/pull/680))
+- Ada redemption tests modified to run in mainnet mode ([PR 681](https://github.com/input-output-hk/daedalus/pull/681))
+- Log file moved to public folder and Electron crash reporter removed ([PR 682](https://github.com/input-output-hk/daedalus/pull/682))
 
 ## 0.8.3
 =======
-
-### Features
-
-- Do not block the UI while wallet is being restored/imported ([PR 457](https://github.com/input-output-hk/daedalus/pull/457))
 
 ### Fixes
 

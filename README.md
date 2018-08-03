@@ -1,4 +1,11 @@
-# daedalus
+<blockquote>
+<sub>Document maintainer: Nikola Glumac<br/>Document status: Active</sub>
+</blockquote>
+
+# Daedalus
+[![Build status](https://badge.buildkite.com/e173494257519752d79bb52c7859df6277c6d759b217b68384.svg?branch=master)](https://buildkite.com/input-output-hk/daedalus)
+[![Windows build status](https://ci.appveyor.com/api/projects/status/github/input-output-hk/daedalus?branch=master&svg=true)](https://ci.appveyor.com/project/input-output/daedalus)
+[![Release](https://img.shields.io/github/release/input-output-hk/daedalus.svg)](https://github.com/input-output-hk/daedalus/releases)
 
 Daedalus - cryptocurrency wallet
 
@@ -9,84 +16,94 @@ Daedalus - cryptocurrency wallet
 Platform-specific build scripts facilitate building Daedalus the way it is built
 by the IOHK CI:
 
-   - `scripts/build-installer-unix.sh     <DAEDALUS-VERSION> <CARDANO-BRANCH> [OPTIONS..]`
-      - where OS is either `linux` or `osx`
-      - facilitates installer upload to S3 via `--upload-s3`
-   - `scripts/build-installer-windows.bat <DAEDALUS-VERSION> <CARDANO-BRANCH>`
+# Linux/macOS
 
-The result can be found at:
-   - on OS X:    `${BUILD}/installers/dist/Daedalus-installer-*.pkg`
-   - on WIndows: `${BUILD}/installers/daedalus-*-installer.exe`
+This script requires [Nix](https://nixos.org/nix/), (optionally)
+configured with the [IOHK binary cache][cache].
 
-### One-click build-fresh-daedalus scripts
+    scripts/build-installer-unix.sh [OPTIONS..]
 
-These rely on the scripts from the previous section, but also go to a certain
-trouble to ensure that dependencies are installed, and even check out a fresh
-version of Daedalus from the specifid branch.
+The result can be found at `installers/csl-daedalus/daedalus-*.pkg`.
 
-These are intended to be used by developers in a "clean rebuild" scenario, to
-facilitate validation.
+[cache]: https://github.com/input-output-hk/cardano-sl/blob/3dbe220ae108fa707b55c47e689ed794edf5f4d4/docs/how-to/build-cardano-sl-and-daedalus-from-source-code.md#nix-build-mode-recommended
 
-Dependencies:
-   - on OS X:    `git`
-   - on Windows: `Node.js`, `7zip`
+# Pure Nix installer build
 
-Location:
-   - on OS X:    https://github.com/input-output-hk/daedalus/blob/master/scripts/osx-build-fresh-daedalus.sh
-   - on Windows: https://github.com/input-output-hk/daedalus/blob/master/scripts/windows-build-fresh-daedalus.bat
+This will use nix to build a Linux installer. Using the [IOHK binary
+cache][cache] will speed things up.
 
-Invocation:
-   ```shell
-   {osx,windows}-build-fresh-daedalus.{sh,bat} [BRANCH] [GITHUB-USER] [OPTIONS...]
-   ```
-   ..where `BRANCH` defaults to the current release branch, and `GITHUB-USER`
-   defaults to `input-output-hk`.
+    nix build -f ./release.nix mainnet.installer
 
-   The remaining `OPTIONS` are passed as-is to the respective build scripts.
+The result can be found at `./result/daedalus-*.bin`.
+
+# Windows
+
+This batch file requires [Node.js](https://nodejs.org/en/download/) and
+[7zip](https://www.7-zip.org/download.html).
+
+    scripts/build-installer-win64.bat
+
+The result will can be found at `.\daedalus-*.exe`.
 
 ## Stepwise build
 
 ### Install Node.js dependencies.
 
+To ensure secure and reproducible builds we are using [yarn](https://yarnpkg.com/lang/en/) to manage dependencies.
+
 ```bash
-$ npm install
+$ yarn install
 ```
 
 ## Development
 
-run with one command:
+Run with:
 
 ```bash
-$ npm run dev
+$ export CARDANO_TLS_PATH={path-to-cardano-sl}/run/tls-files/
+$ yarn run dev
 ```
 
-Or run these two commands __simultaneously__ in different console tabs.
+*Note: requires a node version >= 8 and an yarn version >= 1.7.0.*
+
+### Development - with Cardano Wallet
+
+Build and run [Cardano SL](https://github.com/input-output-hk/cardano-sl)
+
+Build with:
 
 ```bash
-$ npm run hot-server
-$ npm run start-hot
+$ brew install haskell-stack # OR curl -ssl https://get.haskellstack.org/ | sh
+$ stack setup
+$ stack install cpphs
+$ brew install xz # OR sudo apt-get install xz-utils
+$ brew install rocksdb # OR sudo apt-get install librocksdb-dev
+$ git clone git@github.com:input-output-hk/cardano-sl.git
+$ cd cardano-sl/
+$ ./scripts/build/cardano-sl.sh
 ```
 
-*Note: requires a node version >= 4 and an npm version >= 3. This project
-defaults to 6.x*
+Run with:
 
-### Development - with Cardano Wallet (daedalus-bridge)
+```bash
+$ tmux new-session -s cardano
+$ WALLET_CLIENT_AUTH_DISABLE=1 ./scripts/launch/demo-with-wallet-api.sh
+```
 
-Build and run daedalus-bridge [using instructions in the repo](https://github.com/input-output-hk/pos-haskell-prototype/tree/master/daedalus)
+Stop with:
 
-Symlink the npm package in the subfolder `pos-haskell-prototype/daedalus`:
-* `npm link` (inside the daedalus sub folder of the Cardano client)
-* `npm link daedalus-client-api` (inside this daedalus frontend app)
-
-Run with `npm run dev`
+```bash
+$ tmux kill-session -t cardano
+```
 
 ### Development - network options
 
-There are four different network options you can run Deadalus in: `mainnet`, `testnet` and `development` (default).
+There are three different network options you can run Daedalus in: `mainnet`, `testnet` and `development` (default).
 To set desired network option use `NETWORK` environment variable:
 
 ```bash
-$ NETWORK=testnet npm run dev
+$ export NETWORK=testnet
+$ yarn run dev
 ```
 
 ### Testing
@@ -94,34 +111,20 @@ $ NETWORK=testnet npm run dev
 You can run the test suite in two different modes:
 
 **One-time run:**
-For running tests once using the application in prod mode (which is fast)
-instead of dev with webpack hot-reload server (which is slow).
-
-Execute this once before running the tests (which creates the `dist/bundle.js`):
-```bash
-$ npm run build
-``` 
-
-After that, execute this to run the tests:
+For running tests once using the application in production mode:
 
 ```bash
-$ npm run test
+$ yarn run test
 ```
 
 **Watch & Rerun on file changes:**
-For development purposes run the tests continuously in watch mode which will re-run tests when source code changes.
+For development purposes run the tests continuously in watch mode which will re-run tests when source code changes:
 
-Execute:
 ```bash
-$ npm run hot-server
+$ yarn run test:watch
 ```
 
-and then this:
-```bash
-$ npm run test-watch
-```
-
-You can find more details regarding tests setup within [Running Deadalus acceptance tests](https://github.com/input-output-hk/daedalus/blob/master/features/README.md) README file.
+You can find more details regarding tests setup within [Running Daedalus acceptance tests](https://github.com/input-output-hk/daedalus/blob/master/features/README.md) README file.
 
 ### CSS Modules
 
@@ -142,7 +145,7 @@ externals: [
 ]
 ```
 
-For a common example, to install Bootstrap, `npm i --save bootstrap` and link them in the head of app.html
+For a common example, to install Bootstrap, `yarn install --save bootstrap` and link them in the head of app.html
 
 ```html
 <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css" />
@@ -158,19 +161,19 @@ externals: ['bootstrap']
 ## Packaging
 
 ```bash
-$ npm run package
+$ yarn run package
 ```
 
 To package apps for all platforms:
 
 ```bash
-$ npm run package-all
+$ yarn run package:all
 ```
 
 To package apps with options:
 
 ```bash
-$ npm run package -- --[option]
+$ yarn run package -- --[option]
 ```
 
 ### Options
