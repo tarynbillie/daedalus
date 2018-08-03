@@ -4,7 +4,12 @@ import type { ActionsMap } from '../../actions/index';
 import type { StoresMap } from '../../stores/index';
 import type { Api } from '../../api/index';
 
-export default class Store {
+export interface StoreLifecycle {
+  initialize(): void;
+  teardown(): void;
+}
+
+export default class Store implements StoreLifecycle {
 
   stores: StoresMap;
   api: Api;

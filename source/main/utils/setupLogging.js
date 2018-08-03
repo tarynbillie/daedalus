@@ -10,6 +10,7 @@ const isTest = process.env.NODE_ENV === 'test';
 
 export const setupLogging = () => {
   const logFilePath = path.join(pubLogsFolderPath, APP_NAME + '.log');
+  console.log(logFilePath);
   ensureDirectoryExists(pubLogsFolderPath);
 
   log.transports.console.level = isTest ? 'error' : false;

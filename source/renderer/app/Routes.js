@@ -3,6 +3,7 @@ import React from 'react';
 import { Route, IndexRedirect } from 'react-router';
 import { ROUTES } from './routes-config';
 import resolver from './utils/imports';
+import environment from '../../common/environment';
 
 // PAGES
 // import StakingPage from './containers/staking/StakingPage';
@@ -25,6 +26,7 @@ const WalletSendPage = resolver('containers/wallet/WalletSendPage');
 const WalletReceivePage = resolver('containers/wallet/WalletReceivePage');
 const WalletTransactionsPage = resolver('containers/wallet/WalletTransactionsPage');
 const WalletSettingsPage = resolver('containers/wallet/WalletSettingsPage');
+const WalletTokensPage = resolver('tokens/pages/WalletTokensPage');
 
 export const Routes = (
   <Route path={ROUTES.ROOT} component={Root}>
@@ -40,6 +42,7 @@ export const Routes = (
       <Route path={ROUTES.WALLETS.SEND} component={WalletSendPage} />
       <Route path={ROUTES.WALLETS.RECEIVE} component={WalletReceivePage} />
       <Route path={ROUTES.WALLETS.SETTINGS} component={WalletSettingsPage} />
+      {environment.isEtcApi() && <Route path={ROUTES.WALLETS.TOKENS} component={WalletTokensPage} />}
     </Route>
     <Route path="/settings" component={Settings}>
       <IndexRedirect to="general" />

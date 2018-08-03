@@ -5,6 +5,7 @@ const AutoDllPlugin = require('autodll-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const lodash = require('lodash');
 const yamljs = require('yamljs');
+const FlowWebpackPlugin = require('flow-webpack-plugin');
 
 let reportUrl = '';
 reportUrl = yamljs.parseFile('launcher-config.yaml').reportServer;
@@ -22,6 +23,12 @@ module.exports = {
   // https://github.com/chentsulin/webpack-target-electron-renderer#how-this-module-works
   target: 'electron-renderer',
   cache: true,
+  resolve: {
+    extensions: ['.js', '.jsx', '.json', '.node'],
+    alias: {
+      'scrypt.js$': path.resolve(__dirname, '..', '..', 'node_modules/scrypt.js/js.js')
+    }
+  },
   module: {
     rules: [
       {
@@ -77,7 +84,8 @@ module.exports = {
         use: {
           loader: 'transform-loader?brfs',
         }
-      }
+      },
+      { test: /\.node$/, use: 'node-loader' }
     ]
   },
   plugins: [
@@ -128,17 +136,6 @@ module.exports = {
         ]
       }
     }),
-    // Dont use caching for CI builds!
-    !isCi && (
-      new HardSourceWebpackPlugin({
-        configHash: (webpackConfig) => (
-          // Remove the `watch` flag to avoid different caches for static and incremental builds
-          require('node-object-hash')({ sort: false }).hash(lodash.omit(webpackConfig, 'watch'))
-        ),
-        environmentPaths: {
-          files: ['.babelrc', 'yarn.lock'],
-        },
-      })
-    )
-  ].filter(Boolean)
+    new FlowWebpackPlugin(),
+  ]
 };

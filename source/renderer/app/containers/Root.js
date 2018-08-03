@@ -25,6 +25,7 @@ export default class Root extends Component<Props> {
     if (networkStatus.isConnected && isPageThatDoesntNeedWallets) {
       return React.Children.only(children);
     }
+
     if (
       !networkStatus.isSynced ||
       !wallets.hasLoadedWallets ||

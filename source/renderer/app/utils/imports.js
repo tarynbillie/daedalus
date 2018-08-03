@@ -9,9 +9,10 @@ const resolver = (path: string) => {
   const envPath = envPathSegments.join('/');
   let file;
   try {
-    file = require(`../${envPath}.js`); // eslint-disable-line
+    file = require(`../${envPath}`); // eslint-disable-line
   } catch (e) {
-    file = require(`../${path}.js`); // eslint-disable-line
+    console.error(e);
+    file = require(`../${path}`); // eslint-disable-line
   }
   return file.default || file;
 };

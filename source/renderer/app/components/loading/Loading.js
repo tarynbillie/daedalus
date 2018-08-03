@@ -82,15 +82,11 @@ type Props = {
 
 @observer
 export default class Loading extends Component<Props, State> {
-
-  constructor() {
-    super();
-    this.state = {
-      connectingTime: 0,
-      syncingTime: 0,
-      syncPercentage: '0',
-    };
-  }
+  state = {
+    connectingTime: 0,
+    syncingTime: 0,
+    syncPercentage: '0',
+  };
 
   componentWillReceiveProps(nextProps: Props) {
     const startConnectingTimer = nextProps.isConnecting && (connectingInterval === null);
@@ -149,6 +145,8 @@ export default class Loading extends Component<Props, State> {
       handleReportIssue,
       onProblemSolutionClick,
     } = this.props;
+
+    console.log(this.props);
 
     const { connectingTime, syncingTime } = this.state;
 

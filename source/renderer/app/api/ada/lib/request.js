@@ -40,6 +40,7 @@ function typedRequest<Response>(
         // Passphrase must be ommited from rest query params
         queryParams = omit(queryParams, 'passphrase');
 
+        // $FlowFixMe
         if (size(queryParams > 1) && passphrase) {
           queryString += `&${querystring.stringify(queryParams)}`;
         }

@@ -1,18 +1,20 @@
 // @flow
-import { observable, action } from 'mobx';
+import { action, observable } from 'mobx';
+import environment from '../../../common/environment';
+import type { TokenStores } from '../tokens';
+import { setupTokenStores } from '../tokens';
+import type { AdaStoresMap } from './ada';
+import setupAdaStores from './ada';
 import AppStore from './AppStore';
+import type { EtcStoresMap } from './etc';
+import setupEtcStores from './etc';
+import NetworkStatusStore from './NetworkStatusStore';
 import ProfileStore from './ProfileStore';
-import WalletBackupStore from './WalletBackupStore';
 import SidebarStore from './SidebarStore';
-import WindowStore from './WindowStore';
 import UiDialogsStore from './UiDialogsStore';
 import UiNotificationsStore from './UiNotificationsStore';
-import NetworkStatusStore from './NetworkStatusStore';
-import setupAdaStores from './ada/index';
-import setupEtcStores from './etc/index';
-import type { AdaStoresMap } from './ada/index';
-import type { EtcStoresMap } from './etc/index';
-import environment from '../../../common/environment';
+import WalletBackupStore from './WalletBackupStore';
+import WindowStore from './WindowStore';
 
 export const storeClasses = {
   profile: ProfileStore,
@@ -37,6 +39,7 @@ export type StoresMap = {
   networkStatus: NetworkStatusStore,
   ada: AdaStoresMap,
   etc: EtcStoresMap,
+  tokens: TokenStores,
 };
 
 // Constant that does never change during lifetime
@@ -65,8 +68,13 @@ export default action((api, actions, router): StoresMap => {
   storeNames.forEach(name => { if (stores[name]) stores[name].initialize(); });
 
   // Add currency specific stores
-  if (environment.API === 'ada') stores.ada = setupAdaStores(stores, api, actions);
-  if (environment.API === 'etc') stores.etc = setupEtcStores(stores, api, actions);
+  if (environment.API === 'ada') {
+    stores.ada = setupAdaStores(stores, api, actions);
+  } else if (environment.API === 'etc') {
+    stores.etc = setupEtcStores(stores, api, actions);
+    Object.values(stores.tokens || {}).forEach(store => store.teardown());
+    stores.tokens = setupTokenStores(stores.etc.wallets);
+  }
 
   return stores;
 });

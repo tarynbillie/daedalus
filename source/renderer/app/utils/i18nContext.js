@@ -1,3 +1,4 @@
+// @flow
 import { IntlProvider } from 'react-intl';
 
 // context that can be used outside React Component

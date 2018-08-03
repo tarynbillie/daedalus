@@ -41,7 +41,7 @@ export default class NetworkStatusStore extends Store {
     this.api[environment.API].getSyncProgress
   );
   @observable localTimeDifferenceRequest: Request<GetLocalTimeDifferenceResponse> = new Request(
-    this.api.ada.getLocalTimeDifference
+    environment.isAdaApi() ? this.api.ada.getLocalTimeDifference : () => Promise.resolve(0)
   );
   @observable _localDifficultyStartedWith = null;
 

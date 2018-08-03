@@ -52,9 +52,7 @@ import type {
 
 // Load Dummy ETC Wallets into Local Storage
 if (environment.isDev() && environment.isEtcApi()) {
-  (async () => {
-    await initEtcWalletsDummyData();
-  })();
+  initEtcWalletsDummyData();
 }
 
 /**
@@ -95,7 +93,6 @@ export type GetEstimatedGasPriceRequest = {
 export type GetEstimatedGasPriceResponse = Promise<BigNumber>;
 
 export default class EtcApi {
-
   async getSyncProgress(): Promise<GetSyncProgressResponse> {
     Logger.debug('EtcApi::getSyncProgress called');
     try {
@@ -106,6 +103,7 @@ export default class EtcApi {
         networkDifficulty: response ? parseInt(response.highestBlock, 16) : 100,
       };
     } catch (error) {
+      console.error(error);
       Logger.debug('EtcApi::getSyncProgress error: ' + stringifyError(error));
       throw new GenericApiError();
     }
@@ -247,7 +245,7 @@ export default class EtcApi {
         await getEtcEstimatedGas({ ca, from, to, value, gasPrice })
       );
       const txHash: EtcTxHash = await sendEtcTransaction({
-        ca, from, to, value, password, gasPrice, gas,
+        ca, from, to, value, password, gasPrice, gas, type: 'send_ether',
       });
       Logger.debug('EtcApi::createTransaction success: ' + stringifyData(txHash));
       return _createTransaction(senderAccount, txHash);

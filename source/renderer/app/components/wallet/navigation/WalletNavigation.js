@@ -29,7 +29,8 @@ const messages = defineMessages({
   transactions: {
     id: 'wallet.navigation.transactions',
     defaultMessage: '!!!Transactions',
-    description: 'Label for the "Transactions" nav button in the wallet navigation.'
+    description:
+      'Label for the "Transactions" nav button in the wallet navigation.'
   },
   settings: {
     id: 'wallet.navigation.settings',
@@ -40,14 +41,13 @@ const messages = defineMessages({
 
 type Props = {
   isActiveNavItem: Function,
-  onNavItemClick: Function,
+  onNavItemClick: Function
 };
 
 @observer
 export default class WalletNavigation extends Component<Props> {
-
   static contextTypes = {
-    intl: intlShape.isRequired,
+    intl: intlShape.isRequired
   };
 
   render() {
@@ -55,7 +55,6 @@ export default class WalletNavigation extends Component<Props> {
     const { intl } = this.context;
     return (
       <div className={styles.component}>
-
         <div className={styles.navItem}>
           <WalletNavButton
             className="summary"
@@ -97,13 +96,21 @@ export default class WalletNavigation extends Component<Props> {
 
         <div className={styles.navItem}>
           <WalletNavButton
+            label="tokens"
+            icon={transactionsIcon}
+            isActive={isActiveNavItem('tokens')}
+            onClick={() => onNavItemClick('tokens')}
+          />
+        </div>
+
+        <div className={styles.navItem}>
+          <WalletNavButton
             label={intl.formatMessage(messages.settings)}
             icon={settingsIcon}
             isActive={isActiveNavItem('settings')}
             onClick={() => onNavItemClick('settings')}
           />
         </div>
-
       </div>
     );
   }

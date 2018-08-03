@@ -5,16 +5,30 @@ const mainWebpackConfig = require('./source/main/webpack.config');
 const rendererWebpackConfig = require('./source/renderer/webpack.config');
 const shell = require('gulp-shell');
 const electronConnect = require('electron-connect');
+const log = require('fancy-log');
 
 const mainOutputDestination = () => gulp.dest('dist/main');
 const rendererOutputDestination = () => gulp.dest('dist/renderer');
 
+const logWebpackOutput = done => (err, stats) => {
+  if (err) {
+    log.error(err);
+  }
+
+  if (stats) {
+    log(stats.toString({
+      colors: true,
+    }));
+  }
+  done(err, stats);
+};
+
 const buildMain = (config, done) => gulp.src('source/main/index.js')
-  .pipe(webpackStream(Object.assign({}, mainWebpackConfig, config), webpack, done))
+  .pipe(webpackStream(Object.assign({}, mainWebpackConfig, config), webpack, logWebpackOutput(done)))
   .pipe(mainOutputDestination());
 
 const buildRenderer = (config, done) => gulp.src('source/renderer/index.js')
-  .pipe(webpackStream(Object.assign({}, rendererWebpackConfig, config), webpack, done))
+  .pipe(webpackStream(Object.assign({}, rendererWebpackConfig, config), webpack, logWebpackOutput(done)))
   .pipe(rendererOutputDestination());
 
 // Setup electron-connect server to start the app in development mode
@@ -22,6 +36,7 @@ let electronServer;
 
 const createElectronServer = (env, args = []) => {
   electronServer = electronConnect.server.create({
+    stopOnClose: true,
     spawnOpt: {
       env: Object.assign({}, process.env, env),
       args,
@@ -73,7 +88,7 @@ gulp.task('electron:restart', (done) => {
 });
 
 gulp.task('electron:reload', (done) => {
-  electronServer.reload();
+  // electronServer.reload();
   done();
 });
 
