@@ -22,11 +22,16 @@ export type PlainTransactionParams = CommonParams & {
 
 export type ContractDeploymentParams = CommonParams & {
   type: 'deploy_contract',
-  password: string,
   data: string,
 }
 
-export type SendEtcTransactionParams = PlainTransactionParams | ContractDeploymentParams;
+export type FunctionExecutionParams = CommonParams & {
+  type: 'execute_function',
+  to: string,
+  data: string,
+}
+
+export type SendEtcTransactionParams = PlainTransactionParams | ContractDeploymentParams | FunctionExecutionParams;
 
 export const sendEtcTransaction = (
   params: SendEtcTransactionParams
@@ -35,7 +40,7 @@ export const sendEtcTransaction = (
 
   const txParams = {
     from: params.from,
-    to: params.type === 'send_ether' ? params.to : undefined,
+    to: params.to,
     value: '0x' + (params.type === 'send_ether' ? params.value : new BigNumber(0)).toString(16),
     gasPrice: '0x' + new BigNumber(params.gasPrice || 20000000000).toString(16),
     gasLimit: '0x' + (params.gasLimit || new BigNumber(4700000)).toString(16),

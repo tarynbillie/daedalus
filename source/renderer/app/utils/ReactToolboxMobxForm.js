@@ -6,12 +6,15 @@ import { isEmpty } from 'validator';
 
 import { FieldRequiredError } from '../i18n/errors';
 
+type ValidatorInput = {
+  field: Field,
+}
 const intlValidators = (intl: IntlShape) => ({
-  required: ({ field }: { field: Field }) => [
+  required: ({ field }: ValidatorInput) => [
     !isEmpty(field.value),
     intl.formatMessage(new FieldRequiredError())
   ],
-  requiredNumeric: ({ field }) => [
+  requiredNumeric: ({ field }: ValidatorInput) => [
     field.value != null,
     intl.formatMessage(new FieldRequiredError())
   ]

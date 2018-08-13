@@ -1,47 +1,46 @@
 // @flow
+import { BigNumber } from 'bignumber.js';
+import Maybe from 'data.maybe';
 import { remote } from 'electron';
-import abiCoder from 'web3-eth-abi';
 import erc20Abi from 'human-standard-token-abi';
-import { filter as sfilter, insert, pipe, prop, of, Nothing, toMaybe } from 'sanctuary';
+import { filter as rfilter, fromPairs, pipe, prop, propEq, replace } from 'ramda';
 import { interval } from 'rxjs';
-import { pluck, filter, take, concatMap } from 'rxjs/operators';
+import { concatMap, filter, pluck, take } from 'rxjs/operators';
+import abiCoder from 'web3-eth-abi';
 
 import { ethCall } from '../../api/etc/ethCall';
 import { getEtcEstimatedGas } from '../../api/etc/getEtcEstimatedGas';
-import { sendEtcTransaction } from '../../api/etc/sendEtcTransaction';
 import { getEtcTransactionByHash } from '../../api/etc/getEtcTransaction';
-
 import { getTransactionReceipt } from '../../api/etc/getEtcTransactionReceipt';
+import { sendEtcTransaction } from '../../api/etc/sendEtcTransaction';
+import { toDict, toNothing, traverse } from '../../utils';
+import { prefixWith } from '../../utils/strings';
+import { topicOf } from '../models/Abi';
 import type { ERC20Meta } from '../models/ERC20';
 import { isValidERC20 } from '../models/ERC20';
 
 const ca = remote.getGlobal('ca');
 
-const taggedLog = (tag: string) => (...vals) => console.log(tag, ...vals);
-const taggedError = (tag: string) => (...vals) => console.error(tag, ...vals);
+const TRANSFER_EVENT_NAME = 'Transfer';
+const TRANSACTION_POLL_INTERVAL = 1000;
 
-const groupBy = <T, K: string>(grouper: T => K) => (items: T[]): { [K]: T } =>
-  items.reduce((map, item) => insert(grouper(item))(item)(map), {});
-
-const traverse = fn => arr => Promise.all(arr.map(fn));
-
-const fromPairs = <T>(arr) =>
-  (arr.reduce((acc, [name, value]) => ({ ...acc, [name]: value }), {}): { [string]: T });
-
-
-const toNothing = of(Function)(Nothing);
+const padAddressTo64Bytes = pipe(
+  replace('0x', ''),
+  x => x.padStart(64, '0'),
+  prefixWith('0x')
+);
 
 export type ERC20Check = ERC20Meta & {
   isERC20: boolean
 };
 
 export class EtcERC20TokenApi {
-  functionAbis = pipe([sfilter(item => item.type === 'function'), groupBy(prop('name'))])(erc20Abi);
+  functionAbis = pipe(rfilter(item => item.type === 'function'), toDict(prop('name')))(erc20Abi);
 
   async checkIfERC20Token(contractAddress: string, caller: string): Promise<ERC20Check> {
     const getProperty = (name: string) =>
       this._getProperty(contractAddress, name)
-        .then(toMaybe)
+        .then(Maybe.of)
         .catch(toNothing)
         .then(value => [name, value]);
 
@@ -49,17 +48,16 @@ export class EtcERC20TokenApi {
       .then(pairs => (fromPairs(pairs): ERC20Meta))
       .then(meta =>
         this.getAllowance(contractAddress, caller, caller)
-          .then(toMaybe)
+          .then(Maybe.of)
           .catch(toNothing)
           .then(allowance => ({ ...meta, allowance }))
       )
       .then(meta =>
         this.getBalanceOf(contractAddress, caller)
-          .then(toMaybe)
+          .then(Maybe.of)
           .catch(toNothing)
           .then(balanceOf => ({ ...meta, balanceOf }))
       )
-
       .then(meta => ({ ...meta, isERC20: isValidERC20(meta) }));
   }
 
@@ -87,32 +85,19 @@ export class EtcERC20TokenApi {
     return this._callContract(contractAddress, 'balanceOf', [accountAddress]).then(result => result[0]);
   }
 
-  async deployContract(bytecode: string, from: string) {
-    return sendEtcTransaction({
-      type: 'deploy_contract',
-      from,
-      ca,
-      data: bytecode,
-      password: ''
-    }).then(this.getContractAddressFromTransaction);
-  }
+  sendTokens(contractAddress: string, senderAddress: string, amount: number, receiverAddress: string): Promise<boolean> {
+    const transferEventTopic = topicOf(erc20Abi.find(propEq('name', TRANSFER_EVENT_NAME)));
+    const expectedTransferEvent = [transferEventTopic, padAddressTo64Bytes(senderAddress), padAddressTo64Bytes(receiverAddress)];
 
-  getContractAddressFromTransaction = async (txHash: string) =>
-    interval(1000)
-      .pipe(
-        concatMap((val, index) => getEtcTransactionByHash({ ca, txHash })),
-        filter(tx => !!tx.blockHash),
-        concatMap((val, index) => getTransactionReceipt({ ca, txHash })),
-        pluck('contractAddress'),
-        take(1)
-      )
-      .toPromise();
+    return this._executeContractFunction(contractAddress, senderAddress, 'transfer', [receiverAddress, amount])
+      .then(({ receipt }) => receipt.logs.some(propEq('topics', expectedTransferEvent)));
+  }
 
   _buildCallData(methodName: string, params: any[]): string {
     return abiCoder.encodeFunctionCall(this.functionAbis[methodName], params);
   }
 
-  async _getGasEstimation(data: string) {
+  _getGasEstimation(data: string) {
     return getEtcEstimatedGas({ data, ca, value: 0, gasPrice: 20000000000 });
   }
 
@@ -132,4 +117,34 @@ export class EtcERC20TokenApi {
       .then(tx => ethCall({ ca, tx, block: 'latest' }))
       .then(result => abiCoder.decodeParameters(this.functionAbis[methodName].outputs, result));
   }
+
+  _executeContractFunction(address: string, from: string, methodName: string, params: any[] = []): Promise<{ transaction: {}, receipt: {} }> {
+    const callData = this._buildCallData(methodName, params);
+
+    return this._getGasEstimation(callData)
+      .then(gasEstimation =>
+        sendEtcTransaction({
+          type: 'execute_function',
+          ca,
+          block: 'latest',
+          to: address,
+          from,
+          gas: new BigNumber(gasEstimation),
+          password: '',
+          data: callData
+        }))
+      .then(this._pollForReceipt);
+  }
+
+  _pollForReceipt = (txHash: string): Promise<{ transaction: {}, receipt: {} }> => interval(TRANSACTION_POLL_INTERVAL)
+    .pipe(
+      concatMap(() => getEtcTransactionByHash({ ca, txHash })),
+      filter(tx => !!tx.blockHash),
+      concatMap(transaction => getTransactionReceipt({ ca, txHash }).then((receipt) => ({
+        transaction,
+        receipt
+      }))),
+      take(1)
+    )
+    .toPromise();
 }

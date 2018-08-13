@@ -1,8 +1,8 @@
 // @flow strict
 import { action, observable } from 'mobx';
+import { assoc, values } from 'ramda';
 import { interval, merge, Subscription } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter, pluck } from 'rxjs/operators';
-import { insert, values } from 'sanctuary';
 
 import { RxStore } from '../../stores/lib/RxStore';
 import WalletsStore from '../../stores/WalletStore';
@@ -78,6 +78,14 @@ export class TokenStore extends RxStore {
     return this.tokenBalances[token.address.toLowerCase()] || 0;
   }
 
+  stopWatching(token: ERC20Token): Promise<void> {
+    return this._tokenRepository.removeToken(this._currentWalletId, token).then(this._setTokens);
+  }
+
+  sendTokens(token: ERC20Token, amount: number, receiver: string): Promise<boolean> {
+    return this._erc20TokenApi.sendTokens(token.address, this._currentWalletId, amount, receiver);
+  }
+
   _updateTokens = (): Promise<void> =>
     this._tokenRepository.getWalletTokens(this._currentWalletId).then(this._setTokens);
 
@@ -95,7 +103,7 @@ export class TokenStore extends RxStore {
   });
 
   _setBalance = action((tokenBalance: TokenWithBalance) => {
-    this.tokenBalances = insert(tokenBalance.token.address.toLowerCase())(tokenBalance.balance)(
+    this.tokenBalances = assoc(tokenBalance.token.address.toLowerCase())(tokenBalance.balance)(
       this.tokenBalances
     );
   });

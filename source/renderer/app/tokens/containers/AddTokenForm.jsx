@@ -7,7 +7,7 @@ import Button from 'react-polymorph/lib/components/Button';
 import SimpleButtonSkin from 'react-polymorph/lib/skins/simple/raw/ButtonSkin';
 import { Observable, Observer, Subscription } from 'rxjs';
 import { debounceTime, filter, map, switchMap, tap } from 'rxjs/operators';
-import { pipe } from 'sanctuary';
+import { pipe } from 'ramda';
 
 import { forEach, nonEmpty } from '../../utils';
 import { withStore } from '../../utils/mobx';
@@ -99,6 +99,6 @@ class AddTokenFormComponent extends React.PureComponent<AddTokenFormProps, AddTo
   });
 }
 
-export const AddTokenForm = pipe([injectIntl, withStore('tokens', 'tokenStore')])(
+export const AddTokenForm = pipe(injectIntl, withStore('tokens', 'tokenStore'))(
   AddTokenFormComponent
 );

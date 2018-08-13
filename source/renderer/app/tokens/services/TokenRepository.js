@@ -2,7 +2,7 @@
 import Store from 'electron-store';
 
 import type { WalletTokensKeyBuilder } from '../../api/etc/etcLocalStorage';
-import { addToken } from '../models/ERC20';
+import { addToken, removeToken } from '../models/ERC20';
 import type { ERC20Token, TokensMap } from '../models/ERC20';
 
 export class TokenRepository {
@@ -16,6 +16,10 @@ export class TokenRepository {
 
   addToken(walletId: string, token: ERC20Token): Promise<TokensMap> {
     return this.updateWalletTokens(addToken(token), walletId);
+  }
+
+  removeToken(walletId: string, token: ERC20Token): Promise<TokensMap> {
+    return this.updateWalletTokens(removeToken(token), walletId);
   }
 
   getWalletTokens(walletId: string): Promise<TokensMap> {

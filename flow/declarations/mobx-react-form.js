@@ -1,14 +1,24 @@
 declare module 'mobx-react-form' {
-  declare export type FieldDeclaration = {
-    +name: string,
-    +type?: string
-  };
 
-  declare export type Field = FieldDeclaration & {
+  declare export type FieldDeclarationWithoutName = {
+    +type?: string;
+  }
+
+  declare export type FieldDeclarationWithName = FieldDeclarationWithoutName & {
+    +name: string;
+  }
+  declare export type FieldDeclaration = FieldDeclarationWithoutName | FieldDeclarationWithName;
+
+  declare type FieldError = string;
+
+  declare export type Field = FieldDeclarationWithName & {
     +value: string,
-    +bind: () => {},
+    +isValid: boolean,
+    +error: FieldError,
     +observe: (cb: ({ form: MobxReactForm, field: Field, change: Change }) => void) => void,
     +reset: () => void,
+    bind (): {},
+    set (val: string): void,
   };
 
   declare export type Change = {
@@ -26,10 +36,14 @@ declare module 'mobx-react-form' {
     +isValid: boolean;
 
     constructor(
-      fields: { fields: FieldDeclaration[] },
-      hooksAndPlugins?: { plugins?: { [string]: Plugin }, hooks?: Hooks }
+      fields: { fields: (FieldDeclarationWithName[] | {[string]: FieldDeclarationWithoutName }) },
+      hooksAndPlugins?: { plugins?: { [string]: Plugin }, hooks?: Hooks<> }
     ): void;
 
     $(name: string): Field;
+    submit(hooks: Hooks<>): void;
+    values(): {[string]: string};
+
+    onSubmit(): void;
   }
 }
