@@ -2,10 +2,9 @@
 import { BigNumber } from 'bignumber.js';
 import Maybe from 'data.maybe';
 import { remote } from 'electron';
-import erc20Abi from 'human-standard-token-abi';
-import { filter as rfilter, fromPairs, pipe, prop, propEq, replace } from 'ramda';
+import { merge, pipe, prop, propEq, reduce, replace, find, map } from 'ramda';
 import { interval } from 'rxjs';
-import { concatMap, filter, pluck, take } from 'rxjs/operators';
+import { concatMap, filter, take } from 'rxjs/operators';
 import abiCoder from 'web3-eth-abi';
 
 import { ethCall } from '../../api/etc/ethCall';
@@ -13,11 +12,16 @@ import { getEtcEstimatedGas } from '../../api/etc/getEtcEstimatedGas';
 import { getEtcTransactionByHash } from '../../api/etc/getEtcTransaction';
 import { getTransactionReceipt } from '../../api/etc/getEtcTransactionReceipt';
 import { sendEtcTransaction } from '../../api/etc/sendEtcTransaction';
-import { toDict, toNothing, traverse } from '../../utils';
+import type { EtcTransaction } from '../../api/etc/types';
+import type { Dict } from '../../utils';
+import { findMaybe, toDict, toNothing, traverse } from '../../utils';
 import { prefixWith } from '../../utils/strings';
-import { topicOf } from '../models/Abi';
+import { erc20Abi } from '../data/ERC20Abi';
+import type { ContractFunctionAbi } from '../models/Abi';
+import { onlyEvents, onlyFunctions, topicOf } from '../models/Abi';
 import type { ERC20Meta } from '../models/ERC20';
 import { isValidERC20 } from '../models/ERC20';
+import type { Receipt } from '../models/Receipt';
 
 const ca = remote.getGlobal('ca');
 
@@ -35,30 +39,33 @@ export type ERC20Check = ERC20Meta & {
 };
 
 export class EtcERC20TokenApi {
-  functionAbis = pipe(rfilter(item => item.type === 'function'), toDict(prop('name')))(erc20Abi);
+  functionAbis: Dict<ContractFunctionAbi> = toDict(prop('name'), onlyFunctions(erc20Abi));
 
   async checkIfERC20Token(contractAddress: string, caller: string): Promise<ERC20Check> {
-    const getProperty = (name: string) =>
-      this._getProperty(contractAddress, name)
-        .then(Maybe.of)
-        .catch(toNothing)
-        .then(value => [name, value]);
+    const getProperty = <K: string>(name: K): Promise<$Shape<ERC20Meta>> => {
+      // $FlowIssue, again...
+      let valuePromise: Promise<$PropertyType<ERC20Meta, K>>;
+      if (name === 'allowance') {
+        valuePromise = this.getAllowance(contractAddress, caller, caller);
+      } else if (name === 'balanceOf') {
+        valuePromise = this.getBalanceOf(contractAddress, caller);
+      } else {
+        valuePromise = this._getProperty(contractAddress, name);
+      }
 
-    return traverse(getProperty)(['name', 'symbol', 'decimals', 'totalSupply'])
-      .then(pairs => (fromPairs(pairs): ERC20Meta))
-      .then(meta =>
-        this.getAllowance(contractAddress, caller, caller)
-          .then(Maybe.of)
-          .catch(toNothing)
-          .then(allowance => ({ ...meta, allowance }))
-      )
-      .then(meta =>
-        this.getBalanceOf(contractAddress, caller)
-          .then(Maybe.of)
-          .catch(toNothing)
-          .then(balanceOf => ({ ...meta, balanceOf }))
-      )
-      .then(meta => ({ ...meta, isERC20: isValidERC20(meta) }));
+      return valuePromise.then(Maybe.of, toNothing).then(value => ({ [name]: value }));
+    };
+
+    return traverse(getProperty)([
+      'name',
+      'symbol',
+      'decimals',
+      'totalSupply',
+      'allowance',
+      'balanceOf'
+    ])
+      .then(reduce(merge))
+      .then((meta: ERC20Meta) => ({ ...meta, isERC20: isValidERC20(meta) }));
   }
 
   getName(contractAddress: string): Promise<string> {
@@ -82,15 +89,32 @@ export class EtcERC20TokenApi {
   }
 
   getBalanceOf(contractAddress: string, accountAddress: string): Promise<number> {
-    return this._callContract(contractAddress, 'balanceOf', [accountAddress]).then(result => result[0]);
+    return this._callContract(contractAddress, 'balanceOf', [accountAddress]).then(
+      result => result[0]
+    );
   }
 
-  sendTokens(contractAddress: string, senderAddress: string, amount: number, receiverAddress: string): Promise<boolean> {
-    const transferEventTopic = topicOf(erc20Abi.find(propEq('name', TRANSFER_EVENT_NAME)));
-    const expectedTransferEvent = [transferEventTopic, padAddressTo64Bytes(senderAddress), padAddressTo64Bytes(receiverAddress)];
+  sendTokens(
+    contractAddress: string,
+    senderAddress: string,
+    amount: number,
+    receiverAddress: string
+  ): Promise<boolean> {
+    const transferEventTopic = pipe(
+      onlyEvents,
+      findMaybe(propEq('name', TRANSFER_EVENT_NAME)),
+      x => x.map(topicOf).get()
+      )(erc20Abi);
+    const expectedTransferEvent = [
+      transferEventTopic,
+      padAddressTo64Bytes(senderAddress),
+      padAddressTo64Bytes(receiverAddress)
+    ];
 
-    return this._executeContractFunction(contractAddress, senderAddress, 'transfer', [receiverAddress, amount])
-      .then(({ receipt }) => receipt.logs.some(propEq('topics', expectedTransferEvent)));
+    return this._executeContractFunction(contractAddress, senderAddress, 'transfer', [
+      receiverAddress,
+      amount
+    ]).then(({ receipt }) => receipt.logs.some(propEq('topics', expectedTransferEvent)));
   }
 
   _buildCallData(methodName: string, params: any[]): string {
@@ -118,7 +142,12 @@ export class EtcERC20TokenApi {
       .then(result => abiCoder.decodeParameters(this.functionAbis[methodName].outputs, result));
   }
 
-  _executeContractFunction(address: string, from: string, methodName: string, params: any[] = []): Promise<{ transaction: {}, receipt: {} }> {
+  _executeContractFunction(
+    address: string,
+    from: string,
+    methodName: string,
+    params: any[] = []
+  ): Promise<{ transaction: EtcTransaction, receipt: Receipt }> {
     const callData = this._buildCallData(methodName, params);
 
     return this._getGasEstimation(callData)
@@ -132,19 +161,23 @@ export class EtcERC20TokenApi {
           gas: new BigNumber(gasEstimation),
           password: '',
           data: callData
-        }))
+        })
+      )
       .then(this._pollForReceipt);
   }
 
-  _pollForReceipt = (txHash: string): Promise<{ transaction: {}, receipt: {} }> => interval(TRANSACTION_POLL_INTERVAL)
-    .pipe(
-      concatMap(() => getEtcTransactionByHash({ ca, txHash })),
-      filter(tx => !!tx.blockHash),
-      concatMap(transaction => getTransactionReceipt({ ca, txHash }).then((receipt) => ({
-        transaction,
-        receipt
-      }))),
-      take(1)
-    )
-    .toPromise();
+  _pollForReceipt = (txHash: string): Promise<{ transaction: EtcTransaction, receipt: Receipt }> =>
+    interval(TRANSACTION_POLL_INTERVAL)
+      .pipe(
+        concatMap(() => getEtcTransactionByHash({ ca, txHash })),
+        filter(tx => !!tx.blockHash),
+        concatMap(transaction =>
+          getTransactionReceipt({ ca, txHash }).then(receipt => ({
+            transaction,
+            receipt
+          }))
+        ),
+        take(1)
+      )
+      .toPromise();
 }

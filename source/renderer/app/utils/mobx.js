@@ -13,5 +13,10 @@ export const withStore = <M: string, S: string>(module: M, store: S) => <T>(
     [store]: stores[module][store]
   }))(Component);
 
-export const asObservable = <T>(getter: () => T): Observable<T> =>
-  Observable.create(observer => computed(getter).observe(newVal => observer.next(newVal)));
+// mobx typings so good...
+type Change<T> = {
+  newValue?: T;
+}
+
+export const asObservable = <T>(getter: () => T): Observable<Change<T>> =>
+  Observable.create(observer => computed(getter).observe((newVal: Change<T>) => observer.next(newVal)));

@@ -1,11 +1,10 @@
-// @flow strict
+// @flow
 import { observer } from 'mobx-react';
 import React from 'react';
 import Input from 'react-polymorph/lib/components/Input';
 import Button from 'react-polymorph/lib/components/Button';
 import SimpleInputSkin from 'react-polymorph/lib/skins/simple/raw/InputSkin';
 import SimpleButtonSkin from 'react-polymorph/lib/skins/simple/raw/ButtonSkin';
-import NumericInput from 'react-polymorph/lib/components/NumericInput';
 
 import { SendTokensForm } from '../forms/SendTokensForm';
 import type { ERC20Token } from '../models/ERC20';

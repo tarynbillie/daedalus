@@ -1,8 +1,8 @@
 // @flow strict
 import type { Field, Hooks } from 'mobx-react-form';
+import { prop } from 'ramda';
 import type { IntlShape } from 'react-intl';
 
-import { prop } from '../../utils';
 import { intlValidators, ReactToolboxMobxForm } from '../../utils/ReactToolboxMobxForm';
 
 export class TokenForm extends ReactToolboxMobxForm {
@@ -22,7 +22,7 @@ export class TokenForm extends ReactToolboxMobxForm {
     return this.$('decimals');
   }
 
-  constructor(intl: IntlShape, hooks: Hooks<TokenForm>) {
+  constructor(intl: IntlShape, hooks?: Hooks<TokenForm>) {
     const { required, requiredNumeric } = intlValidators(intl);
     const declarations = [
       {

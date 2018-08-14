@@ -1,5 +1,6 @@
 // @flow
 import { observer } from 'mobx-react';
+import { Field } from 'mobx-react-form';
 import React from 'react';
 import type { IntlShape } from 'react-intl';
 import { injectIntl } from 'react-intl';
@@ -9,7 +10,7 @@ import { Observable, Observer, Subscription } from 'rxjs';
 import { debounceTime, filter, map, switchMap, tap } from 'rxjs/operators';
 import { pipe } from 'ramda';
 
-import { forEach, nonEmpty } from '../../utils';
+import { nonEmpty } from '../../utils';
 import { withStore } from '../../utils/mobx';
 import { TokenForm } from '../components/TokenForm';
 import { TokenForm as TokenFormModel } from '../forms/TokenForm';
@@ -21,9 +22,9 @@ interface AddTokenFormProps {
   tokenStore: TokenStore;
 }
 
-interface AddTokenFormState {
+type AddTokenFormState = {
   checking: boolean;
-  check: ERC20Check | null;
+  check: null | ERC20Check;
 }
 
 const CheckResult = (props: { check: ERC20Check | null }) =>
@@ -35,22 +36,25 @@ const CheckResult = (props: { check: ERC20Check | null }) =>
     </span>
   );
 
-@observer
 class AddTokenFormComponent extends React.PureComponent<AddTokenFormProps, AddTokenFormState> {
   tokenForm = new TokenFormModel(this.props.intl, {
-    onSuccess: () => this._addToken()
+    onSuccess: () => {
+      this._addToken();
+    }
   });
   subscription: Subscription;
 
   state: AddTokenFormState = {
     checking: false,
-    check: null
+    check: null,
   };
 
   componentDidMount() {
-    this.subscription = Observable.create((obs: Observer) =>
-      this.tokenForm.addressField.observe(({ field }) => obs.next(field))
-    )
+    this.subscription = Observable.create((obs: Observer<Field>) => {
+      this.tokenForm.addressField.observe(({ field }) => {
+        obs.next(field);
+      });
+    })
       .pipe(
         debounceTime(200),
         tap(() => this.setState({ check: null })),
@@ -60,9 +64,9 @@ class AddTokenFormComponent extends React.PureComponent<AddTokenFormProps, AddTo
         switchMap(this._checkAddress)
       )
       .subscribe(check => {
-        forEach(name => this.tokenForm.nameField.set(name))(check.name);
-        forEach(symbol => this.tokenForm.symbolField.set(symbol))(check.symbol);
-        forEach(decimals => this.tokenForm.decimalsField.set(decimals))(check.decimals);
+        check.name.map(name => this.tokenForm.nameField.set(name));
+        check.symbol.map(symbol => this.tokenForm.symbolField.set(symbol));
+        check.decimals.map(decimals => this.tokenForm.decimalsField.set(decimals.toString()));
         this.tokenForm.validate();
         this.setState({ checking: false, check });
       }, console.error);
@@ -77,7 +81,12 @@ class AddTokenFormComponent extends React.PureComponent<AddTokenFormProps, AddTo
       >
         <div>
           <CheckResult check={this.state.check} />
-          <Button skin={<SimpleButtonSkin />} label="Add token" disabled={!this._canAddToken()} onClick={this.tokenForm.onSubmit} />
+          <Button
+            skin={<SimpleButtonSkin />}
+            label="Add token"
+            disabled={!this._canAddToken()}
+            onClick={this.tokenForm.onSubmit}
+          />
         </div>
       </TokenForm>
     );
@@ -91,14 +100,17 @@ class AddTokenFormComponent extends React.PureComponent<AddTokenFormProps, AddTo
 
   _canAddToken = () => !!this.state.check && this.state.check.isERC20 && this.tokenForm.isValid;
 
-  _addToken = () => this.props.tokenStore.addToken({
-    address: this.tokenForm.addressField.value,
-    name: this.tokenForm.nameField.value,
-    symbol: this.tokenForm.symbolField.value,
-    decimals: this.tokenForm.decimalsField.value,
-  });
+  _addToken = () =>
+    this.props.tokenStore.addToken({
+      address: this.tokenForm.addressField.value,
+      name: this.tokenForm.nameField.value,
+      symbol: this.tokenForm.symbolField.value,
+      decimals: parseInt(this.tokenForm.decimalsField.value, 10)
+    });
 }
 
-export const AddTokenForm = pipe(injectIntl, withStore('tokens', 'tokenStore'))(
-  AddTokenFormComponent
-);
+export const AddTokenForm = pipe(
+  injectIntl,
+  observer,
+  withStore('tokens', 'tokenStore')
+)(AddTokenFormComponent);

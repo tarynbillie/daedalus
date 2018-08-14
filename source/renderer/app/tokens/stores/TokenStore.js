@@ -1,8 +1,9 @@
 // @flow strict
 import { action, observable } from 'mobx';
-import { assoc, values } from 'ramda';
+import { assoc, complement, isNil, values } from 'ramda';
 import { interval, merge, Subscription } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter, pluck } from 'rxjs/operators';
+import Wallet from '../../domains/Wallet';
 
 import { RxStore } from '../../stores/lib/RxStore';
 import WalletsStore from '../../stores/WalletStore';
@@ -42,7 +43,7 @@ export class TokenStore extends RxStore {
     const updateTokensSubscription = asObservable(() => this._walletStore.active)
       .pipe(
         pluck('newValue'),
-        filter(notNull),
+        filter(complement(isNil)),
         pluck('id'),
         distinctUntilChanged(),
       )

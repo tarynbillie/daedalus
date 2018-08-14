@@ -1,4 +1,4 @@
-// @flow strict
+// @flow
 import { observer } from 'mobx-react';
 import { memoizeWith, prop, pipe, always } from 'ramda';
 import React from 'react';
@@ -18,7 +18,7 @@ import { TokenStore } from '../stores/TokenStore';
 type TokensListState = {
   sendingToken: ERC20Token | null,
   sendingForm: SendTokensForm | null,
-  resultMessage: string | null,
+  resultMessage: string | null
 };
 
 export const TokensList = pipe(
@@ -33,7 +33,7 @@ export const TokensList = pipe(
     state = {
       sendingToken: null,
       sendingForm: null,
-      resultMessage: null,
+      resultMessage: null
     };
 
     render() {
@@ -57,13 +57,18 @@ export const TokensList = pipe(
               />
             </div>
           ))}
-          {(this.state.sendingToken && this.state.sendingForm) && (
-            <div>
-              <Dialog closeOnOverlayClick onClose={this._closeSendForm} closeButton={<DialogCloseButton onClose={this._closeSendForm} />}>
-                <SendTokens form={this.state.sendingForm} token={this.state.sendingToken} />
-              </Dialog>
-            </div>
-          )}
+          {this.state.sendingToken &&
+            this.state.sendingForm && (
+              <div>
+                <Dialog
+                  closeOnOverlayClick
+                  onClose={this._closeSendForm}
+                  closeButton={<DialogCloseButton onClose={this._closeSendForm} />}
+                >
+                  <SendTokens form={this.state.sendingForm} token={this.state.sendingToken} />
+                </Dialog>
+              </div>
+            )}
           {this.state.resultMessage && <div>{this.state.resultMessage}</div>}
         </div>
       );
@@ -74,20 +79,27 @@ export const TokensList = pipe(
     );
 
     _openSendForm = memoizeWith(prop('address'), (token: ERC20Token) => () =>
-      this.setState({ sendingToken: token, sendingForm: new SendTokensForm(this.props.intl, {
-        onSuccess: (form) => {
-          this.props.tokenStore.sendTokens(token, form.amountField.value, form.receiverField.value)
-            .catch(always(false))
-            .then(this._showResultMessage)
-            .then(this._closeSendForm)
-        }
-        }) })
+      this.setState({
+        sendingToken: token,
+        sendingForm: new SendTokensForm(this.props.intl, {
+          onSuccess: form => {
+            this.props.tokenStore
+              .sendTokens(token, parseInt(form.amountField.value, 10), form.receiverField.value)
+              .catch(always(false))
+              .then(this._showResultMessage)
+              .then(this._closeSendForm);
+          }
+        })
+      })
     );
 
     _closeSendForm = () => this.setState({ sendingToken: null, sendingForm: null });
 
-    _showResultMessage = (result: boolean) => this.setState({
-      resultMessage: result ? 'Tokens were sent successfully' : 'An error occurred when sending tokens'
-    })
+    _showResultMessage = (result: boolean) =>
+      this.setState({
+        resultMessage: result
+          ? 'Tokens were sent successfully'
+          : 'An error occurred when sending tokens'
+      });
   }
 );

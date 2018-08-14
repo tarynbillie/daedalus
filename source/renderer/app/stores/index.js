@@ -1,5 +1,6 @@
 // @flow
 import { action, observable } from 'mobx';
+import { values } from 'ramda';
 import environment from '../../../common/environment';
 import type { TokenStores } from '../tokens';
 import { setupTokenStores } from '../tokens';
@@ -8,6 +9,7 @@ import setupAdaStores from './ada';
 import AppStore from './AppStore';
 import type { EtcStoresMap } from './etc';
 import setupEtcStores from './etc';
+import type { StoreLifecycle } from './lib/Store';
 import NetworkStatusStore from './NetworkStatusStore';
 import ProfileStore from './ProfileStore';
 import SidebarStore from './SidebarStore';
@@ -55,6 +57,7 @@ const stores = observable({
   networkStatus: null,
   ada: null,
   etc: null,
+  tokens: null
 });
 
 // Set up and return the stores for this app -> also used to reset all stores to defaults
@@ -72,7 +75,7 @@ export default action((api, actions, router): StoresMap => {
     stores.ada = setupAdaStores(stores, api, actions);
   } else if (environment.API === 'etc') {
     stores.etc = setupEtcStores(stores, api, actions);
-    Object.values(stores.tokens || {}).forEach(store => store.teardown());
+    values(stores.tokens).forEach(store => store.teardown());
     stores.tokens = setupTokenStores(stores.etc.wallets);
   }
 

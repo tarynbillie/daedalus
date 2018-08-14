@@ -1,25 +1,28 @@
 declare module 'mobx-react-form' {
-
-  declare export type FieldDeclarationWithoutName = {
+  declare export interface FieldDeclarationWithoutName {
     +type?: string;
   }
 
-  declare export type FieldDeclarationWithName = FieldDeclarationWithoutName & {
+  declare export interface FieldDeclarationWithName extends FieldDeclarationWithoutName {
     +name: string;
   }
+
   declare export type FieldDeclaration = FieldDeclarationWithoutName | FieldDeclarationWithName;
 
   declare type FieldError = string;
 
-  declare export type Field = FieldDeclarationWithName & {
-    +value: string,
-    +isValid: boolean,
-    +error: FieldError,
-    +observe: (cb: ({ form: MobxReactForm, field: Field, change: Change }) => void) => void,
-    +reset: () => void,
-    bind (): {},
-    set (val: string): void,
-  };
+  declare export class Field implements FieldDeclarationWithName {
+    +name: string;
+    +type: string;
+    +value: string;
+    +isValid: boolean;
+    +error: FieldError;
+    observe(cb: ({ form: MobxReactForm, field: Field, change: Change }) => void): void;
+    reset(): void;
+    bind(): {};
+    set(val: string): void;
+    onChange(val: string): void;
+  }
 
   declare export type Change = {
     +path: string
@@ -36,13 +39,14 @@ declare module 'mobx-react-form' {
     +isValid: boolean;
 
     constructor(
-      fields: { fields: (FieldDeclarationWithName[] | {[string]: FieldDeclarationWithoutName }) },
-      hooksAndPlugins?: { plugins?: { [string]: Plugin }, hooks?: Hooks<> }
+      fields: { fields: FieldDeclarationWithName[] | { [string]: FieldDeclarationWithoutName } },
+      hooksAndPlugins?: { plugins?: { [string]: Plugin }, hooks?: Hooks<*> }
     ): void;
 
     $(name: string): Field;
     submit(hooks: Hooks<>): void;
-    values(): {[string]: string};
+    values(): { [string]: string };
+    validate(): void;
 
     onSubmit(): void;
   }

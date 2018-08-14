@@ -1,4 +1,4 @@
-// @flow strict
+// @flow
 import React from 'react';
 import type { Node } from 'react';
 import Input from 'react-polymorph/lib/components/Input';

@@ -49,11 +49,12 @@ dist
 release
 
 # Editors
-.idea
+.idea/
 *~
 \#*
 .\#*
 .~*
+.vscode/
 
 # Generated translation files
 translations/messages

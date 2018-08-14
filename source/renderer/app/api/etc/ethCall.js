@@ -1,17 +1,15 @@
 // @flow
-import { BigNumber } from 'bignumber.js';
-
 import { request } from './lib/request';
 import { ETC_API_HOST, ETC_API_PORT } from './index';
+import type { EtcTransactionParams } from './types';
 
 export interface EthCallParams {
   ca: string;
-  tx: {},
+  tx: EtcTransactionParams,
   block: string,
 }
 
-console.log('remove any');
-export const ethCall = (params: any): Promise<any> =>
+export const ethCall = (params: EthCallParams): Promise<string[]> =>
   request({
     hostname: ETC_API_HOST,
     method: 'POST',

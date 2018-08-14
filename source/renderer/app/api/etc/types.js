@@ -39,6 +39,16 @@ export type EtcTransaction = {
   isOutgoing: boolean,
 };
 
+export type EtcTransactionParams = {
+  from?: string,
+  to?: string,
+  value?: BigNumber,
+  gasPrice?: BigNumber,
+  gasLimit?: BigNumber,
+  gas: BigNumber,
+  data?: string,
+}
+
 export type EtcTransactions = {
   transactions: Array<EtcTransaction>,
 };

@@ -146,8 +146,6 @@ export default class Loading extends Component<Props, State> {
       onProblemSolutionClick,
     } = this.props;
 
-    console.log(this.props);
-
     const { connectingTime, syncingTime } = this.state;
 
     const componentStyles = classNames([
