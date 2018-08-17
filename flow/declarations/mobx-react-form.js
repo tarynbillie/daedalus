@@ -14,12 +14,12 @@ declare module 'mobx-react-form' {
   declare export class Field implements FieldDeclarationWithName {
     +name: string;
     +type: string;
-    +value: string;
+    value: string;
     +isValid: boolean;
     +error: FieldError;
     observe(cb: ({ form: MobxReactForm, field: Field, change: Change }) => void): void;
     reset(): void;
-    bind(): {};
+    bind(): {value: string};
     set(val: string): void;
     onChange(val: string): void;
   }
@@ -47,6 +47,9 @@ declare module 'mobx-react-form' {
     submit(hooks: Hooks<>): void;
     values(): { [string]: string };
     validate(): void;
+    showErrors(shouldShow: boolean): void;
+    each(cb: Field => void): void;
+    reset(): void;
 
     onSubmit(): void;
   }

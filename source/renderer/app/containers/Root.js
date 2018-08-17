@@ -26,11 +26,7 @@ export default class Root extends Component<Props> {
       return React.Children.only(children);
     }
 
-    if (
-      !networkStatus.isSynced ||
-      !wallets.hasLoadedWallets ||
-      !networkStatus.isSystemTimeCorrect
-    ) {
+    if (!networkStatus.isSynced || !wallets.hasLoadedWallets) {
       return <LoadingPage />;
     } else if (!wallets.hasAnyWallets) {
       return <WalletAddPage />;

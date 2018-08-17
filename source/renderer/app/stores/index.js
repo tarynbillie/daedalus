@@ -1,7 +1,17 @@
 // @flow
+import { remote } from 'electron';
+
 import { action, observable } from 'mobx';
 import { values } from 'ramda';
 import environment from '../../../common/environment';
+import { Logger } from '../../../common/logging';
+import {
+  peerCountConnectionChecker,
+  validResponseConnectionChecker,
+} from '../api/ConnectionStatus';
+import { netPeerCount } from '../api/etc/netPeerCount';
+import { networkStatusFactory } from '../api/NetworkStatus';
+import { getEtcSyncProgress } from '../api/SyncProgress';
 import type { TokenStores } from '../tokens';
 import { setupTokenStores } from '../tokens';
 import type { AdaStoresMap } from './ada';
@@ -9,7 +19,6 @@ import setupAdaStores from './ada';
 import AppStore from './AppStore';
 import type { EtcStoresMap } from './etc';
 import setupEtcStores from './etc';
-import type { StoreLifecycle } from './lib/Store';
 import NetworkStatusStore from './NetworkStatusStore';
 import ProfileStore from './ProfileStore';
 import SidebarStore from './SidebarStore';
@@ -26,7 +35,6 @@ export const storeClasses = {
   window: WindowStore,
   uiDialogs: UiDialogsStore,
   uiNotifications: UiNotificationsStore,
-  networkStatus: NetworkStatusStore,
 };
 
 export type StoresMap = {
@@ -57,27 +65,49 @@ const stores = observable({
   networkStatus: null,
   ada: null,
   etc: null,
-  tokens: null
+  tokens: null,
 });
+
+const CHECK_INTERVAL = 1000;
+const ca = remote.getGlobal('ca');
+const getConnectionStatus = () =>
+  environment.isDev()
+    ? validResponseConnectionChecker(CHECK_INTERVAL, () => getEtcSyncProgress(ca), Logger)
+    : peerCountConnectionChecker(CHECK_INTERVAL, () => netPeerCount({ ca }), Logger);
+
+const getNetworkStatus = () =>
+  networkStatusFactory(getConnectionStatus(), () => getEtcSyncProgress(ca));
 
 // Set up and return the stores for this app -> also used to reset all stores to defaults
-export default action((api, actions, router): StoresMap => {
-  // Assign mobx-react-router only once
-  if (stores.router == null) stores.router = router;
-  // All other stores have our lifecycle
-  const storeNames = Object.keys(storeClasses);
-  storeNames.forEach(name => { if (stores[name]) stores[name].teardown(); });
-  storeNames.forEach(name => { stores[name] = new storeClasses[name](stores, api, actions); });
-  storeNames.forEach(name => { if (stores[name]) stores[name].initialize(); });
+export default action(
+  (api, actions, router): StoresMap => {
+    // Assign mobx-react-router only once
+    if (stores.router == null) stores.router = router;
+    // All other stores have our lifecycle
+    Object.keys(storeClasses).forEach(name => {
+      if (stores[name]) stores[name].teardown();
+      stores[name] = new storeClasses[name](stores, api, actions);
+      stores[name].initialize();
+    });
 
-  // Add currency specific stores
-  if (environment.API === 'ada') {
-    stores.ada = setupAdaStores(stores, api, actions);
-  } else if (environment.API === 'etc') {
-    stores.etc = setupEtcStores(stores, api, actions);
-    values(stores.tokens).forEach(store => store.teardown());
-    stores.tokens = setupTokenStores(stores.etc.wallets);
-  }
+    if (stores.networkStatus) {
+      stores.networkStatus.teardown();
+    }
+    stores.networkStatus = new NetworkStatusStore(
+      getNetworkStatus(),
+      actions.networkStatus.isSyncedAndReady,
+    );
+    stores.networkStatus.initialize();
 
-  return stores;
-});
+    // Add currency specific stores
+    if (environment.API === 'ada') {
+      stores.ada = setupAdaStores(stores, api, actions);
+    } else if (environment.API === 'etc') {
+      stores.etc = setupEtcStores(stores, api, actions);
+      values(stores.tokens).forEach(store => store.teardown());
+      stores.tokens = setupTokenStores(stores.etc.wallets);
+    }
+
+    return stores;
+  },
+);
