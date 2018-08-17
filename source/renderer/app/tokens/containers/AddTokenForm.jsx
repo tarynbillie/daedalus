@@ -5,7 +5,7 @@ import React from 'react';
 import type { IntlShape } from 'react-intl';
 import { injectIntl } from 'react-intl';
 import Button from 'react-polymorph/lib/components/Button';
-import SimpleButtonSkin from 'react-polymorph/lib/skins/simple/raw/ButtonSkin';
+import SimpleButtonSkin from 'react-polymorph/lib/skins/simple/ButtonSkin';
 import { Observable, Observer, Subscription } from 'rxjs';
 import { debounceTime, filter, map, switchMap, tap } from 'rxjs/operators';
 import { pipe } from 'ramda';

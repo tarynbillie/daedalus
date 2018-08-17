@@ -1,7 +1,7 @@
 {
   "name": "daedalus",
   "productName": "Daedalus",
-  "version": "0.10.1",
+  "version": "0.11.0",
   "description": "Cryptocurrency Wallet",
   "main": "./dist/main/index.js",
   "scripts": {
@@ -21,20 +21,20 @@
     "cucumber:watch": "npm run cucumber -- --tags @watch",
     "lint": "eslint --format=node_modules/eslint-formatter-pretty source features storybook *.js",
     "flow:test": "flow; test $? -eq 0 -o $? -eq 2",
-    "manage:translations": "gulp purge:translations && gulp clear-cache && gulp build && node ./translations/translation-runner.js",
+    "manage:translations": "gulp purge:translations && gulp clear:cache && gulp build && node ./translations/translation-runner.js",
     "storybook": "start-storybook -p 6006 -c storybook",
-    "clear:cache": "gulp clear-cache"
+    "clear:cache": "gulp clear:cache"
   },
   "bin": {
     "electron": "./node_modules/.bin/electron"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^3.4.6",
-    "@storybook/addon-knobs": "3.4.6",
-    "@storybook/addon-links": "^3.4.6",
-    "@storybook/addon-notes": "^3.4.6",
-    "@storybook/addons": "^3.4.6",
-    "@storybook/react": "^3.4.6",
+    "@storybook/addon-actions": "3.4.7",
+    "@storybook/addon-knobs": "3.4.7",
+    "@storybook/addon-links": "3.4.7",
+    "@storybook/addon-notes": "3.4.7",
+    "@storybook/addons": "3.4.7",
+    "@storybook/react": "3.4.7",
     "asar": "0.14.0",
     "autodll-webpack-plugin": "0.3.8",
     "babel-cli": "6.26.0",
@@ -66,6 +66,7 @@
     "electron-devtools-installer": "2.2.1",
     "electron-packager": "10.1.0",
     "electron-rebuild": "1.6.0",
+    "electron-unhandled": "^1.1.0",
     "electron-webpack": "1.11.0",
     "eslint": "4.19.1",
     "eslint-config-airbnb": "16.1.0",
@@ -149,13 +150,12 @@
     "react": "15.6.2",
     "react-addons-css-transition-group": "15.6.2",
     "react-copy-to-clipboard": "5.0.1",
-    "react-css-themr": "2.1.2",
     "react-dom": "15.6.2",
     "react-dropzone": "4.2.3",
     "react-intl": "2.4.0",
     "react-markdown": "3.1.0",
     "react-number-format": "3.0.3",
-    "react-polymorph": "0.6.5",
+    "react-polymorph": "0.7.1",
     "react-router": "3.0.3",
     "react-svg-inline": "2.1.0",
     "recharts": "1.0.0-beta.10",
@@ -169,6 +169,9 @@
     "validator": "9.1.2",
     "web3": "^1.0.0-beta.34",
     "web3-utils": "1.0.0-beta.30"
+  },
+  "resolutions": {
+    "eslint-scope": "3.7.3"
   },
   "devEngines": {
     "node": "8.x",

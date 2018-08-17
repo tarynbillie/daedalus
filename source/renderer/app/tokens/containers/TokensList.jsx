@@ -4,7 +4,7 @@ import { memoizeWith, prop, pipe, always } from 'ramda';
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import Button from 'react-polymorph/lib/components/Button';
-import SimpleButtonSkin from 'react-polymorph/lib/skins/simple/raw/ButtonSkin';
+import SimpleButtonSkin from 'react-polymorph/lib/skins/simple/ButtonSkin';
 import type { IntlShape } from 'react-intl';
 
 import Dialog from '../../components/widgets/Dialog';

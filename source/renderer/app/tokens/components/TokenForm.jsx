@@ -2,7 +2,7 @@
 import React from 'react';
 import type { Node } from 'react';
 import Input from 'react-polymorph/lib/components/Input';
-import SimpleInputSkin from 'react-polymorph/lib/skins/simple/raw/InputSkin';
+import SimpleInputSkin from 'react-polymorph/lib/skins/simple/InputSkin';
 import NumericInput from 'react-polymorph/lib/components/NumericInput';
 import { observer } from 'mobx-react';
 import type { Field } from 'mobx-react-form';
