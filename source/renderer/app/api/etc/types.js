@@ -14,13 +14,13 @@ export type EtcRecoveryPassphrase = Array<string>;
 export type EtcAccounts = Array<EtcWalletId>;
 
 export type EtcBlock = {
-  timestamp: string
+  timestamp: string,
 };
 
 export type EtcSyncProgress = ?{
-  startingBlock: EtcBlock,
-  currentBlock: EtcBlock,
-  highestBlock: EtcBlock
+  startingBlock: string, //number in hex
+  currentBlock: string,
+  highestBlock: string,
 };
 
 export type EtcTransaction = {
@@ -47,7 +47,7 @@ export type EtcTransactionParams = {
   gasLimit?: BigNumber,
   gas: BigNumber,
   data?: string,
-}
+};
 
 export type EtcTransactions = {
   transactions: Array<EtcTransaction>,

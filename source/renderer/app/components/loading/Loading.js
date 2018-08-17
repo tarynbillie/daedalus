@@ -1,12 +1,11 @@
 // @flow
-import React, { Component } from 'react';
+import * as React from 'react';
 import SVGInline from 'react-svg-inline';
 import { observer } from 'mobx-react';
 import { defineMessages, intlShape } from 'react-intl';
 import classNames from 'classnames';
 import Button from 'react-polymorph/lib/components/Button';
 import SimpleButtonSkin from 'react-polymorph/lib/skins/simple/raw/ButtonSkin';
-import SystemTimeErrorOverlay from './SystemTimeErrorOverlay';
 import LoadingSpinner from '../widgets/LoadingSpinner';
 import daedalusLogo from '../../assets/images/daedalus-logo-loading-grey.inline.svg';
 import styles from './Loading.scss';
@@ -21,37 +20,37 @@ const messages = defineMessages({
   connecting: {
     id: 'loading.screen.connectingToNetworkMessage',
     defaultMessage: '!!!Connecting to network',
-    description: 'Message "Connecting to network" on the loading screen.'
+    description: 'Message "Connecting to network" on the loading screen.',
   },
   waitingForSyncToStart: {
     id: 'loading.screen.waitingForSyncToStart',
     defaultMessage: '!!!Connected - waiting for block syncing to start',
-    description: 'Message "Connected - waiting for block syncing to start" on the loading screen.'
+    description: 'Message "Connected - waiting for block syncing to start" on the loading screen.',
   },
   reconnecting: {
     id: 'loading.screen.reconnectingToNetworkMessage',
     defaultMessage: '!!!Network connection lost - reconnecting',
-    description: 'Message "Network connection lost - reconnecting" on the loading screen.'
+    description: 'Message "Network connection lost - reconnecting" on the loading screen.',
   },
   syncing: {
     id: 'loading.screen.syncingBlocksMessage',
     defaultMessage: '!!!Syncing blocks',
-    description: 'Message "Syncing blocks" on the loading screen.'
+    description: 'Message "Syncing blocks" on the loading screen.',
   },
   reportConnectingIssueText: {
     id: 'loading.screen.reportIssue.connecting.text',
     defaultMessage: '!!!Having trouble connecting to network?',
-    description: 'Report connecting issue text on the loading screen.'
+    description: 'Report connecting issue text on the loading screen.',
   },
   reportSyncingIssueText: {
     id: 'loading.screen.reportIssue.syncing.text',
     defaultMessage: '!!!Having trouble syncing?',
-    description: 'Report syncing issue text on the loading screen.'
+    description: 'Report syncing issue text on the loading screen.',
   },
   reportIssueButtonLabel: {
     id: 'loading.screen.reportIssue.buttonLabel',
     defaultMessage: '!!!Report an issue',
-    description: 'Report an issue button label on the loading .'
+    description: 'Report an issue button label on the loading .',
   },
 });
 
@@ -73,15 +72,11 @@ type Props = {
   loadingDataForNextScreenMessage: ReactIntlMessage,
   hasLoadedCurrentLocale: boolean,
   hasLoadedCurrentTheme: boolean,
-  localTimeDifference: number,
-  isSystemTimeCorrect: boolean,
-  currentLocale: string,
   handleReportIssue: Function,
-  onProblemSolutionClick: Function,
 };
 
 @observer
-export default class Loading extends Component<Props, State> {
+export default class Loading extends React.Component<Props, State> {
   state = {
     connectingTime: 0,
     syncingTime: 0,
@@ -89,12 +84,9 @@ export default class Loading extends Component<Props, State> {
   };
 
   componentWillReceiveProps(nextProps: Props) {
-    const startConnectingTimer = nextProps.isConnecting && (connectingInterval === null);
-    const stopConnectingTimer = (
-      this.props.isConnecting &&
-      !nextProps.isConnecting &&
-      (connectingInterval !== null)
-    );
+    const startConnectingTimer = nextProps.isConnecting && connectingInterval === null;
+    const stopConnectingTimer =
+      this.props.isConnecting && !nextProps.isConnecting && connectingInterval !== null;
 
     if (startConnectingTimer) {
       connectingInterval = setInterval(this.connectingTimer, 1000);
@@ -102,12 +94,9 @@ export default class Loading extends Component<Props, State> {
       this.resetConnectingTimer();
     }
 
-    const startSyncingTimer = nextProps.isSyncing && (syncingInterval === null);
-    const stopSyncingTimer = (
-      this.props.isSyncing &&
-      !nextProps.isSyncing &&
-      (syncingInterval !== null)
-    );
+    const startSyncingTimer = nextProps.isSyncing && syncingInterval === null;
+    const stopSyncingTimer =
+      this.props.isSyncing && !nextProps.isSyncing && syncingInterval !== null;
 
     if (startSyncingTimer) {
       syncingInterval = setInterval(this.syncingTimer, 1000);
@@ -132,18 +121,9 @@ export default class Loading extends Component<Props, State> {
       apiIcon,
       isConnecting,
       isSyncing,
-      isSynced,
-      syncPercentage,
-      loadingDataForNextScreenMessage,
-      hasBeenConnected,
-      hasBlockSyncingStarted,
       hasLoadedCurrentLocale,
       hasLoadedCurrentTheme,
-      localTimeDifference,
-      isSystemTimeCorrect,
-      currentLocale,
       handleReportIssue,
-      onProblemSolutionClick,
     } = this.props;
 
     const { connectingTime, syncingTime } = this.state;
@@ -171,72 +151,22 @@ export default class Loading extends Component<Props, State> {
     const currencyLoadingLogo = currencyIcon;
     const apiLoadingLogo = apiIcon;
 
-    let connectingMessage;
-    if (hasBeenConnected) {
-      connectingMessage = messages.reconnecting;
-    } else {
-      connectingMessage = (
-        hasBlockSyncingStarted ? messages.waitingForSyncToStart : messages.connecting
-      );
-    }
-
     const canReportConnectingIssue = isConnecting && connectingTime >= REPORT_ISSUE_TIME_TRIGGER;
     const canReportSyncingIssue = isSyncing && syncingTime >= REPORT_ISSUE_TIME_TRIGGER;
     const showReportIssue = canReportConnectingIssue || canReportSyncingIssue;
 
-    const buttonClasses = classNames([
-      'primary',
-      styles.reportIssueButton,
-    ]);
+    const buttonClasses = classNames(['primary', styles.reportIssueButton]);
 
-    let loadingScreen = null;
-
-    if (isConnecting) {
-      loadingScreen = (
-        <div className={styles.connecting}>
-          <h1 className={styles.headline}>
-            {intl.formatMessage(connectingMessage)}
-          </h1>
-        </div>
-      );
-    } else if (isSystemTimeCorrect && !isSynced) {
-      loadingScreen = (
-        <div className={styles.syncing}>
-          <h1 className={styles.headline}>
-            {intl.formatMessage(messages.syncing)} {syncPercentage.toFixed(2)}%
-          </h1>
-        </div>
-      );
-    } else if (isSystemTimeCorrect) {
-      loadingScreen = (
-        <div className={styles.syncing}>
-          <div>
-            <h1 className={styles.headline}>
-              {intl.formatMessage(loadingDataForNextScreenMessage)}
-            </h1>
-            <LoadingSpinner />
-          </div>
-        </div>
-      );
-    } else {
-      loadingScreen = (
-        <SystemTimeErrorOverlay
-          localTimeDifference={localTimeDifference}
-          currentLocale={currentLocale}
-          onProblemSolutionClick={onProblemSolutionClick}
-        />
-      );
-    }
+    const loadingScreen = this._getLoadingScreen();
 
     return (
       <div className={componentStyles}>
         {showReportIssue && (
           <div className={styles.reportIssue}>
             <h1 className={styles.reportIssueText}>
-              {isConnecting ?
-                intl.formatMessage(messages.reportConnectingIssueText) :
-                intl.formatMessage(messages.reportSyncingIssueText)
-              }
+              {isConnecting
+                ? intl.formatMessage(messages.reportConnectingIssueText)
+                : intl.formatMessage(messages.reportSyncingIssueText)}
             </h1>
             <Button
               className={buttonClasses}
@@ -286,4 +216,53 @@ export default class Loading extends Component<Props, State> {
     }
     this.setState({ syncingTime: 0 });
   };
+
+  _getLoadingScreen(): React.Element<*> {
+    const { intl } = this.context;
+    const {
+      isConnecting,
+      isSynced,
+      syncPercentage,
+      loadingDataForNextScreenMessage,
+      hasBeenConnected,
+      hasBlockSyncingStarted,
+    } = this.props;
+
+    if (isConnecting) {
+      const connectingMessage = this._getConnectingMessage(
+        hasBeenConnected,
+        hasBlockSyncingStarted,
+      );
+      return (
+        <div className={styles.connecting}>
+          <h1 className={styles.headline}>{intl.formatMessage(connectingMessage)}</h1>
+        </div>
+      );
+    } else if (!isSynced) {
+      return (
+        <div className={styles.syncing}>
+          <h1 className={styles.headline}>
+            {intl.formatMessage(messages.syncing)} {syncPercentage.toFixed(2)}%
+          </h1>
+        </div>
+      );
+    }
+    return (
+      <div className={styles.syncing}>
+        <div>
+          <h1 className={styles.headline}>{intl.formatMessage(loadingDataForNextScreenMessage)}</h1>
+          <LoadingSpinner />
+        </div>
+      </div>
+    );
+  }
+
+  _getConnectingMessage(hasBeenConnected, hasBlockSyncingStarted) {
+    if (hasBeenConnected) {
+      return messages.reconnecting;
+    } else if (hasBlockSyncingStarted) {
+      return messages.waitingForSyncToStart;
+    }
+    return messages.connecting;
+  }
 }

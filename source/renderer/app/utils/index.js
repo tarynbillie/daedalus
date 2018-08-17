@@ -6,8 +6,8 @@ import { generateMnemonic } from './crypto';
 
 export default {
   crypto: {
-    generateMnemonic
-  }
+    generateMnemonic,
+  },
 };
 
 interface Functor<A> extends Iterable<A> {
@@ -21,14 +21,17 @@ export const forEach = <T>(iteratee: T => void) => (collection: Functor<T> | May
 export const nonEmpty = (val: string) => !!val;
 // $FlowIssue
 export const notNull = (val: any) => val != null;
+export const isFalse = (val: boolean) => val === false;
 
 // $FlowIssue
 export const taggedLog = (tag: string) => (...args: any[]) => console.log(`[${tag}]`, ...args);
+// $FlowIssue
+export const taggedError = (tag: string) => (...args: any[]) => console.error(`[${tag}]`, ...args);
 
 export type Dict<T> = { [string]: T };
 export const toDict = curry(
   <T>(key: T => string, items: T[]): Dict<T> =>
-    items.reduce((dict: Dict<T>, item) => assoc(key(item), item, dict), {})
+    items.reduce((dict: Dict<T>, item) => assoc(key(item), item, dict), {}),
 );
 
 export const traverse = <A, B>(fn: A => B | Promise<B>) => (arr: Functor<A>) =>
@@ -39,5 +42,5 @@ export const toNothing = always(Maybe.Nothing);
 export const findMaybe = <T>(predicate: T => boolean) =>
   pipe(
     find(predicate),
-    Maybe.fromNullable
+    Maybe.fromNullable,
   );

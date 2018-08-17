@@ -11,16 +11,19 @@ import mantisLogo from '../../assets/images/mantis-logo.inline.svg';
 import { messages } from '../LoadingPage';
 import type { InjectedProps } from '../../types/injectedPropsType';
 
-@inject('stores', 'actions') @observer
+@inject('stores', 'actions')
+@observer
 export default class LoadingPage extends Component<InjectedProps> {
-
   render() {
     const { stores } = this.props;
     const {
-      isConnecting, isSyncing, isSynced, syncPercentage, hasBeenConnected,
-      hasBlockSyncingStarted, localTimeDifference, isSystemTimeCorrect,
-    } = stores.networkStatus;
-    const { hasLoadedCurrentLocale, hasLoadedCurrentTheme, currentLocale } = stores.profile;
+      isConnecting,
+      isSyncing,
+      isSynced,
+      syncPercentage,
+      hasSyncingStarted,
+    } = stores.networkStatus.networkStatus;
+    const { hasLoadedCurrentLocale, hasLoadedCurrentTheme } = stores.profile;
     return (
       <CenteredLayout>
         <Loading
@@ -28,16 +31,13 @@ export default class LoadingPage extends Component<InjectedProps> {
           apiIcon={mantisLogo}
           isSyncing={isSyncing}
           isSynced={isSynced}
-          localTimeDifference={localTimeDifference}
-          isSystemTimeCorrect={isSystemTimeCorrect}
           isConnecting={isConnecting}
           syncPercentage={syncPercentage}
           loadingDataForNextScreenMessage={messages.loadingWalletData}
-          hasBeenConnected={hasBeenConnected}
-          hasBlockSyncingStarted={hasBlockSyncingStarted}
+          hasBeenConnected={stores.networkStatus.hasBeenConnected}
+          hasBlockSyncingStarted={hasSyncingStarted}
           hasLoadedCurrentLocale={hasLoadedCurrentLocale}
           hasLoadedCurrentTheme={hasLoadedCurrentTheme}
-          currentLocale={currentLocale}
           handleReportIssue={this.handleReportIssue}
           onProblemSolutionClick={this.handleProblemSolutionClick}
         />
@@ -48,11 +48,11 @@ export default class LoadingPage extends Component<InjectedProps> {
 
   handleReportIssue = () => {
     this.props.actions.dialogs.open.trigger({
-      dialog: BugReportDialog
+      dialog: BugReportDialog,
     });
   };
 
   handleProblemSolutionClick = (link: string) => {
     shell.openExternal(`https://${link}`);
-  }
+  };
 }

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { defineMessages } from 'react-intl';
 import { shell } from 'electron';
+
 import CenteredLayout from '../components/layout/CenteredLayout';
 import Loading from '../components/loading/Loading';
 import BugReportDialog from '../components/profile/bug-report/BugReportDialog';
@@ -15,19 +16,17 @@ export const messages = defineMessages({
   loadingWalletData: {
     id: 'loading.screen.loadingWalletData',
     defaultMessage: '!!!Loading wallet data',
-    description: 'Message "Loading wallet data" on the loading screen.'
+    description: 'Message "Loading wallet data" on the loading screen.',
   },
 });
 
-@inject('stores', 'actions') @observer
+@inject('stores', 'actions')
+@observer
 export default class LoadingPage extends Component<InjectedProps> {
-
   render() {
     const { stores } = this.props;
-    const {
-      isConnecting, isSyncing, isSynced, syncPercentage, hasBeenConnected,
-      hasBlockSyncingStarted, localTimeDifference, isSystemTimeCorrect,
-    } = stores.networkStatus;
+    const { isSynced, syncPercentage, hasBeenConnected } = stores.networkStatus;
+    const { isConnecting, isSyncing, hasSyncingStarted } = stores.networkStatus.networkStatus;
     const { hasLoadedCurrentLocale, hasLoadedCurrentTheme, currentLocale } = stores.profile;
     return (
       <CenteredLayout>
@@ -36,13 +35,11 @@ export default class LoadingPage extends Component<InjectedProps> {
           apiIcon={cardanoLogo}
           isSyncing={isSyncing}
           isSynced={isSynced}
-          localTimeDifference={localTimeDifference}
-          isSystemTimeCorrect={isSystemTimeCorrect}
           isConnecting={isConnecting}
           syncPercentage={syncPercentage}
           loadingDataForNextScreenMessage={messages.loadingWalletData}
           hasBeenConnected={hasBeenConnected}
-          hasBlockSyncingStarted={hasBlockSyncingStarted}
+          hasBlockSyncingStarted={hasSyncingStarted}
           hasLoadedCurrentLocale={hasLoadedCurrentLocale}
           hasLoadedCurrentTheme={hasLoadedCurrentTheme}
           currentLocale={currentLocale}
@@ -56,11 +53,11 @@ export default class LoadingPage extends Component<InjectedProps> {
 
   handleReportIssue = () => {
     this.props.actions.dialogs.open.trigger({
-      dialog: BugReportDialog
+      dialog: BugReportDialog,
     });
   };
 
   handleProblemSolutionClick = (link: string) => {
     shell.openExternal(`https://${link}`);
-  }
+  };
 }

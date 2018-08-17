@@ -1,3 +1,4 @@
+// @flow strict
 import { store, walletTokensKey } from '../api/etc/etcLocalStorage';
 import WalletsStore from '../stores/WalletStore';
 import { EtcERC20TokenApi } from './services/EtcERC20TokenApi';
