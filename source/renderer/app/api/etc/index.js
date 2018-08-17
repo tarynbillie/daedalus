@@ -385,11 +385,12 @@ export default class EtcApi {
 const _createWalletTransactionFromServerData = async (
   txData: EtcTransaction,
 ): Promise<WalletTransaction> => {
-  const { hash, blockHash, value, from, to, pending, isOutgoing, } = txData;
+  const { hash, blockHash, value, from, to, isOutgoing, } = txData;
   const txBlock: ?EtcBlock = blockHash ? await getEtcBlockByHash({
     ca, blockHash,
   }) : null;
   const blockDate = txBlock ? unixTimestampToDate(txBlock.timestamp) : new Date();
+
   return new WalletTransaction({
     id: hash,
     type: isOutgoing ? transactionTypes.EXPEND : transactionTypes.INCOME,
@@ -402,7 +403,7 @@ const _createWalletTransactionFromServerData = async (
       from: [from],
       to: [to],
     },
-    state: pending ? transactionStates.PENDING : transactionStates.OK,
+    state: blockHash ? transactionStates.OK : transactionStates.PENDING,
   });
 };
 
