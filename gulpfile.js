@@ -1,11 +1,13 @@
 const gulp = require('gulp');
 const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
-const mainWebpackConfig = require('./source/main/webpack.config');
-const rendererWebpackConfig = require('./source/renderer/webpack.config');
 const shell = require('gulp-shell');
 const electronConnect = require('electron-connect');
 const log = require('fancy-log');
+const { assoc } = require('ramda');
+
+const mainWebpackConfig = require('./source/main/webpack.config');
+const rendererWebpackConfig = require('./source/renderer/webpack.config');
 
 const logWebpackOutput = done => (err, stats) => {
   if (err) {
@@ -13,9 +15,11 @@ const logWebpackOutput = done => (err, stats) => {
   }
 
   if (stats) {
-    log(stats.toString({
-      colors: true,
-    }));
+    log(
+      stats.toString({
+        colors: true,
+      }),
+    );
   }
   done(err, stats);
 };
@@ -23,14 +27,14 @@ const logWebpackOutput = done => (err, stats) => {
 // Setup electron-connect server to start the app in development mode
 let electronServer;
 // Gulp input sources for main and renderer compilation
-const mainInputSource = () => gulp.src('source/main/index.js');
-const rendererInputSource = () => gulp.src('source/renderer/index.js');
-// Webpack watch configs
-const mainWebpackWatchConfig = Object.assign({}, mainWebpackConfig, { watch: true });
-const rendererWebpackWatchConfig = Object.assign({}, rendererWebpackConfig, { watch: true });
+const mainSource = () => gulp.src('source/main/index.js');
+const rendererSource = () => gulp.src('source/renderer/index.js');
+
 // Gulp output destinations for main and renderer compilation
-const mainOutputDestination = () => gulp.dest('dist/main');
-const rendererOutputDestination = () => gulp.dest('dist/renderer');
+const mainDestination = () => gulp.dest('dist/main');
+const rendererDestination = () => gulp.dest('dist/renderer');
+
+const withWatchEnabled = assoc('watch', true);
 
 /**
  * Creates an electron-connect server instance that enables
@@ -44,88 +48,70 @@ const createElectronServer = (env, args = []) => {
     spawnOpt: {
       env: Object.assign({}, process.env, env),
       args,
-    }
+    },
   });
 };
 
-const buildMain = () => (
-  () => (
-    mainInputSource()
-      .pipe(webpackStream(mainWebpackConfig, webpack, logWebpackOutput))
-      .pipe(mainOutputDestination())
-  )
-);
+const webpackBuild = (config, source, destination) => done =>
+  source()
+    .pipe(webpackStream(config, webpack, logWebpackOutput(done)))
+    .pipe(destination());
 
-const buildMainWatch = () => (
-  (done) => (
-    mainInputSource()
-      .pipe(webpackStream(mainWebpackWatchConfig, webpack, (err, stats) => {
-        logWebpackOutput(done)(err, stats);
-        // Restart app everytime after main script has been re-compiled
-        electronServer.restart();
-        done();
-      }))
-      .pipe(mainOutputDestination())
-  )
+const buildMain = webpackBuild(mainWebpackConfig, mainSource, mainDestination);
+const buildMainWatch = webpackBuild(
+  withWatchEnabled(mainWebpackConfig),
+  mainSource,
+  mainDestination,
 );
-
-const buildRenderer = () => (
-  () => (
-    rendererInputSource()
-      .pipe(webpackStream(rendererWebpackConfig, webpack, logWebpackOutput))
-      .pipe(rendererOutputDestination())
-  )
-);
-
-const buildRendererWatch = () => (
-  (done) => (
-    rendererInputSource()
-      .pipe(webpackStream(rendererWebpackWatchConfig, webpack, (err, stats) => {
-        logWebpackOutput(done)(err, stats);
-        done();
-      }))
-      .pipe(rendererOutputDestination())
-  )
+const buildRenderer = webpackBuild(rendererWebpackConfig, rendererSource, rendererDestination);
+const buildRendererWatch = webpackBuild(
+  withWatchEnabled(rendererWebpackConfig),
+  rendererSource,
+  rendererDestination,
 );
 
 gulp.task('clear:cache', shell.task('rimraf ./node_modules/.cache'));
 
 gulp.task('clean:dist', shell.task('rimraf ./dist'));
 
-gulp.task('server:start', (done) => {
-  electronServer.start();
-  done();
-});
+gulp.task('server:start', () => electronServer.start());
 
-gulp.task('server:create:dev', (done) => {
-  createElectronServer({ NODE_ENV: process.env.NODE_ENV || 'development' });
-  done();
-});
+gulp.task('server:create:dev', () =>
+  Promise.resolve(createElectronServer({ NODE_ENV: process.env.NODE_ENV || 'development' })),
+);
 
-gulp.task('server:create:debug', (done) => {
-  createElectronServer({ NODE_ENV: 'development' }, ['--inspect', '--inspect-brk']);
-  done();
-});
+gulp.task('server:create:debug', () =>
+  Promise.resolve(
+    createElectronServer({ NODE_ENV: 'development' }, ['--inspect', '--inspect-brk']),
+  ),
+);
 
-gulp.task('build:main', buildMain());
+gulp.task('build:main', buildMain);
 
-gulp.task('build:main:watch', buildMainWatch());
+gulp.task('build:main:watch', buildMainWatch);
 
-gulp.task('build:renderer:html', () => (
-  gulp.src('source/renderer/index.html').pipe(gulp.dest('dist/renderer/'))
-));
+gulp.task('build:renderer:html', () =>
+  gulp.src('source/renderer/index.html').pipe(gulp.dest('dist/renderer/')),
+);
 
-gulp.task('build:renderer:assets', buildRenderer());
+gulp.task('build:renderer:assets', buildRenderer);
 
 gulp.task('build:renderer', gulp.series('build:renderer:html', 'build:renderer:assets'));
 
-gulp.task('build:renderer:watch', buildRendererWatch());
+gulp.task('build:renderer:watch', buildRendererWatch);
 
 gulp.task('build', gulp.series('clean:dist', 'build:main', 'build:renderer'));
 
-gulp.task('build:watch', gulp.series(
-  'clean:dist', 'server:create:dev', 'build:renderer:html', 'build:main:watch', 'build:renderer:watch'
-));
+gulp.task(
+  'build:watch',
+  gulp.series(
+    'clean:dist',
+    'server:create:dev',
+    'build:renderer:html',
+    'build:main:watch',
+    'build:renderer:watch',
+  ),
+);
 
 gulp.task('cucumber', shell.task('npm run cucumber --'));
 
@@ -139,8 +125,14 @@ gulp.task('purge:translations', shell.task('rimraf ./translations/messages/sourc
 
 gulp.task('electron:inspector', shell.task('npm run electron:inspector'));
 
-gulp.task('start', shell.task(`cross-env NODE_ENV=${process.env.NODE_ENV || 'production'} electron ./`));
+gulp.task(
+  'start',
+  shell.task(`cross-env NODE_ENV=${process.env.NODE_ENV || 'production'} electron ./`),
+);
 
 gulp.task('dev', gulp.series('server:create:dev', 'build:watch', 'server:start'));
 
-gulp.task('debug', gulp.series('server:create:debug', 'build:watch', 'server:start', 'electron:inspector'));
+gulp.task(
+  'debug',
+  gulp.series('server:create:debug', 'build:watch', 'server:start', 'electron:inspector'),
+);

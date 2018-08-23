@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { defineMessages, intlShape } from 'react-intl';
+import environment from '../../../../../common/environment';
 import styles from './WalletNavigation.scss';
 import WalletNavButton from './WalletNavButton';
 import summaryIcon from '../../../assets/images/wallet-nav/summary-ic.inline.svg';
@@ -94,14 +95,14 @@ export default class WalletNavigation extends Component<Props> {
           />
         </div>
 
-        <div className={styles.navItem}>
+        {environment.ENABLE_TOKENS_UI && <div className={styles.navItem}>
           <WalletNavButton
             label="tokens"
             icon={transactionsIcon}
             isActive={isActiveNavItem('tokens')}
             onClick={() => onNavItemClick('tokens')}
           />
-        </div>
+        </div>}
 
         <div className={styles.navItem}>
           <WalletNavButton

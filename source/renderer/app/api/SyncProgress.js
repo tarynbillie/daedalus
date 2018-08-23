@@ -18,13 +18,14 @@ export const toPercentage = (progress: SyncProgress): number =>
 
 export const difference = (progress: SyncProgress): number => progress.total - progress.completed;
 
+export const getEtcSyncProgress = (ca: string): Promise<Maybe<SyncProgress>> =>
+  etcApi.getEtcSyncProgress({ ca })
+    .then(etcSyncProgressToSyncProgress);
+
 const etcSyncProgressToSyncProgress = (etcProgress: EtcSyncProgress) =>
   etcProgress
     ? Maybe.Just({
-        completed: etcProgress.currentBlock,
-        total: etcProgress.highestBlock,
-      })
+      completed: etcProgress.currentBlock,
+      total: etcProgress.highestBlock,
+    })
     : Maybe.Nothing();
-
-export const getEtcSyncProgress = (ca: string): Promise<Maybe<SyncProgress>> =>
-  etcApi.getEtcSyncProgress({ ca }).then(etcSyncProgressToSyncProgress);

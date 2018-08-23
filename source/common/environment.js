@@ -49,6 +49,8 @@ const environment = Object.assign({
   os: osNames[platform] || platform,
   version,
   isWindows: () => environment.platform === 'win32'
-}, remote ? remote.getGlobal('env') : process.env);
+}, remote ? remote.getGlobal('env') : process.env, {
+  ENABLE_TOKENS_UI: (process.env.ENABLE_TOKENS_UI === 'true') || false,
+});
 
 export default environment;

@@ -109,6 +109,7 @@ module.exports = {
           'blakejs',
           'bs58',
           'classnames',
+          'data.maybe',
           'es6-error',
           'humanize-duration',
           'lodash',
@@ -138,18 +139,6 @@ module.exports = {
         ]
       }
     }),
-    // Dont use caching for CI builds!
-    !isCi && (
-      new HardSourceWebpackPlugin({
-        configHash: (webpackConfig) => (
-          // Remove the `watch` flag to avoid different caches for static and incremental builds
-          require('node-object-hash')({ sort: false }).hash(lodash.omit(webpackConfig, 'watch'))
-        ),
-        environmentPaths: {
-          files: ['.babelrc', 'yarn.lock'],
-        },
-      })
-    ),
     new FlowWebpackPlugin(),
   ].filter(Boolean),
 };

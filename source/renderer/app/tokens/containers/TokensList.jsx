@@ -3,8 +3,8 @@ import { observer } from 'mobx-react';
 import { memoizeWith, prop, pipe, always } from 'ramda';
 import React from 'react';
 import { injectIntl } from 'react-intl';
-import Button from 'react-polymorph/lib/components/Button';
-import SimpleButtonSkin from 'react-polymorph/lib/skins/simple/ButtonSkin';
+import { Button } from 'react-polymorph/lib/components/Button';
+import { ButtonSkin } from 'react-polymorph/lib/skins/simple/ButtonSkin';
 import type { IntlShape } from 'react-intl';
 
 import Dialog from '../../components/widgets/Dialog';
@@ -46,12 +46,12 @@ export const TokensList = pipe(
               Balance
               <pre>{this.props.tokenStore.getBalance(token)}</pre>
               <Button
-                skin={<SimpleButtonSkin />}
+                skin={ButtonSkin}
                 label="Stop watching"
                 onClick={this._stopWatching(token)}
               />
               <Button
-                skin={<SimpleButtonSkin />}
+                skin={ButtonSkin}
                 label="Send"
                 onClick={this._openSendForm(token)}
               />

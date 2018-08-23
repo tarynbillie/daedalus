@@ -5,12 +5,12 @@ import { action, observable } from 'mobx';
 import { values } from 'ramda';
 import environment from '../../../common/environment';
 import { Logger } from '../../../common/logging';
+import { netPeerCount } from '../api/etc/netPeerCount';
 import {
+  networkStatusFactory,
   peerCountConnectionChecker,
   validResponseConnectionChecker,
-} from '../api/ConnectionStatus';
-import { netPeerCount } from '../api/etc/netPeerCount';
-import { networkStatusFactory } from '../api/NetworkStatus';
+} from '../api/NetworkStatus';
 import { getEtcSyncProgress } from '../api/SyncProgress';
 import type { TokenStores } from '../tokens';
 import { setupTokenStores } from '../tokens';
@@ -68,7 +68,7 @@ const stores = observable({
   tokens: null,
 });
 
-const CHECK_INTERVAL = 1000;
+const CHECK_INTERVAL = 2000;
 const ca = remote.getGlobal('ca');
 const getConnectionStatus = () =>
   environment.isDev()

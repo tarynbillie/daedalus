@@ -1,15 +1,15 @@
 // @flow
-import React from 'react';
-import type { Node } from 'react';
-import Input from 'react-polymorph/lib/components/Input';
-import SimpleInputSkin from 'react-polymorph/lib/skins/simple/InputSkin';
-import NumericInput from 'react-polymorph/lib/components/NumericInput';
 import { observer } from 'mobx-react';
 import type { Field } from 'mobx-react-form';
+import type { Node } from 'react';
+import React from 'react';
+import { Input } from 'react-polymorph/lib/components/Input';
+import { NumericInput } from 'react-polymorph/lib/components/NumericInput';
+import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
 
 import BorderedBox from '../../components/widgets/BorderedBox';
-import styles from './styles/TokenForm.scss';
 import { TokenForm as TokenFormModel } from '../forms/TokenForm';
+import styles from './styles/TokenForm.scss';
 
 interface TokenFormProps {
   form: TokenFormModel;
@@ -40,15 +40,15 @@ export class TokenForm extends React.PureComponent<TokenFormProps> {
       {field.type === 'number' ? (
         <NumericInput
           {...field.bind()}
-          skin={<SimpleInputSkin />}
+          skin={InputSkin}
           type="string"
           disabled={this.props.disabled}
           maxAfterDot={0}
           minValue={0}
         />
-      ) : (
-        <Input {...field.bind()} skin={<SimpleInputSkin />} disabled={this.props.disabled} />
-      )}
+    ) : (
+      <Input {...field.bind()} skin={InputSkin} disabled={this.props.disabled} />
+    )}
     </div>
-  );
+    );
 }

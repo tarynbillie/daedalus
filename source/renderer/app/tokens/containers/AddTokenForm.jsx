@@ -1,14 +1,14 @@
 // @flow
 import { observer } from 'mobx-react';
 import { Field } from 'mobx-react-form';
+import { pipe } from 'ramda';
 import React from 'react';
 import type { IntlShape } from 'react-intl';
 import { injectIntl } from 'react-intl';
-import Button from 'react-polymorph/lib/components/Button';
-import SimpleButtonSkin from 'react-polymorph/lib/skins/simple/ButtonSkin';
+import { Button } from 'react-polymorph/lib/components/Button';
+import { ButtonSkin } from 'react-polymorph/lib/skins/simple/ButtonSkin';
 import { Observable, Observer, Subscription } from 'rxjs';
 import { debounceTime, filter, map, switchMap, tap } from 'rxjs/operators';
-import { pipe } from 'ramda';
 
 import { nonEmpty } from '../../utils';
 import { withStore } from '../../utils/mobx';
@@ -82,7 +82,7 @@ class AddTokenFormComponent extends React.PureComponent<AddTokenFormProps, AddTo
         <div>
           <CheckResult check={this.state.check} />
           <Button
-            skin={<SimpleButtonSkin />}
+            skin={ButtonSkin}
             label="Add token"
             disabled={!this._canAddToken()}
             onClick={this.tokenForm.onSubmit}

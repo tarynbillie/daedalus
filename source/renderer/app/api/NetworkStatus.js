@@ -3,10 +3,10 @@ import Maybe from 'data.maybe';
 import { equals } from 'ramda';
 import { concat, interval, Observable, of } from 'rxjs';
 import { catchError, concatMap, distinctUntilChanged, map, mapTo } from 'rxjs/operators';
-import { Logger } from '../../../common/logging';
 
-import { isCompleted, toPercentage } from './SyncProgress';
+import { Logger } from '../../../common/logging';
 import type { SyncProgress } from './SyncProgress';
+import { isCompleted, toPercentage } from './SyncProgress';
 
 const OUT_OF_SYNC_BLOCKS_LIMIT = 6;
 
