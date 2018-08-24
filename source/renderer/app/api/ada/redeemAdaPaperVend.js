@@ -9,7 +9,7 @@ export type RedeemAdaPaperVendParams = {
     pvWalletId: string,
     pvSeed: string,
     pvBackupPhrase: {
-      bpToList: [],
+      bpToList: string[],
     }
   }
 };

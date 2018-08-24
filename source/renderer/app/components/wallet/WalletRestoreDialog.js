@@ -11,7 +11,8 @@ import { SwitchSkin } from 'react-polymorph/lib/skins/simple/SwitchSkin';
 import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
 import { IDENTIFIERS } from 'react-polymorph/lib/themes/API';
 import { defineMessages, intlShape } from 'react-intl';
-import ReactToolboxMobxForm from '../../utils/ReactToolboxMobxForm';
+import type { UnaryFn } from '../../utils';
+import { ReactToolboxMobxForm } from '../../utils/ReactToolboxMobxForm';
 import DialogCloseButton from '../widgets/DialogCloseButton';
 import Dialog from '../widgets/Dialog';
 import { isValidWalletName, isValidWalletPassword, isValidRepeatPassword } from '../../utils/validations';
@@ -27,7 +28,7 @@ const RESTORE_TYPES = {
   CERTIFICATE: 'certificate'
 };
 
-const messages = defineMessages({
+const messages = Object.assign({}, defineMessages({
   title: {
     id: 'wallet.restore.dialog.title.label',
     defaultMessage: '!!!Restore a wallet',
@@ -113,15 +114,15 @@ const messages = defineMessages({
     defaultMessage: '!!!Enter the recovery phrase from your paper wallet certificate',
     description: 'Hint "Enter shielded recovery phrase" for the recovery phrase input on the wallet restore dialog.'
   },
+}), {
+  fieldIsRequired: globalMessages.fieldIsRequired,
 });
-
-messages.fieldIsRequired = globalMessages.fieldIsRequired;
 
 type Props = {
   onSubmit: Function,
   onCancel: Function,
   isSubmitting: boolean,
-  mnemonicValidator: Function,
+  mnemonicValidator: UnaryFn<string, boolean>,
   error?: ?LocalizableError,
   suggestedMnemonics: Array<string>,
   showCertificateRestore: boolean,

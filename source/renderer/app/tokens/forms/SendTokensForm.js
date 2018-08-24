@@ -5,11 +5,11 @@ import type { IntlShape } from 'react-intl';
 import { intlValidators, ReactToolboxMobxForm } from '../../utils/ReactToolboxMobxForm';
 
 export class SendTokensForm extends ReactToolboxMobxForm {
-  get amountField(): Field {
+  get amountField(): Field<string> {
     return this.$('amount');
   }
 
-  get receiverField(): Field {
+  get receiverField(): Field<string> {
     return this.$('receiver');
   }
 

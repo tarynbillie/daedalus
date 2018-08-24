@@ -1,3 +1,5 @@
+import { groupBy } from 'ramda';
+
 // @flow
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
@@ -6,6 +8,7 @@ import { Button } from 'react-polymorph/lib/components/Button';
 import { ButtonSkin } from 'react-polymorph/lib/skins/simple/ButtonSkin';
 import { defineMessages, intlShape } from 'react-intl';
 import moment from 'moment';
+import { pass } from '../../../utils';
 import styles from './WalletTransactionsList.scss';
 import Transaction from './Transaction';
 import WalletTransaction from '../../../domains/WalletTransaction';
@@ -66,10 +69,10 @@ export default class WalletTransactionsList extends Component<Props> {
 
   list: HTMLElement;
   loadingSpinner: ?LoadingSpinner;
-  localizedDateFormat: 'MM/DD/YYYY';
+  localizedDateFormat: string;
 
   groupTransactionsByDay(transactions: Array<WalletTransaction>) {
-    const groups = [];
+    const groups: {date: string, transactions: WalletTransaction[]}[] = [];
     for (const transaction of transactions) {
       const date = moment(transaction.date).format(dateFormat);
       let group = groups.find((g) => g.date === date);

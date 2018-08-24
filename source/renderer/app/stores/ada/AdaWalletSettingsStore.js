@@ -17,9 +17,9 @@ export default class EtcWalletSettingsStore extends WalletSettingsStore {
 
   setup() {
     const a = this.actions.ada.walletSettings;
-    a.startEditingWalletField.listen(this._startEditingWalletField);
-    a.stopEditingWalletField.listen(this._stopEditingWalletField);
-    a.cancelEditingWalletField.listen(this._cancelEditingWalletField);
+    a.startEditingWalletField.listen(this.startEditingWalletField);
+    a.stopEditingWalletField.listen(this.stopEditingWalletField);
+    a.cancelEditingWalletField.listen(this.cancelEditingWalletField);
     a.updateWalletField.listen(this._updateWalletField);
     a.updateWalletPassword.listen(this._updateWalletPassword);
     a.exportToFile.listen(this._exportToFile);

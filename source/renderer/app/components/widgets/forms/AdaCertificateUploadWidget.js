@@ -28,7 +28,7 @@ export default class AdaCertificateUploadWidget extends Component<Props> {
     intl: intlShape.isRequired,
   };
 
-  onDrop = (files: [File]) => {
+  onDrop = (files: File[]) => {
     this.props.onFileSelected(files[0]);
   };
 

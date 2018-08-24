@@ -22,17 +22,17 @@ export default class Request<Result, Error> {
 
   promise: ?Promise<Result> = null;
 
-  _method: Function;
-  _isWaitingForResponse: boolean = false;
-  _currentApiCall: ?ApiCallType = null;
+  method: Function;
+  isWaitingForResponse: boolean = false;
+  currentApiCall: ?ApiCallType = null;
 
   constructor(method: Function) {
-    this._method = method;
+    this.method = method;
   }
 
   execute(...callArgs: Array<any>): Request<Result, Error> {
     // Do not continue if this request is already loading
-    if (this._isWaitingForResponse) return this;
+    if (this.isWaitingForResponse) return this;
 
     // This timeout is necessary to avoid warnings from mobx
     // regarding triggering actions as side-effect of getters
@@ -42,8 +42,8 @@ export default class Request<Result, Error> {
 
     // Issue api call & save it as promise that is handled to update the results of the operation
     this.promise = new Promise((resolve, reject) => {
-      if (!this._method) reject('Request method not defined');
-      this._method(...callArgs)
+      if (!this.method) reject('Request method not defined');
+      this.method(...callArgs)
         .then((result) => {
           setTimeout(action('Request::execute/then', () => {
             if (this.result != null && isObservableArray(this.result) && Array.isArray(result)) {
@@ -52,10 +52,10 @@ export default class Request<Result, Error> {
             } else {
               this.result = result;
             }
-            if (this._currentApiCall) this._currentApiCall.result = result;
+            if (this.currentApiCall) this.currentApiCall.result = result;
             this.isExecuting = false;
             this.wasExecuted = true;
-            this._isWaitingForResponse = false;
+            this.isWaitingForResponse = false;
             resolve(result);
           }), 1);
           return result;
@@ -66,22 +66,22 @@ export default class Request<Result, Error> {
             this.isExecuting = false;
             this.isError = true;
             this.wasExecuted = true;
-            this._isWaitingForResponse = false;
+            this.isWaitingForResponse = false;
             reject(error);
           }), 1);
         }));
     });
 
-    this._isWaitingForResponse = true;
-    this._currentApiCall = { args: callArgs, result: null };
+    this.isWaitingForResponse = true;
+    this.currentApiCall = { args: callArgs, result: null };
     return this;
   }
 
   isExecutingWithArgs(...args: Array<any>): boolean {
     return (
       this.isExecuting &&
-      (this._currentApiCall != null)
-      && isEqual(this._currentApiCall.args, args)
+      (this.currentApiCall != null)
+      && isEqual(this.currentApiCall.args, args)
     );
   }
 
@@ -115,7 +115,7 @@ export default class Request<Result, Error> {
       setTimeout(action(() => {
         const override = modify(this.result);
         if (override !== undefined) this.result = override;
-        if (this._currentApiCall) this._currentApiCall.result = this.result;
+        if (this.currentApiCall) this.currentApiCall.result = this.result;
         resolve(this);
       }), 0);
     });
@@ -127,8 +127,8 @@ export default class Request<Result, Error> {
     this.isError = false;
     this.isExecuting = false;
     this.wasExecuted = false;
-    this._isWaitingForResponse = false;
-    this._currentApiCall = null;
+    this.isWaitingForResponse = false;
+    this.currentApiCall = null;
     return this;
   }
 

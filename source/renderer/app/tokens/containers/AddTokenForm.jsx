@@ -50,7 +50,7 @@ class AddTokenFormComponent extends React.PureComponent<AddTokenFormProps, AddTo
   };
 
   componentDidMount() {
-    this.subscription = Observable.create((obs: Observer<Field>) => {
+    this.subscription = Observable.create((obs: Observer<Field<string>>) => {
       this.tokenForm.addressField.observe(({ field }) => {
         obs.next(field);
       });

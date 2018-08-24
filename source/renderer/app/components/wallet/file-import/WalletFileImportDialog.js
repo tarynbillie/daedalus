@@ -10,7 +10,7 @@ import { defineMessages, intlShape } from 'react-intl';
 // import { IDENTIFIERS } from 'react-polymorph/lib/themes/API';
 import DialogCloseButton from '../../widgets/DialogCloseButton';
 import Dialog from '../../widgets/Dialog';
-import ReactToolboxMobxForm from '../../../utils/ReactToolboxMobxForm';
+import { ReactToolboxMobxForm } from '../../../utils/ReactToolboxMobxForm';
 import FileUploadWidget from '../../widgets/forms/FileUploadWidget';
 import { isValidWalletName, isValidWalletPassword, isValidRepeatPassword } from '../../../utils/validations';
 import globalMessages from '../../../i18n/global-messages';
@@ -87,6 +87,13 @@ type State = {
   createPassword: boolean,
 };
 
+type ImportForm = ReactToolboxMobxForm<{
+  walletFile: File,
+  walletName: string,
+  walletPassword: string,
+  repeatPassword: string
+}>;
+
 @observer
 export default class WalletFileImportDialog extends Component<Props, State> {
 
@@ -103,7 +110,7 @@ export default class WalletFileImportDialog extends Component<Props, State> {
   };
 
 
-  form = new ReactToolboxMobxForm({
+  form: ImportForm = new ReactToolboxMobxForm({
     fields: {
       walletFile: {
         label: this.context.intl.formatMessage(messages.walletFileLabel),
@@ -221,7 +228,7 @@ export default class WalletFileImportDialog extends Component<Props, State> {
 
         <div className={styles.fileUpload}>
           <FileUploadWidget
-            {...walletFile.bind()}
+            {...(walletFile.bind(): any)}
             selectedFile={walletFile.value}
             onFileSelected={(file) => {
               // "set(value)" is an unbound method and thus must be explicitly called

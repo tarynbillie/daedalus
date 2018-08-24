@@ -1,25 +1,26 @@
 // @flow
-import React, { Component } from 'react';
+import classnames from 'classnames';
 import { join } from 'lodash';
 import { observer } from 'mobx-react';
-import classnames from 'classnames';
+import React, { Component } from 'react';
 import { defineMessages, intlShape } from 'react-intl';
+
 import { Autocomplete } from 'react-polymorph/lib/components/Autocomplete';
 import { Checkbox } from 'react-polymorph/lib/components/Checkbox';
 import { AutocompleteSkin } from 'react-polymorph/lib/skins/simple/AutocompleteSkin';
 import { CheckboxSkin } from 'react-polymorph/lib/skins/simple/CheckboxSkin';
-import Dialog from '../../widgets/Dialog';
-import DialogCloseButton from '../../widgets/DialogCloseButton';
-import ReactToolboxMobxForm from '../../../utils/ReactToolboxMobxForm';
-import { InvalidMnemonicError } from '../../../i18n/errors';
-import globalMessages from '../../../i18n/global-messages';
-import styles from './VerificationDialog.scss';
 import {
   PAPER_WALLET_PRINTED_WORDS_COUNT,
   PAPER_WALLET_RECOVERY_PHRASE_WORD_COUNT,
-  PAPER_WALLET_WRITTEN_WORDS_COUNT
+  PAPER_WALLET_WRITTEN_WORDS_COUNT,
 } from '../../../config/cryptoConfig';
 import { FORM_VALIDATION_DEBOUNCE_WAIT } from '../../../config/timingConfig';
+import { InvalidMnemonicError } from '../../../i18n/errors';
+import globalMessages from '../../../i18n/global-messages';
+import { ReactToolboxMobxForm } from '../../../utils/ReactToolboxMobxForm';
+import Dialog from '../../widgets/Dialog';
+import DialogCloseButton from '../../widgets/DialogCloseButton';
+import styles from './VerificationDialog.scss';
 
 const messages = defineMessages({
   headline: {

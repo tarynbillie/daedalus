@@ -43,7 +43,7 @@ export default class WalletsStore extends Store {
     ]);
   }
 
-  _create = async (params: {
+  create = async (params: {
     name: string,
     password: ?string,
   }) => {
@@ -60,7 +60,7 @@ export default class WalletsStore extends Store {
     }
   };
 
-  _finishCreation = async () => {
+  finishCreation = async () => {
     this._newWalletDetails.mnemonic = this.stores.walletBackup.recoveryPhrase.join(' ');
     const wallet = await this.createWalletRequest.execute(this._newWalletDetails).promise;
     if (wallet) {
@@ -70,7 +70,7 @@ export default class WalletsStore extends Store {
     }
   };
 
-  _delete = async (params: { walletId: string }) => {
+  delete = async (params: { walletId: string }) => {
     const walletToDelete = this.getWalletById(params.walletId);
     if (!walletToDelete) return;
     const indexOfWalletToDelete = this.all.indexOf(walletToDelete);
@@ -95,14 +95,14 @@ export default class WalletsStore extends Store {
     this.refreshWalletsData();
   };
 
-  _restore = async (params: {
+  restore = async (params: {
     recoveryPhrase: string,
     walletName: string,
     walletPassword: ?string,
   }) => {
     const restoredWallet = await this.restoreRequest.execute(params).promise;
     if (!restoredWallet) throw new Error('Restored wallet was not received correctly');
-    await this._patchWalletRequestWithNewWallet(restoredWallet);
+    await this.patchWalletRequestWithNewWallet(restoredWallet);
     this.actions.dialogs.closeActiveDialog.trigger();
     this.restoreRequest.reset();
     this.goToWalletRoute(restoredWallet.id);
@@ -169,7 +169,7 @@ export default class WalletsStore extends Store {
     if (!result) return;
     runInAction('refresh active wallet', () => {
       if (this.active) {
-        this._setActiveWallet({ walletId: this.active.id });
+        this.setActiveWallet({ walletId: this.active.id });
       }
     });
     const transactions = this.stores[environment.API].transactions;
@@ -184,7 +184,7 @@ export default class WalletsStore extends Store {
     });
   };
 
-  @action _setActiveWallet = ({ walletId }: { walletId: string }) => {
+  @action setActiveWallet = ({ walletId }: { walletId: string }) => {
     if (this.hasAnyWallets) {
       this.active = this.all.find(wallet => wallet.id === walletId);
     }
@@ -206,7 +206,7 @@ export default class WalletsStore extends Store {
     return isRootRoute || isAddWalletRoute;
   }
 
-  _patchWalletRequestWithNewWallet = async (wallet: Wallet) => {
+  patchWalletRequestWithNewWallet = async (wallet: Wallet) => {
     // Only add the new wallet if it does not exist yet in the result!
     await this.walletsRequest.patch(result => {
       if (!_.find(result, { id: wallet.id })) result.push(wallet);
@@ -231,16 +231,16 @@ export default class WalletsStore extends Store {
         const walletForCurrentRoute = this.all.find(w => w.id === match.id);
         if (walletForCurrentRoute) {
           // The wallet exists, we are done
-          this._setActiveWallet({ walletId: walletForCurrentRoute.id });
+          this.setActiveWallet({ walletId: walletForCurrentRoute.id });
         } else if (hasAnyWalletLoaded) {
           // There is no wallet with given id -> pick first wallet
-          this._setActiveWallet({ walletId: this.all[0].id });
+          this.setActiveWallet({ walletId: this.all[0].id });
           if (this.active) this.goToWalletRoute(this.active.id);
         }
       } else if (this._canRedirectToWallet) {
         // The route does not specify any wallet -> pick first wallet
         if (!this.hasActiveWallet && hasAnyWalletLoaded) {
-          this._setActiveWallet({ walletId: this.all[0].id });
+          this.setActiveWallet({ walletId: this.all[0].id });
         }
         if (this.active) {
           this.goToWalletRoute(this.active.id);

@@ -119,6 +119,7 @@ const messages = defineMessages({
 
 type Props = {
   logFiles: LogFiles,
+  compressedLogsFile: ?string,
   onCancel: Function,
   onSubmit: Function,
   onSubmitManually: Function,
@@ -215,7 +216,7 @@ export default class BugReportDialog extends Component<Props, State> {
         const { attachLogs, compressedLogsFile } = this.state;
         if (attachLogs && !compressedLogsFile) {
           this.props.onGetLogsAndCompress();
-          return false;
+          return;
         }
         const { email, subject, problem } = form.values();
         const data = {

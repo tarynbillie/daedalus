@@ -25,7 +25,7 @@ export const getEtcSyncProgress = (ca: string): Promise<Maybe<SyncProgress>> =>
 const etcSyncProgressToSyncProgress = (etcProgress: EtcSyncProgress) =>
   etcProgress
     ? Maybe.Just({
-      completed: etcProgress.currentBlock,
-      total: etcProgress.highestBlock,
+      completed: Number.parseInt(etcProgress.currentBlock, 16),
+      total: Number.parseInt(etcProgress.highestBlock, 16),
     })
     : Maybe.Nothing();

@@ -1,44 +1,56 @@
 // @flow
 import { observable } from 'mobx';
 import BigNumber from 'bignumber.js';
+
 import WalletStore from '../WalletStore';
 import Request from '.././lib/LocalizedRequest';
+import type { GetEstimatedGasPriceResponse } from '../../api/etc/index';
 import type {
-  GetEstimatedGasPriceResponse,
-} from '../../api/etc/index';
-import type {
-  CreateWalletResponse, GetWalletsResponse,
-  DeleteWalletResponse, RestoreWalletResponse,
-  CreateTransactionResponse, GetWalletRecoveryPhraseResponse
+  CreateWalletResponse,
+  GetWalletsResponse,
+  DeleteWalletResponse,
+  RestoreWalletResponse,
+  CreateTransactionResponse,
+  GetWalletRecoveryPhraseResponse,
 } from '../../api/common';
 import {
   ETC_DEFAULT_GAS_PRICE,
   HARDCODED_ETC_TX_FEE,
-  WEI_PER_ETC
+  WEI_PER_ETC,
 } from '../../config/numbersConfig';
 
 export default class EtcWalletsStore extends WalletStore {
-
   // REQUESTS
-  /* eslint-disable max-len */
-  @observable walletsRequest: Request<GetWalletsResponse> = new Request(this.api.etc.getWallets);
-  @observable createWalletRequest: Request<CreateWalletResponse> = new Request(this.api.etc.createWallet);
-  @observable deleteWalletRequest: Request<DeleteWalletResponse> = new Request(this.api.etc.deleteWallet);
-  @observable sendMoneyRequest: Request<CreateTransactionResponse> = new Request(this.api.etc.createTransaction);
-  @observable getEstimatedGasPriceRequest: Request<GetEstimatedGasPriceResponse> = new Request(this.api.etc.getEstimatedGasPriceResponse);
-  @observable getWalletRecoveryPhraseRequest: Request<GetWalletRecoveryPhraseResponse> = new Request(this.api.etc.getWalletRecoveryPhrase);
-  @observable restoreRequest: Request<RestoreWalletResponse> = new Request(this.api.etc.restoreWallet);
-  /* eslint-disable max-len */
+  @observable
+  walletsRequest: Request<GetWalletsResponse> = new Request(this.api.etc.getWallets);
+  @observable
+  createWalletRequest: Request<CreateWalletResponse> = new Request(this.api.etc.createWallet);
+  @observable
+  deleteWalletRequest: Request<DeleteWalletResponse> = new Request(this.api.etc.deleteWallet);
+  @observable
+  sendMoneyRequest: Request<CreateTransactionResponse> = new Request(
+    this.api.etc.createTransaction,
+  );
+  @observable
+  getEstimatedGasPriceRequest: Request<GetEstimatedGasPriceResponse> = new Request(
+    this.api.etc.getEstimatedGasPriceResponse,
+  );
+  @observable
+  getWalletRecoveryPhraseRequest: Request<GetWalletRecoveryPhraseResponse> = new Request(
+    this.api.etc.getWalletRecoveryPhrase,
+  );
+  @observable
+  restoreRequest: Request<RestoreWalletResponse> = new Request(this.api.etc.restoreWallet);
 
   setup() {
     super.setup();
     const { walletBackup, etc } = this.actions;
     const { wallets } = etc;
-    wallets.createWallet.listen(this._create);
-    wallets.deleteWallet.listen(this._delete);
+    wallets.createWallet.listen(this.create);
+    wallets.deleteWallet.listen(this.delete);
     wallets.sendMoney.listen(this._sendMoney);
-    wallets.restoreWallet.listen(this._restore);
-    walletBackup.finishWalletBackup.listen(this._finishCreation);
+    wallets.restoreWallet.listen(this.restore);
+    walletBackup.finishWalletBackup.listen(this.finishCreation);
   }
 
   _sendMoney = async (transactionDetails: {
@@ -86,8 +98,9 @@ export default class EtcWalletsStore extends WalletStore {
     const amountInETC = new BigNumber(amount).dividedBy(WEI_PER_ETC);
     const transactionFees = new BigNumber(HARDCODED_ETC_TX_FEE);
     const isGreaterThanZero = amountInETC.greaterThan(0);
-    const isLessOrEqualToWalletAmount =
-      amountInETC.add(transactionFees).lessThanOrEqualTo(wallet.amount);
+    const isLessOrEqualToWalletAmount = amountInETC
+      .add(transactionFees)
+      .lessThanOrEqualTo(wallet.amount);
     return isGreaterThanZero && isLessOrEqualToWalletAmount;
   };
 }

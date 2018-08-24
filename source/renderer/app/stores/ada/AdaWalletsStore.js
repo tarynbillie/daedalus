@@ -58,7 +58,7 @@ export default class AdaWalletsStore extends WalletStore {
     super.setup();
     const { router, walletBackup, ada } = this.actions;
     const { wallets } = ada;
-    wallets.createWallet.listen(this._create);
+    wallets.createWallet.listen(this.create);
     wallets.deleteWallet.listen(this._deleteWallet);
     wallets.sendMoney.listen(this._sendMoney);
     wallets.restoreWallet.listen(this._restoreWallet);
@@ -70,7 +70,7 @@ export default class AdaWalletsStore extends WalletStore {
     wallets.setCertificateTemplate.listen(this._setCertificateTemplate);
     wallets.finishCertificate.listen(this._finishCertificate);
     router.goToRoute.listen(this._onRouteChange);
-    walletBackup.finishWalletBackup.listen(this._finishCreation);
+    walletBackup.finishWalletBackup.listen(this.finishCreation);
   }
 
   _sendMoney = async (transactionDetails: {
@@ -131,10 +131,10 @@ export default class AdaWalletsStore extends WalletStore {
         const walletIds = result.map((wallet: Wallet) => wallet.id);
         this.stores.ada.transactions.transactionsRequests = walletIds.map(walletId => ({
           walletId,
-          recentRequest: this.stores.ada.transactions._getTransactionsRecentRequest(walletId),
-          allRequest: this.stores.ada.transactions._getTransactionsAllRequest(walletId),
+          recentRequest: this.stores.ada.transactions.getTransactionsRecentRequest(walletId),
+          allRequest: this.stores.ada.transactions.getTransactionsAllRequest(walletId),
         }));
-        this.stores.ada.transactions._refreshTransactionData();
+        this.stores.ada.transactions.refreshTransactionData();
       });
       runInAction('refresh active wallet restore', () => {
         const restoringWallet = typeof find(result, ['syncState.tag', 'restoring']) !== 'undefined';
@@ -209,7 +209,7 @@ export default class AdaWalletsStore extends WalletStore {
 
     const restoredWallet = await this.restoreRequest.execute(data).promise;
     if (!restoredWallet) throw new Error('Restored wallet was not received correctly');
-    await this._patchWalletRequestWithNewWallet(restoredWallet);
+    await this.patchWalletRequestWithNewWallet(restoredWallet);
     this.actions.dialogs.closeActiveDialog.trigger();
     this.restoreRequest.reset();
     this.goToWalletRoute(restoredWallet.id);
@@ -222,7 +222,7 @@ export default class AdaWalletsStore extends WalletStore {
       filePath, walletName, walletPassword,
     }).promise;
     if (!importedWallet) throw new Error('Imported wallet was not received correctly');
-    await this._patchWalletRequestWithNewWallet(importedWallet);
+    await this.patchWalletRequestWithNewWallet(importedWallet);
     this.actions.dialogs.closeActiveDialog.trigger();
     this.importFromFileRequest.reset();
     this.goToWalletRoute(importedWallet.id);

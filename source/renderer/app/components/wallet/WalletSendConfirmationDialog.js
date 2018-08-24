@@ -14,7 +14,7 @@ import styles from './WalletSendConfirmationDialog.scss';
 import { FORM_VALIDATION_DEBOUNCE_WAIT } from '../../config/timingConfig';
 import { submitOnEnter } from '../../utils/form';
 
-export const messages = defineMessages({
+export const messages = Object.assign({}, defineMessages({
   dialogTitle: {
     id: 'wallet.send.confirmationDialog.title',
     defaultMessage: '!!!Confirm transaction',
@@ -60,9 +60,7 @@ export const messages = defineMessages({
     defaultMessage: '!!!Back',
     description: 'Label for the back button in the wallet send confirmation dialog.'
   },
-});
-
-messages.fieldIsRequired = globalMessages.fieldIsRequired;
+}), {fieldIsRequired: globalMessages.fieldIsRequired});
 
 type Props = {
   isWalletPasswordSet: boolean,

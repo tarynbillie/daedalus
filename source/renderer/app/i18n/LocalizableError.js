@@ -1,9 +1,16 @@
 // @flow strict
 import ExtendableError from 'es6-error';
 
+// Cannot be expressed nicely but it implements MessageDescriptor from 'react-intl'
 export default class LocalizableError extends ExtendableError {
   id: string;
-  description: string = '';
+  // Flow is so retarded that optional field syntax is supported only in type declarations and interfaces,
+  // it's completely incompatible with nullable type so:
+  // - description?: string
+  // description: ?string
+  // Are completely incompatible types and there is no way to declare optional field in this class <3
+  // $FlowIssue
+  description: ?string;
   defaultMessage: string;
   values: {[string]: string};
 

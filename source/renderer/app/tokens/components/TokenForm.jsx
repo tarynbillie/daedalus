@@ -35,7 +35,7 @@ export class TokenForm extends React.PureComponent<TokenFormProps> {
     );
   }
 
-  _renderInput = (field: Field) => (
+  _renderInput = <T>(field: Field<T>) => (
     <div className={styles.inputWrapper}>
       {field.type === 'number' ? (
         <NumericInput

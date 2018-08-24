@@ -1,7 +1,8 @@
 // @flow
 import React from 'react';
-import { storiesOf, action } from '@storybook/react';
+import { storiesOf } from '@storybook/react';
 import { linkTo } from '@storybook/addon-links';
+import { action } from '@storybook/addon-actions';
 import { withKnobs, text, boolean, number } from '@storybook/addon-knobs';
 import BigNumber from 'bignumber.js';
 import moment from 'moment';
@@ -46,7 +47,7 @@ storiesOf('WalletScreens', module)
                 ? (
                   <WalletWithNavigation
                     isActiveScreen={item => item === context.story.toLocaleLowerCase()}
-                    onWalletNavItemClick={linkTo('WalletScreens', item => startCase(item))}
+                    onWalletNavItemClick={linkTo('WalletScreens', startCase)}
                   >
                     {storyWithKnobs}
                   </WalletWithNavigation>

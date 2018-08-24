@@ -16,7 +16,7 @@ export default class AdaTransactionsStore extends TransactionsStore {
     };
     const wallet = this.stores.ada.wallets.active;
     if (!wallet) return unconfirmedAmount;
-    const result = this._getTransactionsAllRequest(wallet.id).result;
+    const result = this.getTransactionsAllRequest(wallet.id).result;
     if (!result || !result.transactions) return unconfirmedAmount;
 
     for (const transaction of result.transactions) {

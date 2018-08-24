@@ -25,7 +25,7 @@ interface TokenFormStory {
   add(name: string, render: (context: TokenFormContext) => Node): TokenFormStory;
 }
 
-storiesOf<TokenFormStory>('Wallet/Tokens/TokenForm', module)
+storiesOf('Wallet/Tokens/TokenForm', module)
   .addDecorator((story, context) => {
     const FormProvider = injectIntl(
       class extends React.PureComponent<{ intl: IntlShape, children(): Node }> {

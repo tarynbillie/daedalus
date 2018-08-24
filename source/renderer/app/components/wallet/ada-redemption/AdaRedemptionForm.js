@@ -28,7 +28,7 @@ import { ADA_REDEMPTION_TYPES } from '../../../types/redemptionTypes';
 import type { RedemptionTypeChoices } from '../../../types/redemptionTypes';
 import { submitOnEnter } from '../../../utils/form';
 
-const messages = defineMessages({
+const messages = Object.assign({}, defineMessages({
   headline: {
     id: 'wallet.redeem.dialog.headline',
     defaultMessage: '!!!Ada Redemption',
@@ -192,9 +192,7 @@ where Ada should be redeemed and enter {adaRedemptionPassphraseLength} word mnem
     defaultMessage: '!!!Password',
     description: 'Label for "spending password"',
   },
-});
-
-messages.fieldIsRequired = globalMessages.fieldIsRequired;
+}), {fieldIsRequired: globalMessages.fieldIsRequired});
 
 type Props = {
   wallets: Array<{ value: string, label: string }>,
@@ -564,7 +562,7 @@ export default class AdaRedemptionForm extends Component<Props> {
               {showUploadWidget ? (
                 <div className={styles.certificate}>
                   <AdaCertificateUploadWidget
-                    {...certificateField.bind()}
+                    {...(certificateField.bind(): any)}
                     selectedFile={certificateField.value}
                     onFileSelected={(file) => {
                       resetForm();

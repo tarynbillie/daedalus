@@ -11,19 +11,19 @@ export default class CachedRequest<Result, Error> extends Request<Result, Error>
 
   execute(...callArgs: Array<any>): CachedRequest<Result, Error> {
     // Do not continue if this request is already loading
-    if (this._isWaitingForResponse) return this;
+    if (this.isWaitingForResponse) return this;
 
     // Very simple caching strategy -> only continue if the call / args changed
     // or the request was invalidated manually from outside
     const existingApiCall = this._findApiCall(callArgs);
 
     // Invalidate if new or different api call will be done
-    if (existingApiCall && existingApiCall !== this._currentApiCall) {
+    if (existingApiCall && existingApiCall !== this.currentApiCall) {
       this._isInvalidated = true;
-      this._currentApiCall = existingApiCall;
+      this.currentApiCall = existingApiCall;
     } else if (!existingApiCall) {
       this._isInvalidated = true;
-      this._currentApiCall = this._addApiCall(callArgs);
+      this.currentApiCall = this._addApiCall(callArgs);
     }
 
     // Do not continue if this request is not invalidated (see above)
@@ -41,15 +41,15 @@ export default class CachedRequest<Result, Error> extends Request<Result, Error>
 
     // Issue api call & save it as promise that is handled to update the results of the operation
     this.promise = new Promise((resolve, reject) => {
-      this._method(...callArgs)
+      this.method(...callArgs)
         .then((result) => {
           setTimeout(action(() => {
             this.result = result;
-            if (this._currentApiCall) this._currentApiCall.result = result;
+            if (this.currentApiCall) this.currentApiCall.result = result;
             this.isExecuting = false;
             this.wasExecuted = true;
             this._isInvalidated = false;
-            this._isWaitingForResponse = false;
+            this.isWaitingForResponse = false;
             resolve(result);
           }), 1);
           return result;
@@ -60,13 +60,13 @@ export default class CachedRequest<Result, Error> extends Request<Result, Error>
             this.isExecuting = false;
             this.isError = true;
             this.wasExecuted = true;
-            this._isWaitingForResponse = false;
+            this.isWaitingForResponse = false;
             reject(error);
           }), 1);
         }));
     });
 
-    this._isWaitingForResponse = true;
+    this.isWaitingForResponse = true;
     return this;
   }
 
@@ -74,8 +74,8 @@ export default class CachedRequest<Result, Error> extends Request<Result, Error>
     options: { immediately: boolean } = { immediately: false }
   ): CachedRequest<Result, Error> {
     this._isInvalidated = true;
-    if (options.immediately && this._currentApiCall) {
-      return this.execute(...this._currentApiCall.args);
+    if (options.immediately && this.currentApiCall) {
+      return this.execute(...this.currentApiCall.args);
     }
     return this;
   }

@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { Select } from 'react-polymorph/lib/components/Select';
 import { SelectSkin } from 'react-polymorph/lib/skins/simple/SelectSkin';
 import { defineMessages, intlShape } from 'react-intl';
-import ReactToolboxMobxForm from '../../../utils/ReactToolboxMobxForm';
+import { ReactToolboxMobxForm } from '../../../utils/ReactToolboxMobxForm';
 import LocalizableError from '../../../i18n/LocalizableError';
 import styles from './GeneralSettings.scss';
 import type { ReactIntlMessage } from '../../../types/i18nTypes';
@@ -75,7 +75,7 @@ export default class GeneralSettings extends Component<Props> {
           skin={SelectSkin}
         />
 
-        {error && <p className={styles.error}>{error}</p>}
+        {error && <p className={styles.error}>{intl.formatMessage(error)}</p>}
 
       </div>
     );

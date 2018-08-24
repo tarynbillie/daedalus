@@ -22,7 +22,7 @@ import WalletSendConfirmationDialogContainer from '../../containers/wallet/dialo
 import { formattedAmountToBigNumber, formattedAmountToNaturalUnits } from '../../utils/formatters';
 import { FORM_VALIDATION_DEBOUNCE_WAIT } from '../../config/timingConfig';
 
-export const messages = defineMessages({
+export const messages = Object.assign({}, defineMessages({
   titleLabel: {
     id: 'wallet.send.form.title.label',
     defaultMessage: '!!!Title',
@@ -93,9 +93,7 @@ export const messages = defineMessages({
     defaultMessage: '!!!This wallet is currently being synced with the blockchain. While synchronisation is in progress transacting is not possible and transaction history is not complete.',
     description: 'Syncing transactions message shown during async wallet restore in the wallet send form.',
   },
-});
-
-messages.fieldIsRequired = globalMessages.fieldIsRequired;
+}), {fieldIsRequired: globalMessages.fieldIsRequired});
 
 type Props = {
   currencyUnit: string,

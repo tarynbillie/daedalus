@@ -3,24 +3,24 @@ import { action, observable } from 'mobx';
 import { assoc, complement, isNil, values } from 'ramda';
 import { interval, merge, Subscription } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter, pluck } from 'rxjs/operators';
-import Wallet from '../../domains/Wallet';
 
 import { RxStore } from '../../stores/lib/RxStore';
 import WalletsStore from '../../stores/WalletStore';
-import { notNull } from '../../utils';
 import { asObservable } from '../../utils/mobx';
 import type { ERC20Token, TokensMap } from '../models/ERC20';
 import type { ERC20Check } from '../services/EtcERC20TokenApi';
 import { EtcERC20TokenApi } from '../services/EtcERC20TokenApi';
 import { TokenRepository } from '../services/TokenRepository';
 
-type TokenWithBalance = { token: ERC20Token, balance: number }
+type TokenWithBalance = { token: ERC20Token, balance: number };
 
 const TOKEN_BALANCE_REFRESH_INTERVAL = 10000;
 
 export class TokenStore extends RxStore {
-  @observable.ref tokens: ERC20Token[] = [];
-  @observable.ref tokenBalances: { [string]: number } = {};
+  @observable.ref
+  tokens: ERC20Token[] = [];
+  @observable.ref
+  tokenBalances: { [string]: number } = {};
 
   _tokenRepository: TokenRepository;
   _erc20TokenApi: EtcERC20TokenApi;
@@ -31,7 +31,7 @@ export class TokenStore extends RxStore {
   constructor(
     tokenRepository: TokenRepository,
     erc20TokenApi: EtcERC20TokenApi,
-    walletStore: WalletsStore
+    walletStore: WalletsStore,
   ) {
     super();
     this._tokenRepository = tokenRepository;
@@ -47,7 +47,7 @@ export class TokenStore extends RxStore {
         pluck('id'),
         distinctUntilChanged(),
       )
-      .subscribe((walletId) => {
+      .subscribe(walletId => {
         this._currentWalletId = walletId;
         this._setTokens({});
         this._setBalances({});
@@ -56,11 +56,11 @@ export class TokenStore extends RxStore {
 
     const updateBalancesSubscription = merge(
       interval(TOKEN_BALANCE_REFRESH_INTERVAL),
-      asObservable(() => this.tokens)
+      asObservable(() => this.tokens),
     )
       .pipe(
         concatMap(() => this.tokens),
-        concatMap(token => this._fetchBalance(token))
+        concatMap(token => this._fetchBalance(token)),
       )
       .subscribe(this._setBalance, console.error);
 
@@ -68,7 +68,9 @@ export class TokenStore extends RxStore {
   }
 
   addToken(token: ERC20Token): Promise<void> {
-    return this._tokenRepository.addToken(this._currentWalletId, token).then(this._setTokens);
+    return this._tokenRepository
+      .addToken(this._currentWalletId, token)
+      .then(tokens => this._setTokens(tokens));
   }
 
   checkAddress(address: string): Promise<ERC20Check> {
@@ -80,7 +82,9 @@ export class TokenStore extends RxStore {
   }
 
   stopWatching(token: ERC20Token): Promise<void> {
-    return this._tokenRepository.removeToken(this._currentWalletId, token).then(this._setTokens);
+    return this._tokenRepository
+      .removeToken(this._currentWalletId, token)
+      .then(tokens => this._setTokens(tokens));
   }
 
   sendTokens(token: ERC20Token, amount: number, receiver: string): Promise<boolean> {
@@ -88,7 +92,9 @@ export class TokenStore extends RxStore {
   }
 
   _updateTokens = (): Promise<void> =>
-    this._tokenRepository.getWalletTokens(this._currentWalletId).then(this._setTokens);
+    this._tokenRepository
+      .getWalletTokens(this._currentWalletId)
+      .then(tokens => this._setTokens(tokens));
 
   _fetchBalance = (token: ERC20Token): Promise<TokenWithBalance> =>
     this._erc20TokenApi
@@ -105,7 +111,7 @@ export class TokenStore extends RxStore {
 
   _setBalance = action((tokenBalance: TokenWithBalance) => {
     this.tokenBalances = assoc(tokenBalance.token.address.toLowerCase())(tokenBalance.balance)(
-      this.tokenBalances
+      this.tokenBalances,
     );
   });
 }

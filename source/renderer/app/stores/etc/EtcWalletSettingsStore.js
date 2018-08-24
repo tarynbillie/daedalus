@@ -14,9 +14,9 @@ export default class EtcWalletSettingsStore extends WalletSettingsStore {
 
   setup() {
     const a = this.actions.etc.walletSettings;
-    a.startEditingWalletField.listen(this._startEditingWalletField);
-    a.stopEditingWalletField.listen(this._stopEditingWalletField);
-    a.cancelEditingWalletField.listen(this._cancelEditingWalletField);
+    a.startEditingWalletField.listen(this.startEditingWalletField);
+    a.stopEditingWalletField.listen(this.stopEditingWalletField);
+    a.cancelEditingWalletField.listen(this.cancelEditingWalletField);
     a.updateWalletField.listen(this._updateWalletField);
     a.updateWalletPassword.listen(this._updateWalletPassword);
   }
@@ -43,7 +43,7 @@ export default class EtcWalletSettingsStore extends WalletSettingsStore {
       result[walletIndex] = wallet;
     });
     this.updateWalletRequest.reset();
-    this.stores.etc.wallets._setActiveWallet({ walletId: id });
+    this.stores.etc.wallets.setActiveWallet({ walletId: id });
   };
 
 }

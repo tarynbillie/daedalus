@@ -19,7 +19,7 @@ import globalMessages from '../../i18n/global-messages';
 import LocalizableError from '../../i18n/LocalizableError';
 import styles from './WalletReceive.scss';
 
-const messages = defineMessages({
+const messages = Object.assign({}, defineMessages({
   walletAddressLabel: {
     id: 'wallet.receive.page.walletAddressLabel',
     defaultMessage: '!!!Your wallet address',
@@ -55,9 +55,7 @@ const messages = defineMessages({
     defaultMessage: '!!!Copy address',
     description: 'Label for "Copy address" link on the wallet "Receive page"',
   },
-});
-
-messages.fieldIsRequired = globalMessages.fieldIsRequired;
+}), {fieldIsRequired: globalMessages.fieldIsRequired});
 
 type Props = {
   walletAddress: string,

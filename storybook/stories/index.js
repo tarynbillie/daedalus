@@ -1,6 +1,4 @@
 // @flow
-
-//TODO: reconfigure storybook to automatically pick all `.stories.jsx?` files
 import '../../source/renderer/app/themes/index.global.scss';
 import './Sidebar.stories';
 import './SidebarCategory.stories';

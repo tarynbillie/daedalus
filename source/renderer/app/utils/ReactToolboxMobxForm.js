@@ -6,21 +6,21 @@ import { isEmpty } from 'validator';
 
 import { FieldRequiredError } from '../i18n/errors';
 
-type ValidatorInput = {
-  field: Field,
+type ValidatorInput<T = string> = {
+  field: Field<T>,
 }
 const intlValidators = (intl: IntlShape) => ({
-  required: ({ field }: ValidatorInput) => [
+  required: ({ field }: ValidatorInput<>) => [
     !isEmpty(field.value),
     intl.formatMessage(new FieldRequiredError())
   ],
-  requiredNumeric: ({ field }: ValidatorInput) => [
+  requiredNumeric: ({ field }: ValidatorInput<number>) => [
     field.value != null,
     intl.formatMessage(new FieldRequiredError())
   ]
 });
 
-class ReactToolboxMobxForm extends MobxReactForm {
+class ReactToolboxMobxForm<T: {} = { [string]: string }> extends MobxReactForm<T> {
   bindings() {
     return {
       ReactToolbox: {

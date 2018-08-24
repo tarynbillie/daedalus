@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import * as React from 'react';
 import classnames from 'classnames';
 import { observer } from 'mobx-react';
 import SVGInline from 'react-svg-inline';
@@ -33,11 +33,11 @@ const messages = defineMessages({
 
 type Props = {
   onDiscard: () => void,
-  onFaqLinkClick: (event: MouseEvent) => void,
+  onFaqLinkClick: (event: SyntheticMouseEvent<HTMLAnchorElement>) => void,
 };
 
 @observer
-export default class AntivirusRestaurationSlowdownNotification extends Component<Props> {
+export default class AntivirusRestaurationSlowdownNotification extends React.Component<Props> {
 
   static contextTypes = {
     intl: intlShape.isRequired,
@@ -50,7 +50,7 @@ export default class AntivirusRestaurationSlowdownNotification extends Component
     const faqLink = (
       <a
         href={intl.formatMessage(globalMessages.faqLinkUrl)}
-        onClick={event => onFaqLinkClick(event)}
+        onClick={onFaqLinkClick}
       >
         {intl.formatMessage(messages.faqLinkText)}
       </a>

@@ -1,16 +1,19 @@
 // @flow
-import React, { Component } from 'react';
-import { observer } from 'mobx-react';
-import { find, kebabCase } from 'lodash';
 import classNames from 'classnames';
+import { kebabCase } from 'lodash';
+import { observer } from 'mobx-react';
+import { find, propEq, propOr } from 'ramda';
+import React, { Component } from 'react';
+
+import supportIcon from '../../assets/images/sidebar/bug-report-ic.inline.svg';
+import { CATEGORIES_BY_NAME } from '../../config/ada/sidebarConfig.js';
+import { ROUTES } from '../../routes-config';
+import type { SidebarWalletType } from '../../types/sidebarTypes';
+import { pass } from '../../utils';
+import InstructionsDialog from '../wallet/paper-wallet-certificate/InstructionsDialog';
 import styles from './Sidebar.scss';
 import SidebarCategory from './SidebarCategory';
 import SidebarWalletsMenu from './wallets/SidebarWalletsMenu';
-import InstructionsDialog from '../wallet/paper-wallet-certificate/InstructionsDialog';
-import supportIcon from '../../assets/images/sidebar/bug-report-ic.inline.svg';
-import type { SidebarWalletType } from '../../types/sidebarTypes';
-import { ROUTES } from '../../routes-config';
-import { CATEGORIES_BY_NAME } from '../../config/ada/sidebarConfig.js';
 
 type Props = {
   menus: SidebarMenus,
@@ -53,9 +56,7 @@ export default class Sidebar extends Component<Props> {
     } = this.props;
     let subMenu = null;
 
-    const walletsCategory = find(categories, {
-      name: CATEGORIES_BY_NAME.WALLETS.name
-    }).route;
+    const walletsCategory = pass(categories)(find(propEq('name', CATEGORIES_BY_NAME.WALLETS.name)), x => x ? x.route : '');
 
     if (menus && activeSidebarCategory === walletsCategory) {
       subMenu = (

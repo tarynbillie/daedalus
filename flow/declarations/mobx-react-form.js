@@ -1,3 +1,4 @@
+// @flow
 declare module 'mobx-react-form' {
   declare export interface FieldDeclarationWithoutName {
     +type?: string;
@@ -11,17 +12,24 @@ declare module 'mobx-react-form' {
 
   declare type FieldError = string;
 
-  declare export class Field implements FieldDeclarationWithName {
+  declare export class Field<T = string> implements FieldDeclarationWithName {
     +name: string;
+    +label: string;
     +type: string;
-    value: string;
+    value: T;
     +isValid: boolean;
+    +isDirty: boolean;
     +error: FieldError;
-    observe(cb: ({ form: MobxReactForm, field: Field, change: Change }) => void): void;
+    +debouncedValidation: {
+      cancel(): void;
+    };
+    observe(cb: ({ form: MobxReactForm<>, field: Field<>, change: Change }) => void): void;
     reset(): void;
     bind(): {value: string};
     set(val: string): void;
     onChange(val: string): void;
+    onFocus(): void;
+    onBlur(): void;
   }
 
   declare export type Change = {
@@ -30,12 +38,12 @@ declare module 'mobx-react-form' {
 
   declare type Plugin = any;
 
-  declare export type Hooks<T: MobxReactForm = MobxReactForm> = {
+  declare export type Hooks<T: MobxReactForm<> = MobxReactForm<>> = {
     onSuccess?: T => void,
     onError?: T => void
   };
 
-  declare export default class MobxReactForm {
+  declare export default class MobxReactForm<T: {} = { [string]: string }> {
     +isValid: boolean;
 
     constructor(
@@ -43,12 +51,12 @@ declare module 'mobx-react-form' {
       hooksAndPlugins?: { plugins?: { [string]: Plugin }, hooks?: Hooks<*> }
     ): void;
 
-    $(name: string): Field;
-    submit(hooks: Hooks<>): void;
-    values(): { [string]: string };
+    $<T>(name: string): Field<T>;
+    submit(hooks: Hooks<*>): void;
+    values(): T;
     validate(): void;
     showErrors(shouldShow: boolean): void;
-    each(cb: Field => void): void;
+    each(cb: Field<$Values<T>> => void): void;
     reset(): void;
 
     onSubmit(): void;

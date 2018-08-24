@@ -17,7 +17,7 @@ type Props = {
 @observer
 export default class FileUploadWidget extends Component<Props> {
 
-  onDrop = (files: [File]) => {
+  onDrop = (files: File[]) => {
     this.props.onFileSelected(files[0]);
   };
 

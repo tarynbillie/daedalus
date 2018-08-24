@@ -6,19 +6,19 @@ import type { IntlShape } from 'react-intl';
 import { intlValidators, ReactToolboxMobxForm } from '../../utils/ReactToolboxMobxForm';
 
 export class TokenForm extends ReactToolboxMobxForm {
-  get addressField(): Field {
+  get addressField(): Field<string> {
     return this.$('address');
   }
 
-  get nameField(): Field {
+  get nameField(): Field<string> {
     return this.$('name');
   }
 
-  get symbolField(): Field {
+  get symbolField(): Field<string> {
     return this.$('symbol');
   }
 
-  get decimalsField(): Field {
+  get decimalsField(): Field<number> {
     return this.$('decimals');
   }
 

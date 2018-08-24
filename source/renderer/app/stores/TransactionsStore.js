@@ -50,14 +50,14 @@ export default class TransactionsStore extends Store {
     const wallet = this.stores[environment.API].wallets.active;
     // TODO: Do not return new request here
     if (!wallet) return new CachedRequest(this.api[environment.API].getTransactions);
-    return this._getTransactionsRecentRequest(wallet.id);
+    return this.getTransactionsRecentRequest(wallet.id);
   }
 
   @computed get searchRequest(): CachedRequest<GetTransactionsResponse> {
     const wallet = this.stores[environment.API].wallets.active;
     // TODO: Do not return new request here
     if (!wallet) return new CachedRequest(this.api[environment.API].getTransactions);
-    return this._getTransactionsAllRequest(wallet.id);
+    return this.getTransactionsAllRequest(wallet.id);
   }
 
   @computed get searchOptions(): ?TransactionSearchOptionsStruct {
@@ -82,7 +82,7 @@ export default class TransactionsStore extends Store {
     const wallet = this.stores[environment.API].wallets.active;
     if (!wallet || !this.searchOptions) return [];
     const { searchTerm } = this.searchOptions;
-    const request = this._getTransactionsAllRequest(wallet.id);
+    const request = this.getTransactionsAllRequest(wallet.id);
     if (searchTerm && request.result && request.result.transactions) {
       return request.result.transactions.filter(
         transaction => transaction.title.search(new RegExp(searchTerm, 'i')) !== -1
@@ -94,43 +94,43 @@ export default class TransactionsStore extends Store {
   @computed get recent(): Array<WalletTransaction> {
     const wallet = this.stores[environment.API].wallets.active;
     if (!wallet) return [];
-    const result = this._getTransactionsRecentRequest(wallet.id).result;
+    const result = this.getTransactionsRecentRequest(wallet.id).result;
     return result ? result.transactions.slice(0, this.RECENT_TRANSACTIONS_LIMIT) : [];
   }
 
   @computed get hasAnyFiltered(): boolean {
     const wallet = this.stores[environment.API].wallets.active;
     if (!wallet) return false;
-    const result = this._getTransactionsAllRequest(wallet.id).result;
+    const result = this.getTransactionsAllRequest(wallet.id).result;
     return result ? result.transactions.length > 0 : false;
   }
 
   @computed get hasAny(): boolean {
     const wallet = this.stores[environment.API].wallets.active;
     if (!wallet) return false;
-    const result = this._getTransactionsRecentRequest(wallet.id).result;
+    const result = this.getTransactionsRecentRequest(wallet.id).result;
     return result ? result.transactions.length > 0 : false;
   }
 
   @computed get totalAvailable(): number {
     const wallet = this.stores[environment.API].wallets.active;
     if (!wallet) return 0;
-    const result = this._getTransactionsAllRequest(wallet.id).result;
+    const result = this.getTransactionsAllRequest(wallet.id).result;
     return result ? result.transactions.length : 0;
   }
 
   @computed get totalFilteredAvailable(): number {
     const wallet = this.stores[environment.API].wallets.active;
     if (!wallet) return 0;
-    const result = this._getTransactionsAllRequest(wallet.id).result;
+    const result = this.getTransactionsAllRequest(wallet.id).result;
     return result ? result.transactions.length : 0;
   }
 
-  @action _refreshTransactionData = () => {
+  @action refreshTransactionData = () => {
     if (this.stores.networkStatus.isConnected) {
       const allWallets = this.stores[environment.API].wallets.all;
       for (const wallet of allWallets) {
-        const recentRequest = this._getTransactionsRecentRequest(wallet.id);
+        const recentRequest = this.getTransactionsRecentRequest(wallet.id);
         recentRequest.invalidate({ immediately: false });
         recentRequest.execute({
           walletId: wallet.id,
@@ -138,7 +138,7 @@ export default class TransactionsStore extends Store {
           skip: 0,
           searchTerm: '',
         });
-        const allRequest = this._getTransactionsAllRequest(wallet.id);
+        const allRequest = this.getTransactionsAllRequest(wallet.id);
         allRequest.invalidate({ immediately: false });
         allRequest.execute({
           walletId: wallet.id,
@@ -150,13 +150,13 @@ export default class TransactionsStore extends Store {
     }
   };
 
-  _getTransactionsRecentRequest = (walletId: string): CachedRequest<GetTransactionsResponse> => {
+  getTransactionsRecentRequest = (walletId: string): CachedRequest<GetTransactionsResponse> => {
     const foundRequest = _.find(this.transactionsRequests, { walletId });
     if (foundRequest && foundRequest.recentRequest) return foundRequest.recentRequest;
     return new CachedRequest(this.api[environment.API].getTransactions);
   };
 
-  _getTransactionsAllRequest = (walletId: string): CachedRequest<GetTransactionsResponse> => {
+  getTransactionsAllRequest = (walletId: string): CachedRequest<GetTransactionsResponse> => {
     const foundRequest = _.find(this.transactionsRequests, { walletId });
     if (foundRequest && foundRequest.allRequest) return foundRequest.allRequest;
     return new CachedRequest(this.api[environment.API].getTransactions);

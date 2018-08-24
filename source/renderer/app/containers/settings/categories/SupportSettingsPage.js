@@ -1,11 +1,12 @@
 // @flow
-import React, { Component } from 'react';
-import { observer, inject } from 'mobx-react';
 import { remote } from 'electron';
+import { inject, observer } from 'mobx-react';
+import React, { Component } from 'react';
+
+import { generateFileNameWithTimestamp } from '../../../../../common/fileName';
+import BugReportDialog from '../../../components/profile/bug-report/BugReportDialog';
 import SupportSettings from '../../../components/settings/categories/SupportSettings';
 import type { InjectedProps } from '../../../types/injectedPropsType';
-import BugReportDialog from '../../../components/profile/bug-report/BugReportDialog';
-import { generateFileNameWithTimestamp } from '../../../../../common/fileName';
 
 const shell = require('electron').shell;
 
@@ -14,9 +15,9 @@ export default class SupportSettingsPage extends Component<InjectedProps> {
 
   static defaultProps = { actions: null, stores: null };
 
-  handleExternalLinkClick = (event: MouseEvent) => {
+  handleExternalLinkClick = (event: SyntheticMouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    if (event.target.href) shell.openExternal(event.target.href);
+    if (event.currentTarget.href) shell.openExternal(event.currentTarget.href);
   };
 
   handleSupportRequestClick = () => {

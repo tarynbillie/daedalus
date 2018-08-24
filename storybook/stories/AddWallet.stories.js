@@ -33,7 +33,7 @@ storiesOf('AddWallet', module)
   .add('WalletRestoreDialog', () => (
     <div>
       <WalletRestoreDialog
-        mnemonicValidator={() => {}}
+        mnemonicValidator={() => true}
         showCertificateRestore={false}
         isSubmitting={false}
         onSubmit={action('onSubmit')}

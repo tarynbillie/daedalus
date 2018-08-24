@@ -32,7 +32,7 @@ export type AdaWalletInitData = {
     cwUnit: number,
   },
   cwBackupPhrase: {
-    bpToList: [],
+    bpToList: string[],
   }
 };
 

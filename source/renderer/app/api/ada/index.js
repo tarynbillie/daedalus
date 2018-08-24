@@ -620,7 +620,7 @@ export default class AdaApi {
     let nextUpdate = null;
     try {
       // TODO: add flow type definitions for nextUpdate response
-      const response: Promise<any> = await nextAdaUpdate({ ca });
+      const response = await nextAdaUpdate({ ca });
       Logger.debug('AdaApi::nextUpdate success: ' + stringifyData(response));
       if (response && response.cuiSoftwareVersion) {
         nextUpdate = {
