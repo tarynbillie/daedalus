@@ -42,9 +42,9 @@ let emptyMenus;
 
 storiesOf('Sidebar', module)
 
-  .addDecorator((story) => (
+  .addDecorator((story, context) => (
     <StoryDecorator>
-      {story()}
+      {story(context)}
     </StoryDecorator>
   ))
 

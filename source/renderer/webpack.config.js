@@ -36,6 +36,15 @@ module.exports = {
         include: /source/,
         exclude: /source\/main/,
         use: {
+          loader: 'eslint-loader',
+        },
+        enforce: 'pre',
+      },
+      {
+        test: /\.jsx?$/,
+        include: /source/,
+        exclude: /source\/main/,
+        use: {
           loader: 'babel-loader',
         },
       },

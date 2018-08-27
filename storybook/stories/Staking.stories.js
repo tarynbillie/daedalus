@@ -7,9 +7,9 @@ import StakingSwitch from '../../source/renderer/app/components/staking/StakingS
 
 storiesOf('Staking', module)
 
-  .addDecorator((story) => (
+  .addDecorator((story, context) => (
     <StoryDecorator>
-      {story()}
+      {story(context)}
     </StoryDecorator>
   ))
 

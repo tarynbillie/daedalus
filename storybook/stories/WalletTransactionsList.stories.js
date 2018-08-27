@@ -1,22 +1,20 @@
 // @flow
-import React from 'react';
 import { storiesOf } from '@storybook/react';
-import moment from 'moment';
 import BigNumber from 'bignumber.js';
+import moment from 'moment';
+import React from 'react';
+import WalletTransactionsList from '../../source/renderer/app/components/wallet/transactions/WalletTransactionsList';
+import { transactionStates, transactionTypes } from '../../source/renderer/app/domains/WalletTransaction';
+import { formattedWalletAmount } from '../../source/renderer/app/utils/ada/formatters';
+
 import StoryDecorator from './support/StoryDecorator';
 import { generateTransaction } from './support/utils';
-import WalletTransactionsList from '../../source/renderer/app/components/wallet/transactions/WalletTransactionsList';
-import {
-  transactionStates,
-  transactionTypes
-} from '../../source/renderer/app/domains/WalletTransaction';
-import { formattedWalletAmount } from '../../source/renderer/app/utils/ada/formatters';
 
 storiesOf('WalletTransactionsList', module)
 
-  .addDecorator((story) => (
+  .addDecorator((story, context) => (
     <StoryDecorator>
-      {story()}
+      {story(context)}
     </StoryDecorator>
   ))
 

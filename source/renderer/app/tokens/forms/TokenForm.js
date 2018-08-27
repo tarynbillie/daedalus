@@ -53,7 +53,7 @@ export class TokenForm extends ReactToolboxMobxForm {
 
   hasAddressOnly(): boolean {
     const hasAddress = !!this.addressField.value;
-    const hasOtherValue = [this.nameField, this.symbolField, this.decimalsField].map(prop('value')).some(value => !!value);
+    const hasOtherValue = [this.nameField, this.symbolField, this.decimalsField].map(x => x.value).some(value => !!value);
 
     return hasAddress && !hasOtherValue;
   }

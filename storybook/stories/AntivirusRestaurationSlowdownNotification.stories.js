@@ -9,9 +9,9 @@ import AntivirusRestaurationSlowdownNotification
 
 storiesOf('AntivirusRestaurationSlodownNotification', module)
 
-  .addDecorator((story) => (
+  .addDecorator((story, context) => (
     <StoryDecorator>
-      {story()}
+      {story(context)}
     </StoryDecorator>
   ))
 

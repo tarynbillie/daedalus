@@ -16,7 +16,7 @@ import TinySwitch from '../../source/renderer/app/components/widgets/forms/TinyS
 
 storiesOf('Widgets', module)
 
-  .addDecorator((story) => {
+  .addDecorator((story, context) => {
     const onChangeAction = action('onChange');
     const state = observable({
       checked: false,
@@ -30,7 +30,7 @@ storiesOf('Widgets', module)
       <StoryDecorator
         propsForChildren={state}
       >
-        {story()}
+        {story(context)}
       </StoryDecorator>
     );
   })

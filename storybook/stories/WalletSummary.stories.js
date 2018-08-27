@@ -7,9 +7,9 @@ import WalletSummary from '../../source/renderer/app/components/wallet/summary/W
 
 storiesOf('WalletSummary', module)
 
-  .addDecorator((story) => (
+  .addDecorator((story, context) => (
     <StoryDecorator>
-      {story()}
+      {story(context)}
     </StoryDecorator>
   ))
 

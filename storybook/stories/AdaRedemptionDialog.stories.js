@@ -11,9 +11,9 @@ import { ADA_REDEMPTION_TYPES } from '../../source/renderer/app/types/redemption
 
 storiesOf('AdaRedemptionForm', module)
 
-  .addDecorator((story) => (
+  .addDecorator((story, context) => (
     <StoryDecorator>
-      {story()}
+      {story(context)}
     </StoryDecorator>
   ))
 

@@ -43,9 +43,9 @@ const topBarProductionEnv = (
 
 storiesOf('TopBar', module)
 
-  .addDecorator((story) => (
+  .addDecorator((story, context) => (
     <StoryDecorator>
-      {story()}
+      {story(context)}
     </StoryDecorator>
   ))
 

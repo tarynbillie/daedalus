@@ -12,9 +12,9 @@ import CompletionDialog from '../../source/renderer/app/components/wallet/paper-
 
 storiesOf('PaperWallets', module)
 
-  .addDecorator((story) => (
+  .addDecorator((story, context) => (
     <StoryDecorator>
-      {story()}
+      {story(context)}
     </StoryDecorator>
   ))
 

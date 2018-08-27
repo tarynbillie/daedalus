@@ -8,9 +8,9 @@ import SidebarWalletsMenu from '../../source/renderer/app/components/sidebar/wal
 
 storiesOf('SidebarWalletsMenu', module)
 
-  .addDecorator((story) => (
+  .addDecorator((story, context) => (
     <StoryDecorator>
-      <div style={{ width: '200px' }}>{story()}</div>
+      <div style={{ width: '200px' }}>{story(context)}</div>
     </StoryDecorator>
   ))
 

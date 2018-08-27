@@ -11,8 +11,9 @@
 [include]
 
 [libs]
-./flow/declarations/
 node_modules/mobx/lib/mobx.js.flow
+./flow-typed/npm/
+./flow/declarations/
 
 [options]
 esproposal.class_static_fields=enable

@@ -11,8 +11,8 @@ export default class WalletBackupStore extends Store {
   @observable inProgress = false;
   @observable currentStep: walletBackupStep = WALLET_BACKUP_STEPS.NOT_INITIATED;
   @observable recoveryPhrase = [];
-  @observable recoveryPhraseWords = [];
-  @observable recoveryPhraseShuffled = [];
+  @observable recoveryPhraseWords: {word: string}[] = [];
+  @observable recoveryPhraseShuffled: Array<{word: string, isActive: boolean}> = [];
   @observable completed = false;
   @observable enteredPhrase = [];
   @observable isPrivacyNoticeAccepted = false;

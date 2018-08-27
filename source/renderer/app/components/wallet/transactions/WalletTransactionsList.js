@@ -1,19 +1,19 @@
-import { groupBy } from 'ramda';
-
 // @flow
-import React, { Component } from 'react';
-import { observer } from 'mobx-react';
 import classnames from 'classnames';
+import { observer } from 'mobx-react';
+import moment from 'moment';
+import React, { Component } from 'react';
+import { defineMessages, intlShape } from 'react-intl';
 import { Button } from 'react-polymorph/lib/components/Button';
 import { ButtonSkin } from 'react-polymorph/lib/skins/simple/ButtonSkin';
-import { defineMessages, intlShape } from 'react-intl';
-import moment from 'moment';
-import { pass } from '../../../utils';
-import styles from './WalletTransactionsList.scss';
-import Transaction from './Transaction';
+
 import WalletTransaction from '../../../domains/WalletTransaction';
-import LoadingSpinner from '../../widgets/LoadingSpinner';
 import type { AssuranceMode } from '../../../types/transactionAssuranceTypes';
+import LoadingSpinner from '../../widgets/LoadingSpinner';
+import Transaction from './Transaction';
+import styles from './WalletTransactionsList.scss';
+
+type TransactionGroup = {date: string, transactions: WalletTransaction[]}
 
 const messages = defineMessages({
   today: {
@@ -71,8 +71,9 @@ export default class WalletTransactionsList extends Component<Props> {
   loadingSpinner: ?LoadingSpinner;
   localizedDateFormat: string;
 
-  groupTransactionsByDay(transactions: Array<WalletTransaction>) {
-    const groups: {date: string, transactions: WalletTransaction[]}[] = [];
+  groupTransactionsByDay(transactions: Array<WalletTransaction>): TransactionGroup[] {
+    const groups: TransactionGroup[] = [];
+
     for (const transaction of transactions) {
       const date = moment(transaction.date).format(dateFormat);
       let group = groups.find((g) => g.date === date);
@@ -82,6 +83,7 @@ export default class WalletTransactionsList extends Component<Props> {
       }
       group.transactions.push(transaction);
     }
+
     return groups.sort(
       (a, b) => b.transactions[0].date.getTime() - a.transactions[0].date.getTime()
     );

@@ -10,9 +10,9 @@ import WalletFileImportDialog from '../../source/renderer/app/components/wallet/
 
 storiesOf('AddWallet', module)
 
-  .addDecorator((story) => (
+  .addDecorator((story, context) => (
     <StoryDecorator>
-      {story()}
+      {story(context)}
     </StoryDecorator>
   ))
 

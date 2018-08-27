@@ -74,11 +74,11 @@ export const TokensList = pipe(
       );
     }
 
-    _stopWatching = memoizeWith(prop('address'), (token: ERC20Token) => () =>
+    _stopWatching = memoizeWith(x => x.address, (token: ERC20Token) => () =>
       this.props.tokenStore.stopWatching(token)
     );
 
-    _openSendForm = memoizeWith(prop('address'), (token: ERC20Token) => () =>
+    _openSendForm = memoizeWith(x => x.address, (token: ERC20Token) => () =>
       this.setState({
         sendingToken: token,
         sendingForm: new SendTokensForm(this.props.intl, {

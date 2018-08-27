@@ -8,9 +8,9 @@ import ExportWalletToFileDialog from '../../source/renderer/app/components/walle
 
 storiesOf('ExportWalletToFileDialog', module)
 
-  .addDecorator((story) => (
+  .addDecorator((story, context) => (
     <StoryDecorator>
-      {story()}
+      {story(context)}
     </StoryDecorator>
   ))
 
