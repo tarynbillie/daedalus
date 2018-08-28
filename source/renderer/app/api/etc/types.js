@@ -18,7 +18,7 @@ export type EtcBlock = {
 };
 
 export type EtcSyncProgress = ?{
-  startingBlock: string, //number in hex
+  startingBlock: string, // number in hex
   currentBlock: string,
   highestBlock: string,
 };

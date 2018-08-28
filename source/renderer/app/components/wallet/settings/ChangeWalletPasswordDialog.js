@@ -8,7 +8,7 @@ import { SwitchSkin } from 'react-polymorph/lib/skins/simple/SwitchSkin';
 import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
 import { IDENTIFIERS } from 'react-polymorph/lib/themes/API';
 import { defineMessages, intlShape } from 'react-intl';
-import ReactToolboxMobxForm from '../../../utils/ReactToolboxMobxForm';
+import { ReactToolboxMobxForm } from '../../../utils/ReactToolboxMobxForm';
 import DialogCloseButton from '../../widgets/DialogCloseButton';
 import Dialog from '../../widgets/Dialog';
 import { isValidWalletPassword, isValidRepeatPassword } from '../../../utils/validations';

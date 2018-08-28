@@ -212,6 +212,9 @@ export type GetWalletRecoveryPhraseFromCertificateRequest = {
 
 export default class AdaApi {
 
+  setLocalTimeDifference = () => {};
+  setNextUpdate = () => {};
+
   constructor() {
     if (environment.isTest()) {
       patchAdaApi(this);
@@ -550,7 +553,7 @@ export default class AdaApi {
     }
   }
 
-  async redeemAda(request: RedeemAdaRequest): Promise<RedeemAdaResponse> {
+  redeemAda = async (request: RedeemAdaRequest): Promise<RedeemAdaResponse> => {
     Logger.debug('AdaApi::redeemAda called');
     const { redemptionCode, accountId, walletPassword } = request;
     try {
@@ -574,9 +577,9 @@ export default class AdaApi {
     }
   }
 
-  async redeemPaperVendedAda(
+  redeemPaperVendedAda = async (
     request: RedeemPaperVendedAdaRequest
-  ): Promise<RedeemPaperVendedAdaResponse> {
+  ): Promise<RedeemPaperVendedAdaResponse> => {
     Logger.debug('AdaApi::redeemAdaPaperVend called');
     const { shieldedRedemptionKey, mnemonics, accountId, walletPassword } = request;
     try {
@@ -615,7 +618,7 @@ export default class AdaApi {
     }
   }
 
-  async nextUpdate(): Promise<NextUpdateResponse> {
+  nextUpdate = async (): Promise<NextUpdateResponse> => {
     Logger.debug('AdaApi::nextUpdate called');
     let nextUpdate = null;
     try {
@@ -775,7 +778,7 @@ export default class AdaApi {
     }
   }
 
-  async getLocalTimeDifference(): Promise<GetLocalTimeDifferenceResponse> {
+  getLocalTimeDifference = async (): Promise<GetLocalTimeDifferenceResponse> => {
     Logger.debug('AdaApi::getLocalTimeDifference called');
     try {
       const response: AdaLocalTimeDifference = await getAdaLocalTimeDifference({ ca });

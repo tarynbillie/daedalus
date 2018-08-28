@@ -1,7 +1,11 @@
+// @flow
 import { defineMessages } from 'react-intl';
-import LocalizableError from '../i18n/LocalizableError';
-import { WalletTransaction, Wallet } from '../domains/WalletTransaction';
+import Wallet from '../domains/Wallet';
+import WalletTransaction from '../domains/WalletTransaction';
 import globalMessages from '../i18n/global-messages';
+
+import LocalizableError from '../i18n/LocalizableError';
+import type { BugReportFormData } from './etc/sendEtcBugReport';
 
 const messages = defineMessages({
   genericApiError: {
@@ -30,7 +34,7 @@ export class GenericApiError extends LocalizableError {
   constructor() {
     super({
       id: messages.genericApiError.id,
-      defaultMessage: messages.genericApiError.defaultMessage,
+      defaultMessage: messages.genericApiError.defaultMessage || '',
     });
   }
 }
@@ -39,7 +43,7 @@ export class IncorrectWalletPasswordError extends LocalizableError {
   constructor() {
     super({
       id: messages.incorrectWalletPasswordError.id,
-      defaultMessage: messages.incorrectWalletPasswordError.defaultMessage,
+      defaultMessage: messages.incorrectWalletPasswordError.defaultMessage || '',
     });
   }
 }
@@ -48,7 +52,7 @@ export class WalletAlreadyRestoredError extends LocalizableError {
   constructor() {
     super({
       id: messages.walletAlreadyRestoredError.id,
-      defaultMessage: messages.walletAlreadyRestoredError.defaultMessage,
+      defaultMessage: messages.walletAlreadyRestoredError.defaultMessage || '',
     });
   }
 }
@@ -57,7 +61,7 @@ export class ReportRequestError extends LocalizableError {
   constructor() {
     super({
       id: messages.reportRequestError.id,
-      defaultMessage: messages.reportRequestError.defaultMessage,
+      defaultMessage: messages.reportRequestError.defaultMessage || '',
     });
   }
 }
@@ -120,10 +124,5 @@ export type GetTransactionsResponse = {
   total: number,
 };
 
-export type SendBugReportRequest = {
-  email: string,
-  subject: string,
-  problem: string,
-  logs: Array<string>,
-};
+export type SendBugReportRequest = BugReportFormData;
 export type SendBugReportResponse = any;

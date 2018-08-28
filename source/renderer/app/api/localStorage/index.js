@@ -1,3 +1,4 @@
+// @flow
 import Store from 'electron-store';
 import environment from '../../../../common/environment';
 
@@ -17,7 +18,7 @@ const storageKeys = {
 
 export default class LocalStorageApi {
 
-  getUserLocale = () => new Promise((resolve, reject) => {
+  getUserLocale = (): Promise<string> => new Promise((resolve, reject) => {
     try {
       const locale = store.get(storageKeys.USER_LOCALE);
       if (!locale) return resolve('');
@@ -27,7 +28,7 @@ export default class LocalStorageApi {
     }
   });
 
-  setUserLocale = (locale: string) => new Promise((resolve, reject) => {
+  setUserLocale = (locale: string): Promise<void> => new Promise((resolve, reject) => {
     try {
       store.set(storageKeys.USER_LOCALE, locale);
       resolve();
@@ -36,14 +37,14 @@ export default class LocalStorageApi {
     }
   });
 
-  unsetUserLocale = () => new Promise((resolve) => {
+  unsetUserLocale = (): Promise<void> => new Promise((resolve) => {
     try {
       store.delete(storageKeys.USER_LOCALE);
       resolve();
     } catch (error) {} // eslint-disable-line
   });
 
-  getTermsOfUseAcceptance = () => new Promise((resolve, reject) => {
+  getTermsOfUseAcceptance = (): Promise<boolean> => new Promise((resolve, reject) => {
     try {
       const accepted = store.get(storageKeys.TERMS_OF_USE_ACCEPTANCE);
       if (!accepted) return resolve(false);
@@ -53,7 +54,7 @@ export default class LocalStorageApi {
     }
   });
 
-  setTermsOfUseAcceptance = () => new Promise((resolve, reject) => {
+  setTermsOfUseAcceptance = (): Promise<void> => new Promise((resolve, reject) => {
     try {
       store.set(storageKeys.TERMS_OF_USE_ACCEPTANCE, true);
       resolve();
@@ -62,14 +63,14 @@ export default class LocalStorageApi {
     }
   });
 
-  unsetTermsOfUseAcceptance = () => new Promise((resolve) => {
+  unsetTermsOfUseAcceptance = (): Promise<void> => new Promise((resolve) => {
     try {
       store.delete(storageKeys.TERMS_OF_USE_ACCEPTANCE);
       resolve();
     } catch (error) {} // eslint-disable-line
   });
 
-  getUserTheme = () => new Promise((resolve, reject) => {
+  getUserTheme = (): Promise<string> => new Promise((resolve, reject) => {
     try {
       const theme = store.get(storageKeys.THEME);
       if (!theme) return resolve('');
@@ -79,7 +80,7 @@ export default class LocalStorageApi {
     }
   });
 
-  setUserTheme = (theme: string) => new Promise((resolve, reject) => {
+  setUserTheme = (theme: string): Promise<void> => new Promise((resolve, reject) => {
     try {
       store.set(storageKeys.THEME, theme);
       resolve();
@@ -88,7 +89,7 @@ export default class LocalStorageApi {
     }
   });
 
-  unsetUserTheme = () => new Promise((resolve) => {
+  unsetUserTheme = (): Promise<void> => new Promise((resolve) => {
     try {
       store.delete(storageKeys.THEME);
       resolve();

@@ -1,27 +1,34 @@
-import React, { Component } from 'react';
+// @flow
+import * as React from 'react';
 import _ from 'lodash';
 import classnames from 'classnames';
-import type { Node } from 'react';
 import { Modal } from 'react-polymorph/lib/components/Modal';
 import { Button } from 'react-polymorph/lib/components/Button';
 import { ButtonSkin } from 'react-polymorph/lib/skins/simple/ButtonSkin';
 import { ModalSkin } from 'react-polymorph/lib/skins/simple/ModalSkin';
 import styles from './Dialog.scss';
 
+type Action = {
+  className?: ?string,
+  primary?: boolean,
+  label?: string,
+  onClick: ?(() => void),
+  disabled?: boolean,
+};
+
 type Props = {
   title?: string,
-  children?: Node,
-  actions?: Node,
-  closeButton?: Node,
-  backButton?: Node,
+  children?: React.Node,
+  actions?: Action[],
+  closeButton?: React.Element<*>,
+  backButton?: React.Node,
   className?: string,
-  onClose?: Function,
+  onClose?: ?Function,
   closeOnOverlayClick?: boolean,
   primaryButtonAutoFocus?: boolean,
 };
 
-export default class Dialog extends Component<Props> {
-
+export default class Dialog extends React.Component<Props> {
   render() {
     const {
       title,
@@ -42,21 +49,16 @@ export default class Dialog extends Component<Props> {
         onClose={onClose}
         skin={ModalSkin}
       >
-
         <div className={classnames([styles.dialogWrapper, className])}>
-          {title &&
+          {title && (
             <div className={styles.title}>
               <h1>{title}</h1>
             </div>
-          }
+          )}
 
-          {children &&
-            <div className={styles.content}>
-              {children}
-            </div>
-          }
+          {children && <div className={styles.content}>{children}</div>}
 
-          {actions &&
+          {actions && (
             <div className={styles.actions}>
               {_.map(actions, (action, key) => {
                 const buttonClasses = classnames([
@@ -76,11 +78,10 @@ export default class Dialog extends Component<Props> {
                 );
               })}
             </div>
-          }
+          )}
 
           {closeButton ? React.cloneElement(closeButton, { onClose }) : null}
           {backButton}
-
         </div>
       </Modal>
     );

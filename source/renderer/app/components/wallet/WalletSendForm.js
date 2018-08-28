@@ -10,7 +10,7 @@ import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
 import { defineMessages, intlShape } from 'react-intl';
 import BigNumber from 'bignumber.js';
 
-import ReactToolboxMobxForm from '../../utils/ReactToolboxMobxForm';
+import { ReactToolboxMobxForm } from '../../utils/ReactToolboxMobxForm';
 import { submitOnEnter } from '../../utils/form';
 import AmountInputSkin from './skins/AmountInputSkin';
 import BorderedBox from '../widgets/BorderedBox';
@@ -93,7 +93,7 @@ export const messages = Object.assign({}, defineMessages({
     defaultMessage: '!!!This wallet is currently being synced with the blockchain. While synchronisation is in progress transacting is not possible and transaction history is not complete.',
     description: 'Syncing transactions message shown during async wallet restore in the wallet send form.',
   },
-}), {fieldIsRequired: globalMessages.fieldIsRequired});
+}), { fieldIsRequired: globalMessages.fieldIsRequired });
 
 type Props = {
   currencyUnit: string,

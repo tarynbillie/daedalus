@@ -4,13 +4,15 @@ import url from 'url';
 import { request } from '../lib/reportRequest';
 import environment from '../../../../common/environment';
 
+export type BugReportFormData = {
+  email: string,
+  subject: string,
+  problem: string,
+  compressedLogsFile: string,
+}
+
 export type SendEtcBugReportRequestParams = {
-  requestFormData: {
-    email: string,
-    subject: string,
-    problem: string,
-    compressedLogsFile: string,
-  },
+  requestFormData: BugReportFormData,
   application: string,
 };
 

@@ -1,22 +1,35 @@
+// @flow
 import hash from 'hash.js';
 import faker from 'faker';
 import moment from 'moment';
 import BigNumber from 'bignumber.js';
+import WalletAddress from '../../../source/renderer/app/domains/WalletAddress';
 
+import type {
+  TransactionState,
+  TransactionType,
+} from '../../../source/renderer/app/domains/WalletTransaction';
 import WalletTransaction, {
   transactionStates,
-  transactionTypes
+  transactionTypes,
 } from '../../../source/renderer/app/domains/WalletTransaction';
 
 export const generateHash = () => {
-  const now = (new Date()).valueOf().toString();
+  const now = new Date().valueOf().toString();
   const random = Math.random().toString();
-  return hash.sha512().update(now + random).digest('hex');
+  return hash
+    .sha512()
+    .update(now + random)
+    .digest('hex');
 };
 
 export const generateTransaction = (
-  type, date, amount, confirmations = 1, state = transactionStates.OK
-) => (
+  type: TransactionType,
+  date: Date,
+  amount: BigNumber,
+  confirmations: number = 1,
+  state: TransactionState = transactionStates.OK,
+) =>
   new WalletTransaction({
     id: faker.random.uuid(),
     title: '',
@@ -27,28 +40,29 @@ export const generateTransaction = (
     description: '',
     numberOfConfirmations: confirmations,
     addresses: {
-      from: [faker.random.uuid()], to: [faker.random.uuid()]
+      from: [faker.random.uuid()],
+      to: [faker.random.uuid()],
     },
-  })
-);
+  });
 
 export const generateRandomTransaction = (index: number) =>
   generateTransaction(
     transactionTypes.INCOME,
-    moment().subtract(index, 'days').toDate(),
-    new BigNumber(faker.random.number(5))
+    moment()
+      .subtract(index, 'days')
+      .toDate(),
+    new BigNumber(faker.random.number(5)),
   );
 
-export const generateAddres = (isUsed: boolean) => ({
+export const generateAddress = (isUsed: boolean = false): WalletAddress => new WalletAddress({
   id: generateHash(),
   amount: new BigNumber(faker.random.number(5)),
-  isUsed
+  isUsed,
 });
 
-export const promise = (returnValue: any) => (
+export const promise = <T>(returnValue: T): Promise<T> =>
   new Promise(resolve => {
     setTimeout(() => {
       resolve(returnValue);
     }, 2000);
-  })
-);
+  });

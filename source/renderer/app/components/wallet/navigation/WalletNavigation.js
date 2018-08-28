@@ -15,40 +15,39 @@ const messages = defineMessages({
   summary: {
     id: 'wallet.navigation.summary',
     defaultMessage: '!!!Summary',
-    description: 'Label for the "Summary" nav button in the wallet navigation.'
+    description: 'Label for the "Summary" nav button in the wallet navigation.',
   },
   send: {
     id: 'wallet.navigation.send',
     defaultMessage: '!!!Send',
-    description: 'Label for the "Send" nav button in the wallet navigation.'
+    description: 'Label for the "Send" nav button in the wallet navigation.',
   },
   receive: {
     id: 'wallet.navigation.receive',
     defaultMessage: '!!!Receive',
-    description: 'Label for the "Receive" nav button in the wallet navigation.'
+    description: 'Label for the "Receive" nav button in the wallet navigation.',
   },
   transactions: {
     id: 'wallet.navigation.transactions',
     defaultMessage: '!!!Transactions',
-    description:
-      'Label for the "Transactions" nav button in the wallet navigation.'
+    description: 'Label for the "Transactions" nav button in the wallet navigation.',
   },
   settings: {
     id: 'wallet.navigation.settings',
     defaultMessage: '!!!Settings',
-    description: 'Label for the "Settings" nav button in the wallet navigation.'
-  }
+    description: 'Label for the "Settings" nav button in the wallet navigation.',
+  },
 });
 
 type Props = {
   isActiveNavItem: Function,
-  onNavItemClick: Function
+  onNavItemClick: Function,
 };
 
 @observer
 export default class WalletNavigation extends Component<Props> {
   static contextTypes = {
-    intl: intlShape.isRequired
+    intl: intlShape.isRequired,
   };
 
   render() {
@@ -95,14 +94,16 @@ export default class WalletNavigation extends Component<Props> {
           />
         </div>
 
-        {environment.ENABLE_TOKENS_UI && <div className={styles.navItem}>
-          <WalletNavButton
-            label="tokens"
-            icon={transactionsIcon}
-            isActive={isActiveNavItem('tokens')}
-            onClick={() => onNavItemClick('tokens')}
-          />
-        </div>}
+        {environment.ENABLE_TOKENS_UI && (
+          <div className={styles.navItem}>
+            <WalletNavButton
+              label="tokens"
+              icon={transactionsIcon}
+              isActive={isActiveNavItem('tokens')}
+              onClick={() => onNavItemClick('tokens')}
+            />
+          </div>
+        )}
 
         <div className={styles.navItem}>
           <WalletNavButton

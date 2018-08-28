@@ -2,7 +2,7 @@
 import BigNumber from 'bignumber.js';
 import { request } from './lib/request';
 import { ETC_API_HOST, ETC_API_PORT } from './index';
-import type { EtcTransaction, EtcTransactionParams, EtcTxHash } from './types';
+import type { EtcTransactionParams, EtcTxHash } from './types';
 
 type CommonParams = {
   ca: string,

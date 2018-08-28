@@ -10,7 +10,7 @@ import { Button } from 'react-polymorph/lib/components/Button';
 import { Input } from 'react-polymorph/lib/components/Input';
 import { ButtonSkin } from 'react-polymorph/lib/skins/simple/ButtonSkin';
 import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
-import ReactToolboxMobxForm from '../../utils/ReactToolboxMobxForm';
+import { ReactToolboxMobxForm } from '../../utils/ReactToolboxMobxForm';
 import BorderedBox from '../widgets/BorderedBox';
 import TinySwitch from '../widgets/forms/TinySwitch';
 import iconCopy from '../../assets/images/clipboard-ic.inline.svg';
@@ -55,7 +55,7 @@ const messages = Object.assign({}, defineMessages({
     defaultMessage: '!!!Copy address',
     description: 'Label for "Copy address" link on the wallet "Receive page"',
   },
-}), {fieldIsRequired: globalMessages.fieldIsRequired});
+}), { fieldIsRequired: globalMessages.fieldIsRequired });
 
 type Props = {
   walletAddress: string,

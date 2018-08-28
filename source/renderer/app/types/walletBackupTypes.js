@@ -1,3 +1,5 @@
+// @flow strict
+
 export type walletBackupStep = 'privacyWarning' | 'recoveryPhraseDisplay' | 'recoveryPhraseEntry' | null;
 
 export const WALLET_BACKUP_STEPS = {

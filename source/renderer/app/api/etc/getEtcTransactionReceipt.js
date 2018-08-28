@@ -1,4 +1,4 @@
-import type { GetEtcTransactionByHashParams } from './getEtcTransaction';
+// @flow
 import { request } from './lib/request';
 import { ETC_API_HOST, ETC_API_PORT } from './index';
 

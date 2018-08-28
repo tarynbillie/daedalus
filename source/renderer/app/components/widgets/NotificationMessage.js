@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import type { Children } from 'react';
+// @flow
+import * as React from 'react';
 import SVGInline from 'react-svg-inline';
 import classNames from 'classnames';
 import styles from './NotificationMessage.scss';
@@ -7,10 +7,10 @@ import styles from './NotificationMessage.scss';
 type Props = {
   icon: string,
   show: boolean,
-  children?: Children,
+  children?: React.Node,
 };
 
-export default class NotificationMessage extends Component<Props> {
+export default class NotificationMessage extends React.Component<Props> {
 
   render() {
     const { icon, show, children } = this.props;

@@ -2,7 +2,7 @@
 import { BigNumber } from 'bignumber.js';
 import Maybe from 'data.maybe';
 import { remote } from 'electron';
-import { merge, pipe, prop, propEq, reduce, replace, find, map } from 'ramda';
+import { merge, pipe, prop, propEq, reduce, replace } from 'ramda';
 import { interval } from 'rxjs';
 import { concatMap, filter, take } from 'rxjs/operators';
 import abiCoder from 'web3-eth-abi';
@@ -163,7 +163,7 @@ export class EtcERC20TokenApi {
           data: callData
         })
       )
-      .then(this._pollForReceipt);
+      .then(hash => this._pollForReceipt(hash));
   }
 
   _pollForReceipt = (txHash: string): Promise<{ transaction: EtcTransaction, receipt: Receipt }> =>

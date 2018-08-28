@@ -12,7 +12,7 @@ import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
 import { TextAreaSkin } from 'react-polymorph/lib/skins/simple/TextAreaSkin';
 import { SwitchSkin } from 'react-polymorph/lib/skins/simple/SwitchSkin';
 import { IDENTIFIERS } from 'react-polymorph/lib/themes/API';
-import ReactToolboxMobxForm from '../../../utils/ReactToolboxMobxForm';
+import { ReactToolboxMobxForm } from '../../../utils/ReactToolboxMobxForm';
 import DialogCloseButton from '../../widgets/DialogCloseButton';
 import Dialog from '../../widgets/Dialog';
 import { InvalidEmailError, FieldRequiredError } from '../../../i18n/errors';

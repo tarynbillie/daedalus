@@ -13,7 +13,7 @@ import { ButtonSkin } from 'react-polymorph/lib/skins/simple/ButtonSkin';
 import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
 import { SelectSkin } from 'react-polymorph/lib/skins/simple/SelectSkin';
 import { defineMessages, intlShape, FormattedHTMLMessage } from 'react-intl';
-import ReactToolboxMobxForm from '../../../utils/ReactToolboxMobxForm';
+import { ReactToolboxMobxForm } from '../../../utils/ReactToolboxMobxForm';
 import AdaCertificateUploadWidget from '../../widgets/forms/AdaCertificateUploadWidget';
 import AdaRedemptionChoices from './AdaRedemptionChoices';
 import AdaRedemptionDisclaimer from './AdaRedemptionDisclaimer';
@@ -192,7 +192,7 @@ where Ada should be redeemed and enter {adaRedemptionPassphraseLength} word mnem
     defaultMessage: '!!!Password',
     description: 'Label for "spending password"',
   },
-}), {fieldIsRequired: globalMessages.fieldIsRequired});
+}), { fieldIsRequired: globalMessages.fieldIsRequired });
 
 type Props = {
   wallets: Array<{ value: string, label: string }>,

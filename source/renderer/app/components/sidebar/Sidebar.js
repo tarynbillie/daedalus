@@ -2,7 +2,7 @@
 import classNames from 'classnames';
 import { kebabCase } from 'lodash';
 import { observer } from 'mobx-react';
-import { find, propEq, propOr } from 'ramda';
+import { find, propEq } from 'ramda';
 import React, { Component } from 'react';
 
 import supportIcon from '../../assets/images/sidebar/bug-report-ic.inline.svg';

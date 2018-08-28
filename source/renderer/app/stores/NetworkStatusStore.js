@@ -1,7 +1,7 @@
 // @flow
 import { action, computed, observable } from 'mobx';
 import { Observable } from 'rxjs';
-import { bufferCount, filter, share, take, tap } from 'rxjs/operators';
+import { bufferCount, filter, share, take } from 'rxjs/operators';
 
 import { Logger } from '../../../common/logging';
 import Action from '../actions/lib/Action';

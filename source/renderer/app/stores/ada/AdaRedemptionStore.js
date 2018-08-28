@@ -112,31 +112,31 @@ export default class AdaRedemptionStore extends Store {
     this._parseCodeFromCertificate();
   });
 
-  _setPassPhrase = action(({ passPhrase } : { passPhrase: string }) => {
+  _setPassPhrase = action(({ passPhrase }: { passPhrase: string }) => {
     this.passPhrase = passPhrase;
     if (this.isValidRedemptionMnemonic(passPhrase)) this._parseCodeFromCertificate();
   });
 
-  _setRedemptionCode = action(({ redemptionCode } : { redemptionCode: string }) => {
+  _setRedemptionCode = action(({ redemptionCode }: { redemptionCode: string }) => {
     this.redemptionCode = redemptionCode;
   });
 
-  _setEmail = action(({ email } : { email: string }) => {
+  _setEmail = action(({ email }: { email: string }) => {
     this.email = email;
     this._parseCodeFromCertificate();
   });
 
-  _setAdaPasscode = action(({ adaPasscode } : { adaPasscode: string }) => {
+  _setAdaPasscode = action(({ adaPasscode }: { adaPasscode: string }) => {
     this.adaPasscode = adaPasscode;
     this._parseCodeFromCertificate();
   });
 
-  _setAdaAmount = action(({ adaAmount } : { adaAmount: string }) => {
+  _setAdaAmount = action(({ adaAmount }: { adaAmount: string }) => {
     this.adaAmount = adaAmount;
     this._parseCodeFromCertificate();
   });
 
-  _setDecryptionKey = action(({ decryptionKey } : { decryptionKey: string }) => {
+  _setDecryptionKey = action(({ decryptionKey }: { decryptionKey: string }) => {
     this.decryptionKey = decryptionKey;
     this._parseCodeFromCertificate();
   });
@@ -204,7 +204,7 @@ export default class AdaRedemptionStore extends Store {
     this.decryptionKey = null;
   });
 
-  _redeemAda = async ({ walletId, walletPassword } : {
+  _redeemAda = async ({ walletId, walletPassword }: {
     walletId: string,
     walletPassword: ?string,
   }) => {
@@ -231,7 +231,7 @@ export default class AdaRedemptionStore extends Store {
       }));
   };
 
-  _redeemPaperVendedAda = async ({ walletId, shieldedRedemptionKey, walletPassword } : {
+  _redeemPaperVendedAda = async ({ walletId, shieldedRedemptionKey, walletPassword }: {
     walletId: string,
     shieldedRedemptionKey: string,
     walletPassword: ?string,

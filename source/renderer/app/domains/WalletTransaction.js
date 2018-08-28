@@ -37,6 +37,8 @@ export default class WalletTransaction {
   @observable numberOfConfirmations: number = 0;
   @observable addresses: TrasactionAddresses = { from: [], to: [] };
   @observable state: TransactionState;
+  @observable exchange: ?any; // Didn't infer it from usage
+  @observable conversionRate: ?number;
 
   constructor(data: {
     id: string,

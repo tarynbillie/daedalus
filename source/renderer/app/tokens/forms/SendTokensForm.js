@@ -2,7 +2,7 @@
 import type { Field, Hooks } from 'mobx-react-form';
 import type { IntlShape } from 'react-intl';
 
-import { intlValidators, ReactToolboxMobxForm } from '../../utils/ReactToolboxMobxForm';
+import { ReactToolboxMobxForm, intlValidators } from '../../utils/ReactToolboxMobxForm';
 
 export class SendTokensForm extends ReactToolboxMobxForm {
   get amountField(): Field<string> {

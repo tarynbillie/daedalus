@@ -7,7 +7,7 @@ import { Select } from 'react-polymorph/lib/components/Select';
 import { ButtonSkin } from 'react-polymorph/lib/skins/simple/ButtonSkin';
 import { SelectSkin } from 'react-polymorph/lib/skins/simple/SelectSkin';
 import { defineMessages, intlShape } from 'react-intl';
-import ReactToolboxMobxForm from '../../../utils/ReactToolboxMobxForm';
+import { ReactToolboxMobxForm } from '../../../utils/ReactToolboxMobxForm';
 import LocalizableError from '../../../i18n/LocalizableError';
 import styles from './LanguageSelectionForm.scss';
 import type { ReactIntlMessage } from '../../../types/i18nTypes';

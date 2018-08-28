@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { Input } from 'react-polymorph/lib/components/Input';
 import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
 import { intlShape } from 'react-intl';
-import ReactToolboxMobxForm from '../../../utils/ReactToolboxMobxForm';
+import { ReactToolboxMobxForm } from '../../../utils/ReactToolboxMobxForm';
 import Dialog from '../../widgets/Dialog';
 import DialogCloseButton from '../../widgets/DialogCloseButton';
 import LocalizableError from '../../../i18n/LocalizableError';
@@ -97,7 +97,7 @@ export default class WalletSendConfirmationDialog extends Component<Props> {
     const actions = [
       {
         label: intl.formatMessage(messages.backButtonLabel),
-        onClick: !isSubmitting && onCancel,
+        onClick: !isSubmitting ? onCancel : null,
       },
       {
         label: intl.formatMessage(messages.sendButtonLabel),

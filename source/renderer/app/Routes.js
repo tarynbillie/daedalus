@@ -42,7 +42,10 @@ export const Routes = (
       <Route path={ROUTES.WALLETS.SEND} component={WalletSendPage} />
       <Route path={ROUTES.WALLETS.RECEIVE} component={WalletReceivePage} />
       <Route path={ROUTES.WALLETS.SETTINGS} component={WalletSettingsPage} />
-      {(environment.isEtcApi() && environment.ENABLE_TOKENS_UI) && <Route path={ROUTES.WALLETS.TOKENS} component={WalletTokensPage} />}
+      {environment.isEtcApi() &&
+        environment.ENABLE_TOKENS_UI && (
+          <Route path={ROUTES.WALLETS.TOKENS} component={WalletTokensPage} />
+        )}
     </Route>
     <Route path="/settings" component={Settings}>
       <IndexRedirect to="general" />

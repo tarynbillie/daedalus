@@ -36,7 +36,7 @@ export const toDict = curry(
     items.reduce((dict: Dict<T>, item) => assoc(key(item), item, dict), {}),
 );
 
-export const traverse = <A, B>(fn: A => (B | Promise<B>)) => (arr: Functor<A>): Promise<Functor<B>> =>
+export const traverse = <A, B>(fn: A => B | Promise<B>) => (arr: Functor<A>): Promise<Functor<B>> =>
   Promise.all(arr.map(fn));
 
 export const toNothing = always(Maybe.Nothing);

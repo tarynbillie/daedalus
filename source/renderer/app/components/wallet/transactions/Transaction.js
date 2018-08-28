@@ -1,21 +1,20 @@
-import React, { Component } from 'react';
-import { defineMessages, intlShape } from 'react-intl';
-import moment from 'moment';
-import SVGInline from 'react-svg-inline';
+// @flow
 import classNames from 'classnames';
-import styles from './Transaction.scss';
-import TransactionTypeIcon from './TransactionTypeIcon';
+import moment from 'moment';
+import * as React from 'react';
+import { defineMessages, intlShape } from 'react-intl';
+import SVGInline from 'react-svg-inline';
+
+import environment from '../../../../../common/environment';
 import adaSymbol from '../../../assets/images/ada-symbol.inline.svg';
 import etcSymbol from '../../../assets/images/etc-symbol.inline.svg';
-import WalletTransaction, {
-  transactionStates,
-  transactionTypes
-} from '../../../domains/WalletTransaction';
-import { assuranceLevels } from '../../../types/transactionAssuranceTypes';
-import { environmentSpecificMessages } from '../../../i18n/global-messages';
-import type { TransactionState } from '../../../domains/WalletTransaction';
-import environment from '../../../../../common/environment';
 import { ADA_EXPLORER_URL } from '../../../config/urlsConfig';
+import type { TransactionState } from '../../../domains/WalletTransaction';
+import WalletTransaction, { transactionStates, transactionTypes } from '../../../domains/WalletTransaction';
+import { environmentSpecificMessages } from '../../../i18n/global-messages';
+import { assuranceLevels } from '../../../types/transactionAssuranceTypes';
+import styles from './Transaction.scss';
+import TransactionTypeIcon from './TransactionTypeIcon';
 
 const messages = defineMessages({
   card: {
@@ -139,7 +138,7 @@ type State = {
   isExpanded: boolean
 };
 
-export default class Transaction extends Component<Props, State> {
+export default class Transaction extends React.Component<Props, State> {
   static contextTypes = {
     intl: intlShape.isRequired
   };
@@ -152,11 +151,12 @@ export default class Transaction extends Component<Props, State> {
     this.setState({ isExpanded: !this.state.isExpanded });
   }
 
-  handleOpenExplorer(type, param, e) {
+  handleOpenExplorer(type: string, param: string, e: Event) {
     if (this.props.onOpenExternalLink && environment.isAdaApi()) {
+      const workingOpen = this.props.onOpenExternalLink; // https://flow.org/en/docs/lang/refinements/
       e.stopPropagation();
       const link = `${ADA_EXPLORER_URL}/${type}/${param}`;
-      this.props.onOpenExternalLink(link);
+      workingOpen(link);
     }
   }
 

@@ -1,3 +1,5 @@
+// @flow strict
+
 export interface LogEntry {
   topics: string[];
 }

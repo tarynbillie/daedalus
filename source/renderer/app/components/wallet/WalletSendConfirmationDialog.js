@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { Input } from 'react-polymorph/lib/components/Input';
 import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
 import { defineMessages, intlShape } from 'react-intl';
-import ReactToolboxMobxForm from '../../utils/ReactToolboxMobxForm';
+import { ReactToolboxMobxForm } from '../../utils/ReactToolboxMobxForm';
 import Dialog from '../widgets/Dialog';
 import DialogCloseButton from '../widgets/DialogCloseButton';
 import globalMessages from '../../i18n/global-messages';
@@ -60,7 +60,7 @@ export const messages = Object.assign({}, defineMessages({
     defaultMessage: '!!!Back',
     description: 'Label for the back button in the wallet send confirmation dialog.'
   },
-}), {fieldIsRequired: globalMessages.fieldIsRequired});
+}), { fieldIsRequired: globalMessages.fieldIsRequired });
 
 type Props = {
   isWalletPasswordSet: boolean,
@@ -147,7 +147,7 @@ export default class WalletSendConfirmationDialog extends Component<Props> {
     const actions = [
       {
         label: intl.formatMessage(messages.backButtonLabel),
-        onClick: !isSubmitting && onCancel,
+        onClick: !isSubmitting ? onCancel : null,
       },
       {
         label: intl.formatMessage(messages.sendButtonLabel),

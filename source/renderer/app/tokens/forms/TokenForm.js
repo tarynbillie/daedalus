@@ -1,6 +1,5 @@
 // @flow strict
 import type { Field, Hooks } from 'mobx-react-form';
-import { prop } from 'ramda';
 import type { IntlShape } from 'react-intl';
 
 import { intlValidators, ReactToolboxMobxForm } from '../../utils/ReactToolboxMobxForm';
@@ -28,24 +27,24 @@ export class TokenForm extends ReactToolboxMobxForm {
       {
         name: 'address',
         label: 'Address',
-        validators: [required]
+        validators: [required],
       },
       {
         name: 'name',
         label: 'Name',
-        validators: [required]
+        validators: [required],
       },
       {
         name: 'symbol',
         label: 'Symbol',
-        validators: [required]
+        validators: [required],
       },
       {
         name: 'decimals',
         label: 'Decimals',
         type: 'number',
-        validators: [requiredNumeric]
-      }
+        validators: [requiredNumeric],
+      },
     ];
 
     super({ fields: declarations }, { hooks });
@@ -53,7 +52,9 @@ export class TokenForm extends ReactToolboxMobxForm {
 
   hasAddressOnly(): boolean {
     const hasAddress = !!this.addressField.value;
-    const hasOtherValue = [this.nameField, this.symbolField, this.decimalsField].map(x => x.value).some(value => !!value);
+    const hasOtherValue = [this.nameField, this.symbolField, this.decimalsField]
+      .map(x => x.value)
+      .some(value => !!value);
 
     return hasAddress && !hasOtherValue;
   }
