@@ -11,7 +11,7 @@ export type GetEtcAccountBalanceParams = {
 
 export const getEtcAccountBalance = (
   { ca, walletId, status }: GetEtcAccountBalanceParams
-): Promise<EtcWalletBalance> => (
+): Promise<string> => (
   request({
     hostname: ETC_API_HOST,
     method: 'POST',

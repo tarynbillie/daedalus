@@ -1,11 +1,13 @@
 // @flow
+import { BigNumber } from 'bignumber.js';
 import React, { Component } from 'react';
 import { intlShape } from 'react-intl';
-import BigNumber from 'bignumber.js';
 import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
-import styles from './AmountInputSkinEtc.scss';
+
 import { formattedAmountWithoutTrailingZeros } from '../../../../utils/formatters';
 import { messages } from '../AmountInputSkin';
+
+import styles from './AmountInputSkinEtc.scss';
 
 type Props = {
   currency: string,
@@ -24,8 +26,8 @@ export default class AmountInputSkin extends Component<Props> {
     const { error, fees, total, currency } = this.props;
     const { intl } = this.context;
 
-    const formattedFees = formattedAmountWithoutTrailingZeros(fees || '');
-    const formattedTotal = formattedAmountWithoutTrailingZeros(total || '');
+    const formattedFees = formattedAmountWithoutTrailingZeros(fees ? fees.toString() : '');
+    const formattedTotal = formattedAmountWithoutTrailingZeros(total ? total.toString() : '');
 
     return (
       <div className={styles.root}>

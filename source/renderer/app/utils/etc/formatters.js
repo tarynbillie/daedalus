@@ -1,14 +1,16 @@
-// @flow
-import BigNumber from 'bignumber.js';
+// @flow strict
+import { BigNumber } from 'bignumber.js';
+
 import { DECIMAL_PLACES_IN_ETC } from '../../config/numbersConfig';
 
+// TODO: Let's make it short and concise
 // Amount shown in the Topbar and Sidebar
 export const formattedWalletAmount = (
   amount: BigNumber,
   withCurrency: boolean = true,
   long: boolean = false,
 ) => {
-  let formattedAmount = '';
+  let formattedAmount: string = '';
 
   /* eslint-disable max-len */
   if (long) {
@@ -18,41 +20,41 @@ export const formattedWalletAmount = (
   } else if (amount.lessThan(0.000001)) {
     formattedAmount = '< 0.000001';
   } else if (amount.lessThan(1)) {
-    formattedAmount = amount.round(6, BigNumber.ROUND_DOWN);
+    formattedAmount = amount.round(6, BigNumber.ROUND_DOWN).toString();
   } else if (amount.lessThan(1000)) {
-    formattedAmount = amount.round(1, BigNumber.ROUND_DOWN);
+    formattedAmount = amount.round(1, BigNumber.ROUND_DOWN).toString();
   } else if (amount.lessThan(1000000)) {
-    formattedAmount = `${amount.dividedBy(1000).round(1, BigNumber.ROUND_DOWN)}K`;
+    formattedAmount = `${amount.dividedBy(1000).round(1, BigNumber.ROUND_DOWN).toString()}K`;
   } else if (amount.lessThan(1000000000)) {
-    formattedAmount = `${amount.dividedBy(1000000).round(1, BigNumber.ROUND_DOWN)}M`;
+    formattedAmount = `${amount.dividedBy(1000000).round(1, BigNumber.ROUND_DOWN).toString()}M`;
   } else if (amount.lessThan(1000000000000)) {
-    formattedAmount = `${amount.dividedBy(1000000000).round(1, BigNumber.ROUND_DOWN)}B`;
+    formattedAmount = `${amount.dividedBy(1000000000).round(1, BigNumber.ROUND_DOWN).toString()}B`;
   } else if (amount.lessThan(1000000000000000)) {
-    formattedAmount = `${amount.dividedBy(1000000000000).round(1, BigNumber.ROUND_DOWN)}T`;
+    formattedAmount = `${amount.dividedBy(1000000000000).round(1, BigNumber.ROUND_DOWN).toString()}T`;
   } else if (amount.lessThan(1000000000000000000)) {
-    formattedAmount = `${amount.dividedBy(1000000000000000).round(1, BigNumber.ROUND_DOWN)}KT`;
+    formattedAmount = `${amount.dividedBy(1000000000000000).round(1, BigNumber.ROUND_DOWN).toString()}KT`;
   } else if (amount.lessThan(1000000000000000000000)) {
-    formattedAmount = `${amount.dividedBy(1000000000000000000).round(1, BigNumber.ROUND_DOWN)}MT`;
+    formattedAmount = `${amount.dividedBy(1000000000000000000).round(1, BigNumber.ROUND_DOWN).toString()}MT`;
   } else if (amount.lessThan(1000000000000000000000000)) {
-    formattedAmount = `${amount.dividedBy(1000000000000000000000).round(1, BigNumber.ROUND_DOWN)}BT`;
+    formattedAmount = `${amount.dividedBy(1000000000000000000000).round(1, BigNumber.ROUND_DOWN).toString()}BT`;
   } else if (amount.lessThan(1000000000000000000000000000)) {
-    formattedAmount = `${amount.dividedBy(1000000000000000000000000).round(1, BigNumber.ROUND_DOWN)}TT`;
+    formattedAmount = `${amount.dividedBy(1000000000000000000000000).round(1, BigNumber.ROUND_DOWN).toString()}TT`;
   } else if (amount.lessThan(1000000000000000000000000000000)) {
-    formattedAmount = `${amount.dividedBy(1000000000000000000000000000).round(1, BigNumber.ROUND_DOWN)}KTT`;
+    formattedAmount = `${amount.dividedBy(1000000000000000000000000000).round(1, BigNumber.ROUND_DOWN).toString()}KTT`;
   } else if (amount.lessThan(1000000000000000000000000000000000)) {
-    formattedAmount = `${amount.dividedBy(1000000000000000000000000000000).round(1, BigNumber.ROUND_DOWN)}MTT`;
+    formattedAmount = `${amount.dividedBy(1000000000000000000000000000000).round(1, BigNumber.ROUND_DOWN).toString()}MTT`;
   } else if (amount.lessThan(1000000000000000000000000000000000000)) {
-    formattedAmount = `${amount.dividedBy(1000000000000000000000000000000000).round(1, BigNumber.ROUND_DOWN)}BTT`;
+    formattedAmount = `${amount.dividedBy(1000000000000000000000000000000000).round(1, BigNumber.ROUND_DOWN).toString()}BTT`;
   } else if (amount.lessThan(1000000000000000000000000000000000000000)) {
-    formattedAmount = `${amount.dividedBy(1000000000000000000000000000000000000).round(1, BigNumber.ROUND_DOWN)}TTT`;
+    formattedAmount = `${amount.dividedBy(1000000000000000000000000000000000000).round(1, BigNumber.ROUND_DOWN).toString()}TTT`;
   } else if (amount.lessThan(1000000000000000000000000000000000000000000)) {
-    formattedAmount = `${amount.dividedBy(1000000000000000000000000000000000000000).round(1, BigNumber.ROUND_DOWN)}KTTT`;
+    formattedAmount = `${amount.dividedBy(1000000000000000000000000000000000000000).round(1, BigNumber.ROUND_DOWN).toString()}KTTT`;
   } else if (amount.lessThan(1000000000000000000000000000000000000000000000)) {
-    formattedAmount = `${amount.dividedBy(1000000000000000000000000000000000000000000).round(1, BigNumber.ROUND_DOWN)}MTTT`;
+    formattedAmount = `${amount.dividedBy(1000000000000000000000000000000000000000000).round(1, BigNumber.ROUND_DOWN).toString()}MTTT`;
   } else if (amount.lessThan(1000000000000000000000000000000000000000000000000)) {
-    formattedAmount = `${amount.dividedBy(1000000000000000000000000000000000000000000000).round(1, BigNumber.ROUND_DOWN)}BTTT`;
+    formattedAmount = `${amount.dividedBy(1000000000000000000000000000000000000000000000).round(1, BigNumber.ROUND_DOWN).toString()}BTTT`;
   } else {
-    formattedAmount = `${amount.dividedBy(1000000000000000000000000000000000000000000000000).round(1, BigNumber.ROUND_DOWN)}TTTT`;
+    formattedAmount = `${amount.dividedBy(1000000000000000000000000000000000000000000000000).round(1, BigNumber.ROUND_DOWN).toString()}TTTT`;
   }
   /* eslint-disable max-len */
 

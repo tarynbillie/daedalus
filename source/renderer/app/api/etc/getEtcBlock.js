@@ -6,10 +6,11 @@ import type { EtcBlock } from './types';
 export type GetEtcBlockByHashParams = {
   ca: string,
   blockHash: string,
+  full?: boolean,
 };
 
 export const getEtcBlockByHash = (
-  { ca, blockHash }: GetEtcBlockByHashParams
+  { ca, blockHash, full = true }: GetEtcBlockByHashParams
 ): Promise<EtcBlock> => (
   request({
     hostname: ETC_API_HOST,
@@ -20,6 +21,6 @@ export const getEtcBlockByHash = (
   }, {
     jsonrpc: '2.0',
     method: 'eth_getBlockByHash',
-    params: [blockHash, true] // returns the full transaction objects
+    params: [blockHash, full],
   })
 );

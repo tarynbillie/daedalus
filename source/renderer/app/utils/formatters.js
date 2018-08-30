@@ -1,5 +1,5 @@
 // @flow
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 
 export const formattedWalletAmount = (amount: BigNumber) => amount.toFormat(6);
 
@@ -20,3 +20,7 @@ export const formattedAmountWithoutTrailingZeros = (amount: string): string =>
   amount.replace(/0+$/, '').replace(/\.$/, '');
 
 export const formattedYesNo = (val: boolean) => (val ? 'yes' : 'no');
+
+export const bigNumberToHexString = (val: BigNumber): string => val.toString(16);
+
+export const hexStringToNumber = (x: string) => parseInt(x, 16);

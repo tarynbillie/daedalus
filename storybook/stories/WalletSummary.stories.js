@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 import StoryDecorator from './support/StoryDecorator';
 import WalletSummary from '../../source/renderer/app/components/wallet/summary/WalletSummary';
 

@@ -1,6 +1,6 @@
 // @flow
 import { observable } from 'mobx';
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 
 import WalletStore from '../WalletStore';
 import Request from '.././lib/LocalizedRequest';

@@ -1,14 +1,11 @@
-// @flow
-import hash from 'hash.js';
+// @flow strict
+import { BigNumber } from 'bignumber.js';
 import faker from 'faker';
+import hash from 'hash.js';
 import moment from 'moment';
-import BigNumber from 'bignumber.js';
-import WalletAddress from '../../../source/renderer/app/domains/WalletAddress';
 
-import type {
-  TransactionState,
-  TransactionType,
-} from '../../../source/renderer/app/domains/WalletTransaction';
+import WalletAddress from '../../../source/renderer/app/domains/WalletAddress';
+import type { TransactionState, TransactionType } from '../../../source/renderer/app/domains/WalletTransaction';
 import WalletTransaction, {
   transactionStates,
   transactionTypes,

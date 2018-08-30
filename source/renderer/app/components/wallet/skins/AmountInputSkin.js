@@ -1,8 +1,9 @@
 // @flow
+import { BigNumber } from 'bignumber.js';
 import React, { Component } from 'react';
 import { defineMessages, intlShape } from 'react-intl';
-import BigNumber from 'bignumber.js';
 import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
+
 import styles from './AmountInputSkin.scss';
 
 export const messages = defineMessages({
@@ -39,7 +40,7 @@ export default class AmountInputSkin extends Component<Props> {
           </span>
         )}
         <span className={styles.total}>
-          {total && !error && `= ${total} `}{currency}
+          {total && !error && `= ${total.toString()} `}{currency}
         </span>
       </div>
     );

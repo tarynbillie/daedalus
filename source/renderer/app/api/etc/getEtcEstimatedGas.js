@@ -1,5 +1,5 @@
 // @flow
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 import { request } from './lib/request';
 import { ETC_API_HOST, ETC_API_PORT } from './index';
 import type { EtcGas } from './types';

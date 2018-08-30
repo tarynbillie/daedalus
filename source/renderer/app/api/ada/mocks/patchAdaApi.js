@@ -1,5 +1,5 @@
 // @flow
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 import { Logger } from '../../../../../common/logging';
 import { RedeemAdaError } from '../errors';
 import AdaApi from '../index';

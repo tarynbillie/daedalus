@@ -16,5 +16,4 @@ export default (params: any) => {
   resizeWindowApi(params);
   killProcess();
   loadAsset();
-  getGpuStatus();
 };

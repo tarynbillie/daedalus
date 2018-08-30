@@ -1,7 +1,7 @@
 import { Given, When, Then } from 'cucumber';
 import { expect } from 'chai';
 import path from 'path';
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 import {
   createWallets,
   fillOutWalletSendForm,

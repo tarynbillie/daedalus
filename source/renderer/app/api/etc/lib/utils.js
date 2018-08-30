@@ -2,7 +2,7 @@
 import { Buffer } from 'safe-buffer';
 import { pbkdf2Sync as pbkdf2 } from 'pbkdf2';
 import * as unorm from 'unorm';
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 import { isString } from 'lodash';
 
 /**

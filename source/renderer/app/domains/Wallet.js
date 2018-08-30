@@ -1,6 +1,6 @@
 // @flow
 import { observable, computed } from 'mobx';
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 import type { AssuranceMode, AssuranceModeOption } from '../types/transactionAssuranceTypes';
 import type { AdaV1WalletSyncState, AdaV1WalletSyncStateTag } from '../api/ada/types';
 import { assuranceModes, assuranceModeOptions } from '../types/transactionAssuranceTypes';
@@ -34,7 +34,7 @@ export default class Wallet {
   }
 
   @computed get hasFunds(): boolean {
-    return this.amount > 0;
+    return this.amount.greaterThan(0);
   }
 
   @computed get assuranceMode(): AssuranceMode {

@@ -122,7 +122,7 @@ export class EtcERC20TokenApi {
   }
 
   _getGasEstimation(data: string) {
-    return getEtcEstimatedGas({ data, ca, value: 0, gasPrice: 20000000000 });
+    return getEtcEstimatedGas({ data, ca, value: new BigNumber(0), gasPrice: new BigNumber(20000000000) });
   }
 
   _getProperty<T>(contractAddress: string, property: string): Promise<T> {
@@ -135,7 +135,7 @@ export class EtcERC20TokenApi {
     return this._getGasEstimation(callData)
       .then(gasEstimation => ({
         to: address,
-        gas: gasEstimation,
+        gas: new BigNumber(gasEstimation),
         data: callData
       }))
       .then(tx => ethCall({ ca, tx, block: 'latest' }))

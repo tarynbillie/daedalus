@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/react';
 import { linkTo } from '@storybook/addon-links';
 import { action } from '@storybook/addon-actions';
 import { withKnobs, text, boolean, number } from '@storybook/addon-knobs';
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 import moment from 'moment';
 import faker from 'faker';
 import startCase from 'lodash/startCase';
@@ -88,7 +88,7 @@ storiesOf('WalletScreens', module)
       currencyMaxFractionalDigits={6}
       currencyMaxIntegerDigits={11}
       validateAmount={() => promise(true)}
-      calculateTransactionFee={() => promise(true)}
+      calculateTransactionFee={() => promise(new BigNumber(faker.random.number()))}
       addressValidator={() => {}}
       openDialogAction={() => {}}
       isDialogOpen={() => boolean('hasDialog', false)}

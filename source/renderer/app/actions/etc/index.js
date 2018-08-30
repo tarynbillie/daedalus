@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import WalletsActions from './wallets-actions';
 import WalletSettingsActions from './wallet-settings-actions';
 

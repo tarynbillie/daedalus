@@ -15,7 +15,7 @@ export default class Action<Params> {
    * Array of all defined actions in the system
    * @type {[Action]}
    */
-  static actions: Action<any>[] = [];
+  static actions: Action<*>[] = [];
 
   static resetAllActions() {
     Action.actions.forEach(action => action.removeAll());

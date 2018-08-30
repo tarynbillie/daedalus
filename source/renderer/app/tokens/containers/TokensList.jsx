@@ -1,6 +1,6 @@
 // @flow
 import { observer } from 'mobx-react';
-import { memoizeWith, prop, pipe, always } from 'ramda';
+import { memoizeWith, pipe, always } from 'ramda';
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import { Button } from 'react-polymorph/lib/components/Button';

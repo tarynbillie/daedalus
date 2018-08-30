@@ -15,9 +15,6 @@ import adaIcon from '../../../source/renderer/app/assets/images/sidebar/ada-rede
 import paperCertificateIcon from '../../../source/renderer/app/assets/images/sidebar/paper-certificate-ic.inline.svg';
 import type { SidebarMenus } from '../../../source/renderer/app/components/sidebar/Sidebar';
 import type { SidebarWalletType } from '../../../source/renderer/app/types/sidebarTypes';
-// import type { Wallet } from '../../../source/renderer/app/domains/WalletTransaction';
-
-// Empty screen elements
 import TopBar from '../../../source/renderer/app/components/layout/TopBar';
 import Sidebar from '../../../source/renderer/app/components/sidebar/Sidebar';
 import SidebarLayout from '../../../source/renderer/app/components/layout/SidebarLayout';
@@ -109,7 +106,7 @@ export default class StoryLayout extends Component<Props> {
   getSidebarWallets = (wallets: Array<Wallet>): SidebarWalletType[] => wallets.map(wallet => ({
     id: wallet.id,
     title: wallet.name,
-    info: `${wallet.amount} ADA`,
+    info: `${wallet.amount.toString()} ADA`,
     isConnected: true,
     isRestoreActive: false,
     restoreProgress: 0,

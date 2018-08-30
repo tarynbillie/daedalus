@@ -1,10 +1,12 @@
 // @flow strict
 import Maybe from 'data.maybe';
 import { equals } from 'ramda';
-import { concat, interval, Observable, of } from 'rxjs';
+import { interval, Observable } from 'rxjs';
 import { catchError, concatMap, distinctUntilChanged, map, mapTo } from 'rxjs/operators';
 
 import { Logger } from '../../../common/logging';
+import { toNothing } from '../utils';
+import { logError, restoreWith } from '../utils/observable';
 import type { SyncProgress } from './SyncProgress';
 import { isCompleted, toPercentage } from './SyncProgress';
 
@@ -51,10 +53,9 @@ export const peerCountConnectionChecker = (
 ): Observable<boolean> =>
   interval(checkInterval).pipe(
     concatMap(getPeerCount),
-    catchError((err, src$) => {
-      logger.error(err);
-      return concat(of(0), src$);
-    }),
+    catchError(logError(logger)),
+    catchError(restoreWith(0)),
+    map(Number),
     map(x => x > 1),
   );
 
@@ -66,10 +67,9 @@ export const validResponseConnectionChecker = (
   interval(checkInterval).pipe(
     concatMap(doRequest),
     mapTo(true),
-    catchError((err, src$) => {
-      logger.error(err);
-      return concat(of(false), src$);
-    }),
+    catchError(logError(logger)),
+    catchError(restoreWith(false)),
+    map(Boolean),
   );
 
 export const networkStatusFactory = (
@@ -79,7 +79,7 @@ export const networkStatusFactory = (
   connectionStatus$.pipe(
     concatMap(isConnected =>
       getSyncProgress()
-        .catch(() => Maybe.Nothing())
+        .catch(toNothing)
         .then(syncProgress => ({ isConnected, syncProgress })),
     ),
     map(NetworkStatus),

@@ -8,7 +8,7 @@ import { NumericInput } from 'react-polymorph/lib/components/NumericInput';
 import { ButtonSkin } from 'react-polymorph/lib/skins/simple/ButtonSkin';
 import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
 import { defineMessages, intlShape } from 'react-intl';
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 
 import { ReactToolboxMobxForm } from '../../utils/ReactToolboxMobxForm';
 import { submitOnEnter } from '../../utils/form';

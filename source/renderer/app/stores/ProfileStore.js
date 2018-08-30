@@ -1,6 +1,6 @@
 // @flow
 import { action, observable, computed, toJS } from 'mobx';
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 import moment from 'moment/moment';
 import { ipcRenderer } from 'electron';
 import { includes } from 'lodash';

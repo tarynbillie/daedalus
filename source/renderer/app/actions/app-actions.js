@@ -1,10 +1,10 @@
-// @flow
+// @flow strict
 import Action from './lib/Action';
 
 // ======= APP ACTIONS =======
 
 export default class AppActions {
-  openAboutDialog: Action<any> = new Action();
-  closeAboutDialog: Action<any> = new Action();
-  getGpuStatus: Action<any> = new Action();
+  openAboutDialog: Action<void> = new Action();
+  closeAboutDialog: Action<void> = new Action();
+  getGpuStatus: Action<void> = new Action();
 }

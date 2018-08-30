@@ -1,4 +1,5 @@
-import BigNumber from 'bignumber.js';
+// @flow strict
+import { BigNumber } from 'bignumber.js';
 
 // ADA
 export const MAX_ADA_WALLETS_COUNT = 20; // 50 is an absolute max due to V1 API per_page limitation

@@ -1,6 +1,6 @@
 // @flow
 import { observable } from 'mobx';
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 import type { AssuranceMode, AssuranceLevel } from '../types/transactionAssuranceTypes';
 import { assuranceLevels } from '../types/transactionAssuranceTypes';
 

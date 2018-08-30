@@ -1,5 +1,5 @@
 // @flow
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 import isInt from 'validator/lib/isInt';
 
 export const isValidWalletName = (walletName: string) => {

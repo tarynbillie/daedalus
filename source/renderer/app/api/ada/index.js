@@ -2,7 +2,7 @@
 import { split, get } from 'lodash';
 import { action } from 'mobx';
 import { ipcRenderer, remote } from 'electron';
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 import { Logger, stringifyData, stringifyError } from '../../../../common/logging';
 import { unixTimestampToDate } from './lib/utils';
 import Wallet from '../../domains/Wallet';

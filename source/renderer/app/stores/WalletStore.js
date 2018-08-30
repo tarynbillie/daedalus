@@ -177,10 +177,10 @@ export default class WalletsStore extends Store {
       const walletIds = result.map((wallet: Wallet) => wallet.id);
       transactions.transactionsRequests = walletIds.map(walletId => ({
         walletId,
-        recentRequest: transactions._getTransactionsRecentRequest(walletId),
-        allRequest: transactions._getTransactionsAllRequest(walletId),
+        recentRequest: transactions.getTransactionsRecentRequest(walletId),
+        allRequest: transactions.getTransactionsAllRequest(walletId),
       }));
-      transactions._refreshTransactionData();
+      transactions.refreshTransactionData();
     });
   };
 

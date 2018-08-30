@@ -1,9 +1,8 @@
 // @flow
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 import { remote } from 'electron';
 import { isAddress } from 'web3-utils/src/utils';
 import { isValidMnemonic } from '../../../../common/decrypt';
-import environment from '../../../../common/environment';
 import { Logger, stringifyData, stringifyError } from '../../../../common/logging';
 import { ETC_DEFAULT_GAS_PRICE, WEI_PER_ETC } from '../../config/numbersConfig';
 import Wallet from '../../domains/Wallet';
@@ -32,7 +31,6 @@ import { createEtcAccount } from './createEtcAccount';
 import { deleteEtcAccount } from './deleteEtcAccount';
 import {
   getEtcWalletData,
-  initEtcWalletsDummyData,
   setEtcWalletData,
   unsetEtcWalletData,
   updateEtcWalletData,
@@ -64,11 +62,6 @@ import type {
   EtcWalletBalance,
   EtcWalletId,
 } from './types';
-
-// Load Dummy ETC Wallets into Local Storage
-if (environment.isDev() && environment.isEtcApi()) {
-  initEtcWalletsDummyData();
-}
 
 /**
  * The ETC api layer that handles all requests to the
@@ -150,11 +143,11 @@ export default class EtcApi {
       });
   };
 
-  async getAccountBalance(walletId: string): Promise<GetTransactionsResponse> {
+  async getAccountBalance(walletId: string): Promise<EtcWalletBalance> {
     Logger.debug('EtcApi::getAccountBalance called');
     try {
       const status = 'latest';
-      const response: EtcWalletBalance = await getEtcAccountBalance({
+      const response: string = await getEtcAccountBalance({
         ca,
         walletId,
         status,

@@ -1,6 +1,6 @@
 // @flow
 import { storiesOf } from '@storybook/react';
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 import moment from 'moment';
 import React from 'react';
 import WalletTransactionsList from '../../source/renderer/app/components/wallet/transactions/WalletTransactionsList';

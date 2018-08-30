@@ -1,5 +1,5 @@
 // @flow
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 
 export type EtcAccountPassphrase = string;
 export type EtcWalletId = string;

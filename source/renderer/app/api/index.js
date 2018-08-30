@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import AdaApi from './ada/index';
 import EtcApi from './etc/index';
 import LocalStorageApi from './localStorage/index';
