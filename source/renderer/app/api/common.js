@@ -31,10 +31,11 @@ const messages = defineMessages({
 });
 
 export class GenericApiError extends LocalizableError {
-  constructor() {
+  constructor(reason?: Error) {
     super({
       id: messages.genericApiError.id,
       defaultMessage: messages.genericApiError.defaultMessage || '',
+      reason,
     });
   }
 }
@@ -79,7 +80,7 @@ export type CreateTransactionResponse = WalletTransaction;
 export type CreateWalletResponse = Wallet;
 export type DeleteWalletResponse = boolean;
 export type GetLocalTimeDifferenceResponse = number;
-export type GetWalletsResponse = Array<Wallet>;
+export type GetWalletsResponse = Wallet[];
 export type GetWalletRecoveryPhraseResponse = Array<string>;
 export type RestoreWalletResponse = Wallet;
 export type UpdateWalletResponse = Wallet;

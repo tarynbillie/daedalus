@@ -13,15 +13,18 @@ export default class LocalizableError extends ExtendableError {
   description: ?string;
   defaultMessage: string;
   values: { [string]: string };
+  +reason: ?Error;
 
   constructor({
     id,
     defaultMessage,
     values = {},
+    reason
   }: {
     id: string,
     defaultMessage: string,
     values?: { [string]: string },
+    reason?: Error
   }) {
     if (!id) throw new Error('id:string is required.');
     if (!defaultMessage) throw new Error('defaultMessage:string is required.');
@@ -29,5 +32,6 @@ export default class LocalizableError extends ExtendableError {
     this.id = id;
     this.defaultMessage = defaultMessage;
     this.values = values;
+    this.reason = reason;
   }
 }

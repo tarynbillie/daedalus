@@ -1,11 +1,12 @@
 // @flow
 import { remote } from 'electron';
-
 import { action, observable } from 'mobx';
 import { values } from 'ramda';
+
 import environment from '../../../common/environment';
 import { Logger } from '../../../common/logging';
-import { netPeerCount } from '../api/etc/netPeerCount';
+import type { Api } from '../api';
+import { EthRpc } from '../api/etc/EthRpc';
 import {
   networkStatusFactory,
   peerCountConnectionChecker,
@@ -14,6 +15,7 @@ import {
 import { getEtcSyncProgress } from '../api/SyncProgress';
 import type { TokenStores } from '../tokens';
 import { setupTokenStores } from '../tokens';
+
 import type { AdaStoresMap } from './ada';
 import setupAdaStores from './ada';
 import AppStore from './AppStore';
@@ -70,17 +72,17 @@ const stores = observable({
 
 const CHECK_INTERVAL = 2000;
 const ca = remote.getGlobal('ca');
-const getConnectionStatus = () =>
+const getConnectionStatus = (ethRpc: EthRpc) =>
   environment.isDev()
     ? validResponseConnectionChecker(CHECK_INTERVAL, () => getEtcSyncProgress(ca), Logger)
-    : peerCountConnectionChecker(CHECK_INTERVAL, () => netPeerCount({ ca }), Logger);
+    : peerCountConnectionChecker(CHECK_INTERVAL, () => ethRpc.netPeerCount(), Logger);
 
-const getNetworkStatus = () =>
-  networkStatusFactory(getConnectionStatus(), () => getEtcSyncProgress(ca));
+const getNetworkStatus = (ethRpc: EthRpc) =>
+  networkStatusFactory(getConnectionStatus(ethRpc), () => getEtcSyncProgress(ca));
 
 // Set up and return the stores for this app -> also used to reset all stores to defaults
 export default action(
-  (api, actions, router): StoresMap => {
+  (api: Api, actions, router): StoresMap => {
     // Assign mobx-react-router only once
     if (stores.router == null) stores.router = router;
     // All other stores have our lifecycle
@@ -94,7 +96,7 @@ export default action(
       stores.networkStatus.teardown();
     }
     stores.networkStatus = new NetworkStatusStore(
-      getNetworkStatus(),
+      getNetworkStatus(api.ethRpc),
       actions.networkStatus.isSyncedAndReady,
     );
     stores.networkStatus.initialize();
@@ -105,7 +107,7 @@ export default action(
     } else if (environment.API === 'etc') {
       stores.etc = setupEtcStores(stores, api, actions);
       values(stores.tokens).forEach(store => store.teardown());
-      stores.tokens = setupTokenStores(stores.etc.wallets);
+      stores.tokens = setupTokenStores(stores.etc.wallets, api.ethRpc);
     }
 
     return stores;

@@ -1,19 +1,20 @@
 // @flow
 import { BigNumber } from 'bignumber.js';
-import { remote } from 'electron';
+import { tap } from 'ramda';
 import { isAddress } from 'web3-utils/src/utils';
+
 import { isValidMnemonic } from '../../../../common/decrypt';
-import { Logger, stringifyData, stringifyError } from '../../../../common/logging';
+import { Logger, stringifyData, stringifyError, withLogsAsync } from '../../../../common/logging';
 import { ETC_DEFAULT_GAS_PRICE, WEI_PER_ETC } from '../../config/numbersConfig';
 import Wallet from '../../domains/Wallet';
 import WalletTransaction, { transactionStates, transactionTypes } from '../../domains/WalletTransaction';
+import { generateMnemonic } from '../../utils/crypto';
 import type {
   CreateTransactionResponse,
   CreateWalletRequest,
   CreateWalletResponse,
   DeleteWalletRequest,
   DeleteWalletResponse,
-  GetSyncProgressResponse,
   GetTransactionsRequest,
   GetTransactionsResponse,
   GetWalletRecoveryPhraseResponse,
@@ -26,53 +27,20 @@ import type {
   UpdateWalletResponse,
 } from '../common';
 import { GenericApiError, IncorrectWalletPasswordError, WalletAlreadyRestoredError } from '../common';
-import { changeEtcAccountPassphrase } from './changeEtcAccountPassphrase';
-import { createEtcAccount } from './createEtcAccount';
-import { deleteEtcAccount } from './deleteEtcAccount';
-import {
-  getEtcWalletData,
-  setEtcWalletData,
-  unsetEtcWalletData,
-  updateEtcWalletData,
-} from './etcLocalStorage';
-import { getEtcAccountBalance } from './getEtcAccountBalance';
-import { getEtcAccountRecoveryPhrase } from './getEtcAccountRecoveryPhrase';
 
-import { getEtcAccounts } from './getEtcAccounts';
-import { getEtcBlockByHash } from './getEtcBlock';
-import { getEtcBlockNumber } from './getEtcBlockNumber';
-import { getEtcEstimatedGas } from './getEtcEstimatedGas';
-import { getEtcSyncProgress } from './getEtcSyncProgress';
-import { getEtcTransactionByHash } from './getEtcTransaction';
-import { getEtcTransactions } from './getEtcTransactions';
+import { getEtcWalletData, setEtcWalletData, unsetEtcWalletData, updateEtcWalletData } from './etcLocalStorage';
+import type { EtcTransaction, EtcTransactionParams, EtcTransactions, SendEtcTransactionParams } from './EtcTransaction';
+import { withGas } from './EtcTransaction';
+import { EthRpc } from './EthRpc';
 import { mnemonicToSeedHex, quantityToBigNumber, unixTimestampToDate } from './lib/utils';
 import type { BugReportFormData } from './sendEtcBugReport';
 import { sendEtcBugReport } from './sendEtcBugReport';
-import { sendEtcTransaction } from './sendEtcTransaction';
-import type {
-  EtcAccounts,
-  EtcBlock,
-  EtcBlockNumber,
-  EtcGas,
-  EtcRecoveryPassphrase,
-  EtcSyncProgress,
-  EtcTransaction,
-  EtcTransactions,
-  EtcTxHash,
-  EtcWalletBalance,
-  EtcWalletId,
-} from './types';
+import type { EtcAccounts, EtcBlockNumber, EtcBlockResponse, EtcRecoveryPassphrase, EtcTxHash, EtcWalletBalance, EtcWalletId, } from './types';
 
 /**
  * The ETC api layer that handles all requests to the
  * mantis client which is used as backend for ETC blockchain.
  */
-
-const ca = remote.getGlobal('ca');
-
-// export const ETC_API_HOST = 'ec2-52-30-28-57.eu-west-1.compute.amazonaws.com';
-export const ETC_API_HOST = 'localhost';
-export const ETC_API_PORT = 8546;
 
 // ETC specific Request / Response params
 export type ImportWalletResponse = Wallet;
@@ -84,106 +52,73 @@ export type ImportWalletRequest = {
   password: ?string,
 };
 
-export type CreateTransactionRequest = {
-  from: string,
-  to: string,
-  value: BigNumber,
-  password: string,
-};
-
-export type GetEstimatedGasPriceRequest = {
-  ca: string,
-  from: string,
-  to: string,
-  value: BigNumber,
-  gasPrice: BigNumber,
-};
 export type GetEstimatedGasPriceResponse = Promise<BigNumber>;
 
-export default class EtcApi {
-  async getSyncProgress(): Promise<GetSyncProgressResponse> {
-    Logger.debug('EtcApi::getSyncProgress called');
-    try {
-      const response: EtcSyncProgress = await getEtcSyncProgress({ ca });
-      Logger.debug('EtcApi::getSyncProgress success: ' + stringifyData(response));
-      return {
-        localDifficulty: response ? parseInt(response.currentBlock, 16) : 100,
-        networkDifficulty: response ? parseInt(response.highestBlock, 16) : 100,
-      };
-    } catch (error) {
-      console.error(error);
-      Logger.debug('EtcApi::getSyncProgress error: ' + stringifyError(error));
-      throw new GenericApiError();
-    }
+export class EtcApi {
+  _ethRpc: EthRpc;
+
+  constructor(ethRpc: EthRpc) {
+    this._ethRpc = ethRpc;
   }
 
   getWallets = (): Promise<GetWalletsResponse> => {
-    const getWallet = (id): Promise<Wallet> => this.getAccountBalance(id).then(amount =>
+    const getWallet = (id: string): Promise<Wallet> =>
+      this.getAccountBalance(id).then(amount =>
         getEtcWalletData(id)
           .then(walletData => new Wallet({ ...walletData, id, amount }))
-          .catch(() => new Wallet({
-              id,
-              amount,
-              name: 'Untitled Wallet (*)',
-              assurance: 'CWANormal',
-              hasPassword: true,
-              passwordUpdateDate: new Date() })),
+          .catch(
+            () =>
+              new Wallet({
+                id,
+                amount,
+                name: 'Untitled Wallet (*)',
+                assurance: 'CWANormal',
+                hasPassword: true,
+                passwordUpdateDate: new Date(),
+              }),
+          ),
       );
 
     Logger.debug('EtcApi::getWallets called');
-    return getEtcAccounts({ ca })
-      .then(accounts => {
-        Logger.debug('EtcApi::getWallets success: ' + stringifyData(accounts));
-        return accounts;
-      })
+    return this._ethRpc
+      .personalListAccounts()
+      .then(tap(accounts => Logger.debug('EtcApi::getWallets success: ' + stringifyData(accounts))))
       .then(accounts => Promise.all(accounts.map(getWallet)))
       .catch(error => {
         Logger.error('EtcApi::getWallets error: ' + stringifyError(error));
-        throw new GenericApiError();
+        throw new GenericApiError(error);
       });
   };
 
+  @withLogsAsync('EtcApi::getAccountBalance')
   async getAccountBalance(walletId: string): Promise<EtcWalletBalance> {
-    Logger.debug('EtcApi::getAccountBalance called');
-    try {
-      const status = 'latest';
-      const response: string = await getEtcAccountBalance({
-        ca,
-        walletId,
-        status,
+    return this._ethRpc
+      .ethGetBalance({ walletId, status: 'latest' })
+      .then(response => response.dividedBy(WEI_PER_ETC))
+      .catch(error => {
+        throw new GenericApiError(error);
       });
-      Logger.debug('EtcApi::getAccountBalance success: ' + stringifyData(response));
-      return quantityToBigNumber(response).dividedBy(WEI_PER_ETC);
-    } catch (error) {
-      Logger.error('EtcApi::getAccountBalance error: ' + stringifyError(error));
-      throw new GenericApiError();
-    }
   }
 
   getTransactions = async (request: GetTransactionsRequest): Promise<GetTransactionsResponse> => {
     Logger.debug('EtcApi::getTransactions called: ' + stringifyData(request));
     try {
       const walletId = request.walletId;
-      const mostRecentBlockNumber: EtcBlockNumber = await getEtcBlockNumber({ ca });
-      const response: EtcTransactions = await getEtcTransactions({
-        ca,
+      const mostRecentBlockNumber: EtcBlockNumber = await this._ethRpc.ethBlockNumber();
+      const response: EtcTransactions = await this._ethRpc.daedalusGetAccountTransactions({
         walletId,
         fromBlock: Math.max(mostRecentBlockNumber - 10000, 0),
         toBlock: mostRecentBlockNumber,
       });
       Logger.debug('EtcApi::getTransactions success: ' + stringifyData(response));
-      const transactions = await Promise.all(
-        response.transactions.map(async (txData: EtcTransaction) =>
-          _createWalletTransactionFromServerData(txData),
-        ),
-      );
+      const transactions = await Promise.all(response.transactions.map(this._createWalletTransactionFromServerData));
       return {
         transactions,
         total: transactions.length,
       };
     } catch (error) {
       Logger.debug('EtcApi::getTransactions error: ' + stringifyError(error));
-      throw new GenericApiError();
+      throw new GenericApiError(error);
     }
   };
 
@@ -191,11 +126,7 @@ export default class EtcApi {
     Logger.debug('EtcApi::importWallet called');
     const { name, privateKey, password } = request;
     try {
-      const response: EtcWalletId = await createEtcAccount({
-        ca,
-        privateKey,
-        password,
-      });
+      const response: EtcWalletId = await this._ethRpc.personalImportRawKey({ privateKey, password });
       Logger.debug('EtcApi::importWallet success: ' + stringifyData(response));
       const id = response;
       const amount = quantityToBigNumber('0');
@@ -221,58 +152,44 @@ export default class EtcApi {
     const { name, mnemonic, password } = request;
     const privateKey = mnemonicToSeedHex(mnemonic);
     try {
-      const response: ImportWalletResponse = await this.importWallet({
-        name,
-        privateKey,
-        password,
-      });
+      const response: ImportWalletResponse = await this.importWallet({ name, privateKey, password });
       Logger.debug('EtcApi::createWallet success: ' + stringifyData(response));
       return response;
     } catch (error) {
       Logger.error('EtcApi::createWallet error: ' + stringifyError(error));
-      throw new GenericApiError();
+      throw new GenericApiError(error);
     }
   };
 
   getWalletRecoveryPhrase(): Promise<GetWalletRecoveryPhraseResponse> {
     Logger.debug('EtcApi::getWalletRecoveryPhrase called');
     try {
-      const response: Promise<EtcRecoveryPassphrase> = new Promise(resolve =>
-        resolve(getEtcAccountRecoveryPhrase()),
-      );
+      const response: Promise<EtcRecoveryPassphrase> = Promise.resolve(generateMnemonic().split(' '));
       Logger.debug('EtcApi::getWalletRecoveryPhrase success');
       return response;
     } catch (error) {
       Logger.error('EtcApi::getWalletRecoveryPhrase error: ' + stringifyError(error));
-      throw new GenericApiError();
+      throw new GenericApiError(error);
     }
   }
 
-  async createTransaction(params: CreateTransactionRequest): Promise<CreateTransactionResponse> {
+  async createTransaction(params: SendEtcTransactionParams, password: string): Promise<CreateTransactionResponse> {
     Logger.debug('EtcApi::createTransaction called');
     try {
       const senderAccount = params.from;
-      const { from, to, value, password } = params;
-      const gasPrice = ETC_DEFAULT_GAS_PRICE;
-      const gas = quantityToBigNumber(await getEtcEstimatedGas({ ca, from, to, value, gasPrice }));
-      const txHash: EtcTxHash = await sendEtcTransaction({
-        ca,
-        from,
-        to,
-        value,
+      const gas = await this._ethRpc.ethEstimateGas({ tx: params });
+      const txHash: EtcTxHash = await this._ethRpc.personalSendTransaction({
+        tx: withGas(gas)(params),
         password,
-        gasPrice,
-        gas,
-        type: 'send_ether',
       });
       Logger.debug('EtcApi::createTransaction success: ' + stringifyData(txHash));
-      return _createTransaction(senderAccount, txHash);
+      return this._createTransaction(senderAccount, txHash);
     } catch (error) {
       Logger.debug('EtcApi::createTransaction error: ' + stringifyError(error));
       if (error.message.includes('Could not decrypt key with given passphrase')) {
         throw new IncorrectWalletPasswordError();
       }
-      throw new GenericApiError();
+      throw new GenericApiError(error);
     }
   }
 
@@ -291,37 +208,26 @@ export default class EtcApi {
       return new Wallet({ id, name, amount, assurance, hasPassword, passwordUpdateDate });
     } catch (error) {
       Logger.error('EtcApi::updateWallet error: ' + stringifyError(error));
-      throw new GenericApiError();
+      throw new GenericApiError(error);
     }
   }
 
-  async updateWalletPassword(
-    request: UpdateWalletPasswordRequest,
-  ): Promise<UpdateWalletPasswordResponse> {
+  async updateWalletPassword(request: UpdateWalletPasswordRequest): Promise<UpdateWalletPasswordResponse> {
     Logger.debug('EtcApi::updateWalletPassword called');
     const { walletId, oldPassword, newPassword } = request;
     try {
-      await changeEtcAccountPassphrase({
-        ca,
-        walletId,
-        oldPassword,
-        newPassword,
-      });
+      await this._ethRpc.daedalusChangePassphrase({ walletId, oldPassword, newPassword });
       Logger.debug('EtcApi::updateWalletPassword success');
       const hasPassword = newPassword !== null;
       const passwordUpdateDate = hasPassword ? new Date() : null;
-      await updateEtcWalletData({
-        id: walletId,
-        hasPassword,
-        passwordUpdateDate,
-      });
+      await updateEtcWalletData({ id: walletId, hasPassword, passwordUpdateDate });
       return true;
     } catch (error) {
       Logger.debug('EtcApi::updateWalletPassword error: ' + stringifyError(error));
       if (error.message.includes('Could not decrypt key with given passphrase')) {
         throw new IncorrectWalletPasswordError();
       }
-      throw new GenericApiError();
+      throw new GenericApiError(error);
     }
   }
 
@@ -329,13 +235,13 @@ export default class EtcApi {
     Logger.debug('EtcApi::deleteWallet called: ' + stringifyData(request));
     const { walletId } = request;
     try {
-      await deleteEtcAccount({ ca, walletId });
+      await this._ethRpc.daedalusDeleteWallet({ walletAddress: walletId });
       Logger.debug('EtcApi::deleteWallet success: ' + stringifyData(request));
       await unsetEtcWalletData(walletId); // remove wallet data from local storage
       return true;
     } catch (error) {
       Logger.error('EtcApi::deleteWallet error: ' + stringifyError(error));
-      throw new GenericApiError();
+      throw new GenericApiError(error);
     }
   }
 
@@ -352,38 +258,23 @@ export default class EtcApi {
       if (error.message.includes('account already exists')) {
         throw new WalletAlreadyRestoredError();
       }
-      throw new GenericApiError();
+      throw new GenericApiError(error);
     }
   };
 
-  isValidMnemonic(mnemonic: string): Promise<boolean> {
-    return isValidMnemonic(mnemonic, 12);
-  }
+  isValidMnemonic = (mnemonic: string) => isValidMnemonic(mnemonic, 12);
 
-  isValidAddress(address: string): Promise<boolean> {
-    return Promise.resolve(isAddress(address));
-  }
+  isValidAddress = (address: string) => Promise.resolve(isAddress(address));
 
-  async getEstimatedGasPriceResponse(
-    request: GetEstimatedGasPriceRequest,
-  ): GetEstimatedGasPriceResponse {
+  async getEstimatedGasPriceResponse(request: $Shape<EtcTransactionParams>): GetEstimatedGasPriceResponse {
     Logger.debug('EtcApi::getEstimatedGasPriceResponse called');
     try {
-      const { from, to, value, gasPrice } = request;
-      const estimatedGas: EtcGas = await getEtcEstimatedGas({
-        ca,
-        from,
-        to,
-        value,
-        gasPrice,
-      });
+      const estimatedGas = await this._ethRpc.ethEstimateGas({ tx: request });
       Logger.debug('EtcApi::getEstimatedGasPriceResponse success: ' + stringifyData(estimatedGas));
-      return quantityToBigNumber(estimatedGas)
-        .times(request.gasPrice)
-        .dividedBy(WEI_PER_ETC);
+      return estimatedGas.times(request.gasPrice || ETC_DEFAULT_GAS_PRICE).dividedBy(WEI_PER_ETC);
     } catch (error) {
       Logger.error('EtcApi::getEstimatedGasPriceResponse error: ' + stringifyError(error));
-      throw new GenericApiError();
+      throw new GenericApiError(error);
     }
   }
 
@@ -395,59 +286,47 @@ export default class EtcApi {
       return true;
     } catch (error) {
       Logger.error('EtcApi::sendBugReport error: ' + stringifyError(error));
-      throw new GenericApiError();
+      throw new GenericApiError(error);
     }
   }
 
   testReset = async (): Promise<boolean> => {
     Logger.debug('EtcApi::testReset called');
     try {
-      const accounts: EtcAccounts = await getEtcAccounts({ ca });
+      const accounts: EtcAccounts = await this._ethRpc.personalListAccounts();
       await Promise.all(accounts.map(async id => this.deleteWallet({ walletId: id })));
       Logger.debug('EtcApi::testReset success');
       return true;
     } catch (error) {
       Logger.error('EtcApi::testReset error: ' + stringifyError(error));
-      throw new GenericApiError();
+      throw new GenericApiError(error);
     }
   };
+
+  _createWalletTransactionFromServerData = async (txData: EtcTransaction): Promise<WalletTransaction> => {
+    const { hash, blockHash, value, from, to, isOutgoing } = txData;
+    const txBlock: EtcBlockResponse = blockHash ? await this._ethRpc.ethGetBlockByHash({ blockHash }) : null;
+    const blockDate = txBlock ? unixTimestampToDate(txBlock.timestamp) : new Date();
+
+    return new WalletTransaction({
+      id: hash,
+      type: isOutgoing ? transactionTypes.EXPEND : transactionTypes.INCOME,
+      title: '',
+      description: '',
+      amount: quantityToBigNumber(value).dividedBy(WEI_PER_ETC),
+      date: blockDate,
+      numberOfConfirmations: 0,
+      addresses: {
+        from: [from],
+        to: [to],
+      },
+      state: blockHash ? transactionStates.OK : transactionStates.PENDING,
+    });
+  };
+
+  _createTransaction = async (senderAccount: EtcWalletId, txHash: EtcTxHash) => {
+    const txData: EtcTransaction = await this._ethRpc.ethGetTransactionByHash({ txHash });
+    txData.isOutgoing = senderAccount === txData.from;
+    return this._createWalletTransactionFromServerData(txData);
+  };
 }
-
-// ========== TRANSFORM SERVER DATA INTO FRONTEND MODELS =========
-
-const _createWalletTransactionFromServerData = async (
-  txData: EtcTransaction,
-): Promise<WalletTransaction> => {
-  const { hash, blockHash, value, from, to, isOutgoing } = txData;
-  const txBlock: ?EtcBlock = blockHash
-    ? await getEtcBlockByHash({
-        ca,
-        blockHash,
-      })
-    : null;
-  const blockDate = txBlock ? unixTimestampToDate(txBlock.timestamp) : new Date();
-
-  return new WalletTransaction({
-    id: hash,
-    type: isOutgoing ? transactionTypes.EXPEND : transactionTypes.INCOME,
-    title: '',
-    description: '',
-    amount: quantityToBigNumber(value).dividedBy(WEI_PER_ETC),
-    date: blockDate,
-    numberOfConfirmations: 0,
-    addresses: {
-      from: [from],
-      to: [to],
-    },
-    state: blockHash ? transactionStates.OK : transactionStates.PENDING,
-  });
-};
-
-const _createTransaction = async (senderAccount: EtcWalletId, txHash: EtcTxHash) => {
-  const txData: EtcTransaction = await getEtcTransactionByHash({
-    ca,
-    txHash,
-  });
-  txData.isOutgoing = senderAccount === txData.from;
-  return _createWalletTransactionFromServerData(txData);
-};

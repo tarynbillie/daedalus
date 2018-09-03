@@ -27,7 +27,7 @@
     "Iterable": true
   },
   "rules": {
-    "arrow-body-style": 1,
+    "arrow-body-style": "off",
     "arrow-parens": "off",
     "class-methods-use-this": "warn",
     "comma-dangle": "off",
@@ -49,12 +49,13 @@
     "indent": "off",
     "jsx-a11y/alt-text": 0,
     "key-spacing": 1,
-    "max-len": "error",
+    "max-len": "off",
     "no-await-in-loop": 0,
     "no-bitwise": 0,
     "no-confusing-arrow": "off",
     "no-console": 0,
     "no-duplicate-imports": 0,
+    "no-else-return": "off",
     "no-empty-function": 1,
     "no-mixed-operators": 0,
     "no-multi-spaces": 1,

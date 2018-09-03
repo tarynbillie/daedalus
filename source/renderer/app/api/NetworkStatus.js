@@ -1,4 +1,5 @@
 // @flow strict
+import { BigNumber } from 'bignumber.js';
 import Maybe from 'data.maybe';
 import { equals } from 'ramda';
 import { interval, Observable } from 'rxjs';
@@ -7,6 +8,7 @@ import { catchError, concatMap, distinctUntilChanged, map, mapTo } from 'rxjs/op
 import { Logger } from '../../../common/logging';
 import { toNothing } from '../utils';
 import { logError, restoreWith } from '../utils/observable';
+
 import type { SyncProgress } from './SyncProgress';
 import { isCompleted, toPercentage } from './SyncProgress';
 
@@ -30,10 +32,11 @@ const NetworkStatus = (data: NetworkStatusParams): FullNetworkStatus => ({
   isConnecting: !data.isConnected,
   hasSyncingStarted: data.syncProgress.isJust,
   isSyncing: data.isConnected && data.syncProgress.isJust, // these two fields are redundant
-  isSynced: data.syncProgress
-    .map(isCompleted(OUT_OF_SYNC_BLOCKS_LIMIT))
-    .getOrElse(data.isConnected),
-  syncPercentage: data.syncProgress.map(toPercentage).getOrElse(data.isConnected ? 100 : 0),
+  isSynced: data.syncProgress.map(isCompleted(OUT_OF_SYNC_BLOCKS_LIMIT)).getOrElse(data.isConnected),
+  syncPercentage: data.syncProgress
+    .map(toPercentage)
+    .getOrElse(data.isConnected ? new BigNumber(100) : new BigNumber(0))
+    .toNumber(),
 });
 
 export const defaultNetworkStatus: FullNetworkStatus = {

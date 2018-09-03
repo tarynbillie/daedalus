@@ -1,31 +1,24 @@
 // @flow strict
 import { BigNumber } from 'bignumber.js';
-import { identity } from 'ramda';
+import { identity, pipe } from 'ramda';
 
-import { pass } from '../../utils';
-import { bigNumberToHexString, hexStringToNumber } from '../../utils/formatters';
-import { mapMatching } from '../../utils/functor';
+import { bigNumberToHexString, hexStringToBigNumber, hexStringToNumber } from '../../utils/conversion';
+import { mapLeafs, mapValues, whenMatching } from '../../utils/functor';
 import { applyDefaults } from '../../utils/object';
+import type {
+  EtcTransaction, EtcTransactionParams,
+  EtcTransactionReceipt,
+  EtcTransactions,
+  SendEtcTransactionParams,
+} from './EtcTransaction';
 
-import type { ChangeEtcAccountPassphraseParams } from './changeEtcAccountPassphrase';
-import type { CreateEtcAccountParams } from './createEtcAccount';
-import type { EthCallParams } from './ethCall';
-import type { GetEtcAccountBalanceParams } from './getEtcAccountBalance';
-import type { GetEtcBlockByHashParams } from './getEtcBlock';
-import type { GetEtcBlockNumberParams } from './getEtcBlockNumber';
-import type { GetEtcTransactionsParams } from './getEtcTransactions';
 import { request } from './lib/request';
-import type { SendEtcTransactionParams } from './sendEtcTransaction';
 import type {
   EtcAccountPassphrase,
   EtcAccounts,
-  EtcBlock,
   EtcBlockNumber,
-  EtcGas,
+  EtcBlockResponse,
   EtcSyncProgress,
-  EtcTransaction,
-  EtcTransactionParams,
-  EtcTransactions,
   EtcTxHash,
   EtcWalletBalance,
   EtcWalletId,
@@ -65,14 +58,14 @@ export class EthRpc {
     return Promise.resolve(params)
       .then(desc.serialize || identity)
       .then(
-        parameters =>
-          parameters instanceof Object
-            ? pass(parameters)(
-                p => applyDefaults(desc.defaults, p),
-                p => desc.order.map(n => p[n]),
-                mapMatching(BigNumber.isBigNumber, bigNumberToHexString),
-              )
-            : parameters,
+        whenMatching(
+          p => p instanceof Object,
+          pipe(
+            p => applyDefaults(desc.defaults, p),
+            p => desc.order.map(n => p[n]),
+            mapLeafs(whenMatching(BigNumber.isBigNumber, bigNumberToHexString)),
+          ),
+        ),
       )
       .then(parameters =>
         this._request(
@@ -94,10 +87,7 @@ export class EthRpc {
   };
 
   // region Daedalus methods
-  daedalusChangePassphrase: RpcMethod<
-    ChangeEtcAccountPassphraseParams,
-    EtcAccountPassphrase,
-  > = this.method({
+  daedalusChangePassphrase: RpcMethod<{ walletId: string, oldPassword: ?string, newPassword: ?string }, EtcAccountPassphrase> = this.method({
     name: 'daedalus_changePassphrase',
     order: ['walletId', 'oldPassword', 'newPassword'],
     defaults: {
@@ -110,7 +100,7 @@ export class EthRpc {
     order: ['walletAddress'],
   });
   daedalusGetAccountTransactions: RpcMethod<
-    GetEtcTransactionsParams,
+    { walletId: string, fromBlock: number, toBlock: number },
     EtcTransactions,
   > = this.method({
     name: 'daedalus_getAccountTransactions',
@@ -119,39 +109,54 @@ export class EthRpc {
   // endregion
 
   // region ETH methods
-  ethBlockNumber: RpcMethod<GetEtcBlockNumberParams, EtcBlockNumber> = this.method({
+  ethBlockNumber: RpcMethod<void, EtcBlockNumber> = this.method({
     name: 'eth_blockNumber',
     order: [],
     deserialize: hexStringToNumber,
   });
-  ethCall: RpcMethod<EthCallParams, string[]> = this.method({
+  ethCall: RpcMethod<{
+  tx: EtcTransactionParams,
+  block: string,
+}, string[]> = this.method({
     name: 'eth_call',
     order: ['tx', 'block'],
   });
-  ethEstimateGas: RpcMethod<{ tx: $Shape<EtcTransactionParams> }, EtcGas> = this.method({
+  ethEstimateGas: RpcMethod<{ tx: $Shape<EtcTransactionParams> }, BigNumber> = this.method({
     name: 'eth_estimateGas',
     order: ['tx'],
+    deserialize: hexStringToBigNumber,
   });
-  ethGetBalance: RpcMethod<GetEtcAccountBalanceParams, EtcWalletBalance> = this.method({
+  ethGetBalance: RpcMethod<
+    { walletId: string, status: 'latest' | 'earliest' | 'pending' },
+    EtcWalletBalance,
+  > = this.method({
     name: 'eth_getBalance',
     order: ['walletId', 'status'],
+    deserialize: hexStringToBigNumber,
   });
-  ethGetBlockByHash: RpcMethod<GetEtcBlockByHashParams, EtcBlock> = this.method({
+  // TODO: verify typings and deserialization
+  ethGetBlockByHash: RpcMethod<{
+  blockHash: string,
+  full?: boolean,
+}, EtcBlockResponse> = this.method({
     name: 'eth_getBlockByHash',
     order: ['blockHash', 'full'],
     defaults: { full: true },
   });
+  // TODO: verify typings and deserialization
   ethGetTransactionByHash: RpcMethod<{ txHash: string }, EtcTransaction> = this.method({
     name: 'eth_getTransactionByHash',
     order: ['txHash'],
   });
-  ethGetTransactionReceipt: RpcMethod<{ txHash: string }, EtcTransaction> = this.method({
+  // TODO: verify typings and deserialization
+  ethGetTransactionReceipt: RpcMethod<{ txHash: string }, EtcTransactionReceipt> = this.method({
     name: 'eth_getTransactionReceipt',
     order: ['txHash'],
   });
   ethSyncing: RpcMethod<void, EtcSyncProgress> = this.method({
     name: 'eth_syncing',
     order: [],
+    deserialize: x => (x ? mapValues(hexStringToBigNumber, x) : x),
   });
   // endregion
 
@@ -164,7 +169,7 @@ export class EthRpc {
   // endregion
 
   // region Personal methods
-  personalImportRawKey: RpcMethod<CreateEtcAccountParams, EtcWalletId> = this.method({
+  personalImportRawKey: RpcMethod<{ privateKey: string, password: ?string }, EtcWalletId> = this.method({
     name: 'personal_importRawKey',
     order: ['privateKey', 'password'],
     defaults: { password: '' },
@@ -173,10 +178,7 @@ export class EthRpc {
     name: 'personal_listAccounts',
     order: [],
   });
-  personalSendTransaction: RpcMethod<
-    { tx: SendEtcTransactionParams, password: string },
-    EtcTxHash,
-  > = this.method({
+  personalSendTransaction: RpcMethod<{ tx: SendEtcTransactionParams, password: string }, EtcTxHash> = this.method({
     name: 'personal_sendTransaction',
     order: ['tx', 'password'],
     // TODO: refactor to apply defaults instead of have this messed up here

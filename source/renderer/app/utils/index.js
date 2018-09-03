@@ -10,10 +10,6 @@ export default {
   },
 };
 
-interface Functor<A> extends Iterable<A> {
-  map<B>(cb: (A) => B): Functor<B>;
-}
-
 export type UnaryFn<A, R> = (a: A) => R;
 
 export const forEach = <T>(iteratee: T => void) => (collection: Functor<T> | Maybe<T>): void => {
@@ -32,12 +28,8 @@ export const taggedError = (tag: string) => (...args: any[]) => console.error(`[
 
 export type Dict<T> = { [string]: T };
 export const toDict = curry(
-  <T>(key: T => string, items: T[]): Dict<T> =>
-    items.reduce((dict: Dict<T>, item) => assoc(key(item), item, dict), {}),
+  <T>(key: T => string, items: T[]): Dict<T> => items.reduce((dict: Dict<T>, item) => assoc(key(item), item, dict), {}),
 );
-
-export const traverse = <A, B>(fn: A => B | Promise<B>) => (arr: Functor<A>): Promise<Functor<B>> =>
-  Promise.all(arr.map(fn));
 
 export const toNothing = always(Maybe.Nothing);
 
@@ -51,13 +43,7 @@ type Fns<T, R> = ((ab: UnaryFn<T, R>) => R) &
   (<B>(ab: UnaryFn<T, B>, bc: UnaryFn<B, R>) => R) &
   (<B, C>(ab: UnaryFn<T, B>, bc: UnaryFn<B, C>, cd: UnaryFn<C, R>) => R) &
   (<B, C, D>(ab: UnaryFn<T, B>, bc: UnaryFn<B, C>, cd: UnaryFn<C, D>, de: UnaryFn<D, R>) => R) &
-  (<B, C, D, E>(
-    ab: UnaryFn<T, B>,
-    bc: UnaryFn<B, C>,
-    cd: UnaryFn<C, D>,
-    de: UnaryFn<D, E>,
-    ef: UnaryFn<E, R>,
-  ) => R) &
+  (<B, C, D, E>(ab: UnaryFn<T, B>, bc: UnaryFn<B, C>, cd: UnaryFn<C, D>, de: UnaryFn<D, E>, ef: UnaryFn<E, R>) => R) &
   (<B, C, D, E, F>(
     ab: UnaryFn<T, B>,
     bc: UnaryFn<B, C>,

@@ -1,5 +1,7 @@
-// @flow
+// @flow strict
 import { BigNumber } from 'bignumber.js';
+
+import type { EtcTransaction } from './EtcTransaction';
 
 export type EtcAccountPassphrase = string;
 export type EtcWalletId = string;
@@ -11,44 +13,37 @@ export type EtcTxHash = string;
 
 export type EtcRecoveryPassphrase = Array<string>;
 
-export type EtcAccounts = Array<EtcWalletId>;
+export type EtcAccounts = EtcWalletId[];
+
+export type EtcBlockResponse = ?{
+  number: BigNumber,
+  hash: ?string,
+  parentHash: string,
+  nonce: ?string,
+  sha3Uncles: string,
+  logsBloom: string,
+  transactionsRoot: string,
+  stateRoot: string,
+  receiptsRoot: string,
+  miner: ?string,
+  difficulty: BigNumber,
+  totalDifficulty: ?BigNumber,
+  extraData: string,
+  size: BigNumber,
+  gasLimit: BigNumber,
+  gasUsed: BigNumber,
+  timestamp: string,
+  transactions: Array<string> | Array<EtcTransaction>,
+  uncles: Array<string>
+}
 
 export type EtcBlock = {
   timestamp: string,
 };
 
 export type EtcSyncProgress = ?{
-  startingBlock: string, // number in hex
-  currentBlock: string,
-  highestBlock: string,
+  startingBlock: BigNumber, // number in hex
+  currentBlock: BigNumber,
+  highestBlock: BigNumber,
 };
 
-export type EtcTransaction = {
-  hash: EtcTxHash,
-  nonce: string,
-  blockHash: string,
-  blockNumber: EtcBlockNumber,
-  transactionIndex: string,
-  from: EtcWalletId,
-  to: EtcWalletId,
-  value: string,
-  gasPrice: EtcGasPrice,
-  gas: EtcGas,
-  input: string,
-  pending: boolean,
-  isOutgoing: boolean,
-};
-
-export type EtcTransactionParams = {
-  from?: string,
-  to?: string,
-  value?: BigNumber,
-  gasPrice?: BigNumber,
-  gasLimit?: BigNumber,
-  gas: BigNumber,
-  data?: string,
-};
-
-export type EtcTransactions = {
-  transactions: Array<EtcTransaction>,
-};
