@@ -12,6 +12,7 @@ export type ApiCallType = {
   result: any,
 };
 
+// TODO: type args for .execute method!!!
 export default class Request<Result, Error> {
 
   @observable result: ?Result = null;

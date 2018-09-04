@@ -16,6 +16,17 @@ export const forEach = <T>(iteratee: T => void) => (collection: Functor<T> | May
   map(iteratee, collection);
 };
 
+type IdentityFn<T> = T => T;
+export const tap = <T>(fn: T => void): IdentityFn<T> => (x: T): T => {
+  fn(x);
+  return x;
+};
+
+export const tapError = (fn: Error => void) => (e: Error) => {
+  fn(e);
+  throw e;
+};
+
 export const nonEmpty = (val: string) => !!val;
 // $FlowIssue
 export const notNull = (val: any) => val != null;
@@ -31,7 +42,7 @@ export const toDict = curry(
   <T>(key: T => string, items: T[]): Dict<T> => items.reduce((dict: Dict<T>, item) => assoc(key(item), item, dict), {}),
 );
 
-export const toNothing = always(Maybe.Nothing);
+export const toNothing: * => Maybe<*> = always(Maybe.Nothing());
 
 export const findMaybe = <T>(predicate: T => boolean) =>
   pipe(

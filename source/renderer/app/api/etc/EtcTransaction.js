@@ -40,8 +40,10 @@ type CommonParams = {
   gasLimit?: BigNumber,
 };
 
+export const SEND_ETHER = 'send_ether';
+
 export type PlainTransactionParams = {
-  type: 'send_ether',
+  type: typeof SEND_ETHER,
   to: string,
   value: BigNumber,
 } & CommonParams;

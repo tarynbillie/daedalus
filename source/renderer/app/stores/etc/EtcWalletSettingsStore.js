@@ -6,11 +6,10 @@ import Request from '../lib/LocalizedRequest';
 import type { UpdateWalletPasswordResponse, UpdateWalletResponse } from '../../api/common';
 
 export default class EtcWalletSettingsStore extends WalletSettingsStore {
-
-  /* eslint-disable max-len */
-  @observable updateWalletRequest: Request<UpdateWalletResponse> = new Request(this.api.etc.updateWallet);
-  @observable updateWalletPasswordRequest: Request<UpdateWalletPasswordResponse> = new Request(this.api.etc.updateWalletPassword);
-  /* eslint-enable max-len */
+  @observable
+  updateWalletRequest: Request<UpdateWalletResponse> = new Request(this.api.etc.updateWallet);
+  @observable
+  updateWalletPasswordRequest: Request<UpdateWalletPasswordResponse> = new Request(this.api.etc.updateWalletPassword);
 
   setup() {
     const a = this.actions.etc.walletSettings;
@@ -21,16 +20,24 @@ export default class EtcWalletSettingsStore extends WalletSettingsStore {
     a.updateWalletPassword.listen(this._updateWalletPassword);
   }
 
-  @action _updateWalletPassword = async ({ walletId, oldPassword, newPassword }: {
-    walletId: string, oldPassword: ?string, newPassword: ?string,
+  @action
+  _updateWalletPassword = async ({
+    walletId,
+    oldPassword,
+    newPassword,
+  }: {
+    walletId: string,
+    oldPassword: ?string,
+    newPassword: ?string,
   }) => {
-    await this.updateWalletPasswordRequest.execute({ walletId, oldPassword, newPassword });
+    await this.updateWalletPasswordRequest.execute({ walletId, oldPassword, newPassword }).promise;
     this.actions.dialogs.closeActiveDialog.trigger();
     this.updateWalletPasswordRequest.reset();
     this.stores.etc.wallets.refreshWalletsData();
   };
 
-  @action _updateWalletField = async ({ field, value }: { field: string, value: string }) => {
+  @action
+  _updateWalletField = async ({ field, value }: { field: string, value: string }) => {
     const activeWallet = this.stores.etc.wallets.active;
     if (!activeWallet) return;
     const { id, name, amount, assurance, hasPassword, passwordUpdateDate } = activeWallet;
@@ -45,5 +52,4 @@ export default class EtcWalletSettingsStore extends WalletSettingsStore {
     this.updateWalletRequest.reset();
     this.stores.etc.wallets.setActiveWallet({ walletId: id });
   };
-
 }

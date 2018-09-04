@@ -1,23 +1,21 @@
 // @flow
-import { observable } from 'mobx';
 import { BigNumber } from 'bignumber.js';
+import { observable } from 'mobx';
+import { isNil } from 'ramda';
 
-import WalletStore from '../WalletStore';
-import Request from '.././lib/LocalizedRequest';
-import type { GetEstimatedGasPriceResponse } from '../../api/etc/index';
 import type {
-  CreateWalletResponse,
-  GetWalletsResponse,
-  DeleteWalletResponse,
-  RestoreWalletResponse,
   CreateTransactionResponse,
+  CreateWalletResponse,
+  DeleteWalletResponse,
   GetWalletRecoveryPhraseResponse,
+  GetWalletsResponse,
+  RestoreWalletResponse,
 } from '../../api/common';
-import {
-  ETC_DEFAULT_GAS_PRICE,
-  HARDCODED_ETC_TX_FEE,
-  WEI_PER_ETC,
-} from '../../config/numbersConfig';
+import type { CreateTransactionParams, GetEstimatedGasPriceResponse } from '../../api/etc';
+import { SEND_ETHER } from '../../api/etc/EtcTransaction';
+import { ETC_DEFAULT_GAS_PRICE, HARDCODED_ETC_TX_FEE, WEI_PER_ETC } from '../../config/numbersConfig';
+import Request from '../lib/LocalizedRequest';
+import WalletStore from '../WalletStore';
 
 export default class EtcWalletsStore extends WalletStore {
   // REQUESTS
@@ -28,9 +26,7 @@ export default class EtcWalletsStore extends WalletStore {
   @observable
   deleteWalletRequest: Request<DeleteWalletResponse> = new Request(this.api.etc.deleteWallet);
   @observable
-  sendMoneyRequest: Request<CreateTransactionResponse> = new Request(
-    this.api.etc.createTransaction,
-  );
+  sendMoneyRequest: Request<CreateTransactionResponse> = new Request(this.api.etc.createTransaction);
   @observable
   getEstimatedGasPriceRequest: Request<GetEstimatedGasPriceResponse> = new Request(
     this.api.etc.getEstimatedGasPriceResponse,
@@ -53,32 +49,29 @@ export default class EtcWalletsStore extends WalletStore {
     walletBackup.finishWalletBackup.listen(this.finishCreation);
   }
 
-  _sendMoney = async (transactionDetails: {
-    receiver: string,
-    amount: string,
-    password: ?string,
-  }) => {
+  _sendMoney = async (transactionDetails: { receiver: string, amount: string, password: ?string }) => {
     const wallet = this.active;
     if (!wallet) throw new Error('Active wallet required before sending.');
     const { receiver, amount, password } = transactionDetails;
-    await this.sendMoneyRequest.execute({
-      from: wallet.id,
-      to: receiver,
-      value: new BigNumber(amount),
-      password: password != null ? password : '',
-      gasPrice: ETC_DEFAULT_GAS_PRICE,
-    });
+    await this.sendMoneyRequest.execute(
+      ({
+        tx: {
+          type: SEND_ETHER,
+          from: wallet.id,
+          to: receiver,
+          value: new BigNumber(amount),
+          gasPrice: ETC_DEFAULT_GAS_PRICE,
+        },
+        password: isNil(password) ? '' : password,
+      }: CreateTransactionParams),
+    );
     this.refreshWalletsData();
     this.actions.dialogs.closeActiveDialog.trigger();
     this.sendMoneyRequest.reset();
     this.goToWalletRoute(wallet.id);
   };
 
-  calculateTransactionFee = async (transactionDetails: {
-    sender: string,
-    receiver: string,
-    amount: string,
-  }) => {
+  calculateTransactionFee = async (transactionDetails: { sender: string, receiver: string, amount: string }) => {
     const { sender, receiver, amount } = transactionDetails;
     return await this.getEstimatedGasPriceRequest.execute({
       from: sender,
@@ -98,9 +91,7 @@ export default class EtcWalletsStore extends WalletStore {
     const amountInETC = new BigNumber(amount).dividedBy(WEI_PER_ETC);
     const transactionFees = new BigNumber(HARDCODED_ETC_TX_FEE);
     const isGreaterThanZero = amountInETC.greaterThan(0);
-    const isLessOrEqualToWalletAmount = amountInETC
-      .add(transactionFees)
-      .lessThanOrEqualTo(wallet.amount);
+    const isLessOrEqualToWalletAmount = amountInETC.add(transactionFees).lessThanOrEqualTo(wallet.amount);
     return isGreaterThanZero && isLessOrEqualToWalletAmount;
   };
 }

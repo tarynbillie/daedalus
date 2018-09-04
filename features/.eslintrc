@@ -12,7 +12,8 @@
         "When",
         "Then"
       ]
-    }]
+    }],
+    "jest/valid-expect": "off"
   },
   "globals": {
     "daedalus": true

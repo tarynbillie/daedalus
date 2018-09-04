@@ -10,7 +10,8 @@ export type SyncProgress = {
   total: BigNumber,
 };
 
-export const isCompleted = (margin: number) => (progress: SyncProgress) => difference(progress).lessThanOrEqualTo(margin);
+export const isCompleted = (margin: number) => (progress: SyncProgress) =>
+  difference(progress).lessThanOrEqualTo(margin);
 export const isStarted = (progress: SyncProgress) => progress.completed.greaterThanOrEqualTo(1);
 
 export const toPercentage = (progress: SyncProgress): BigNumber =>
@@ -22,7 +23,9 @@ export const getEtcSyncProgress = (ethRpc: EthRpc): Promise<Maybe<SyncProgress>>
   ethRpc.ethSyncing().then(etcSyncProgressToSyncProgress);
 
 const etcSyncProgressToSyncProgress = (etcProgress: EtcSyncProgress) =>
-  Maybe.fromNullable(etcProgress).map(progress => ({
-    completed: progress.currentBlock,
-    total: progress.highestBlock,
-  }));
+  etcProgress
+    ? Maybe.Just({
+        completed: etcProgress.currentBlock,
+        total: etcProgress.highestBlock,
+      })
+    : Maybe.Nothing();

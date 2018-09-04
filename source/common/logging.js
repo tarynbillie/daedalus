@@ -33,7 +33,7 @@ export const withLogsAsync = (name: string) => (fn: Fn) => (...args: mixed[]) =>
       Logger.debug(`${name} errored with: ${stringifyError(error)}`);
       throw error;
     });
-}
+};
 
 export const stringifyData = (data: any) => JSON.stringify(data, null, 2);
 

@@ -1,8 +1,10 @@
 // @flow
-import { observable, action } from 'mobx';
-import Store from './lib/Store';
+import { action, observable } from 'mobx';
+
 import globalMessages from '../i18n/global-messages';
 import { assuranceModeOptions } from '../types/transactionAssuranceTypes';
+
+import Store from './lib/Store';
 
 export default class WalletSettingsStore extends Store {
 

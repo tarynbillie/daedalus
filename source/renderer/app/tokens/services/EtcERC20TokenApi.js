@@ -1,7 +1,7 @@
 // @flow
 import { BigNumber } from 'bignumber.js';
 import Maybe from 'data.maybe';
-import { merge, pipe, prop, propEq, reduce, replace } from 'ramda';
+import { pipe, prop, propEq, replace } from 'ramda';
 import { interval } from 'rxjs';
 import { concatMap, filter, take } from 'rxjs/operators';
 import abiCoder from 'web3-eth-abi';
@@ -11,7 +11,9 @@ import { EthRpc } from '../../api/etc/EthRpc';
 import { ETC_DEFAULT_GAS_PRICE } from '../../config/numbersConfig';
 import type { Dict } from '../../utils';
 import { findMaybe, toDict, toNothing } from '../../utils';
+import { reduce } from '../../utils/array';
 import { traverseP } from '../../utils/functor';
+import { merge } from '../../utils/object';
 import { prefixWith } from '../../utils/strings';
 import { erc20Abi } from '../data/ERC20Abi';
 import type { ContractFunctionAbi } from '../models/Abi';
@@ -58,7 +60,7 @@ export class EtcERC20TokenApi {
     };
 
     return traverseP(getProperty)(['name', 'symbol', 'decimals', 'totalSupply', 'allowance', 'balanceOf'])
-      .then(reduce(merge))
+      .then((reduce(merge, ({}: $Shape<ERC20Meta>)): $Shape<ERC20Meta>[] => ERC20Meta))
       .then((meta: ERC20Meta) => ({ ...meta, isERC20: isValidERC20(meta) }));
   }
 

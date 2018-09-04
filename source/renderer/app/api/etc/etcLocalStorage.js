@@ -1,6 +1,5 @@
 // @flow strict
 import Store from 'electron-store';
-import { merge } from 'ramda';
 
 import environment from '../../../../common/environment';
 import type { AssuranceModeOption } from '../../types/transactionAssuranceTypes';
@@ -45,14 +44,13 @@ export const setEtcWalletData = (walletData: EtcWalletData): Promise<void> =>
 
 export const updateEtcWalletData = (updatedWalletData: UpdatedWalletData): Promise<void> =>
   getEtcWalletData(updatedWalletData.id)
-    .then(merge(updatedWalletData))
+    .then(walletData => ({ ...walletData, ...updatedWalletData }))
     .then(setEtcWalletData);
 
 export const unsetEtcWalletData = (walletId: string): Promise<void> =>
   tryAsync(() => store.delete(walletKey(walletId)));
 
-export const unsetEtcWalletsData = (): Promise<void> =>
-  tryAsync(() => store.delete(storageKeys.WALLETS));
+export const unsetEtcWalletsData = (): Promise<void> => tryAsync(() => store.delete(storageKeys.WALLETS));
 
 // Tokens
 

@@ -27,17 +27,19 @@ export type FullNetworkStatus = NetworkStatusParams & {
   syncPercentage: number,
 };
 
-const NetworkStatus = (data: NetworkStatusParams): FullNetworkStatus => ({
-  ...data,
-  isConnecting: !data.isConnected,
-  hasSyncingStarted: data.syncProgress.isJust,
-  isSyncing: data.isConnected && data.syncProgress.isJust, // these two fields are redundant
-  isSynced: data.syncProgress.map(isCompleted(OUT_OF_SYNC_BLOCKS_LIMIT)).getOrElse(data.isConnected),
-  syncPercentage: data.syncProgress
-    .map(toPercentage)
-    .getOrElse(data.isConnected ? new BigNumber(100) : new BigNumber(0))
-    .toNumber(),
-});
+const NetworkStatus = (data: NetworkStatusParams): FullNetworkStatus => {
+  return {
+    ...data,
+    isConnecting: !data.isConnected,
+    hasSyncingStarted: data.syncProgress.isJust,
+    isSyncing: data.isConnected && data.syncProgress.isJust, // these two fields are redundant
+    isSynced: data.syncProgress.map(isCompleted(OUT_OF_SYNC_BLOCKS_LIMIT)).getOrElse(data.isConnected),
+    syncPercentage: data.syncProgress
+      .map(toPercentage)
+      .getOrElse(data.isConnected ? new BigNumber(100) : new BigNumber(0))
+      .toNumber(),
+  };
+};
 
 export const defaultNetworkStatus: FullNetworkStatus = {
   isConnected: false,

@@ -2,16 +2,18 @@
 import { BigNumber } from 'bignumber.js';
 import { identity, pipe } from 'ramda';
 
+import { taggedError, taggedLog, tap, tapError } from '../../utils';
 import { bigNumberToHexString, hexStringToBigNumber, hexStringToNumber } from '../../utils/conversion';
 import { mapLeafs, mapValues, whenMatching } from '../../utils/functor';
 import { applyDefaults } from '../../utils/object';
+
 import type {
-  EtcTransaction, EtcTransactionParams,
+  EtcTransaction,
+  EtcTransactionParams,
   EtcTransactionReceipt,
   EtcTransactions,
   SendEtcTransactionParams,
 } from './EtcTransaction';
-
 import { request } from './lib/request';
 import type {
   EtcAccountPassphrase,
@@ -52,42 +54,49 @@ export class EthRpc {
 
   method = <In, Out, Request, Response>(
     descriptor: MethodDescriptor<In, Out, Request, Response>,
-  ): RpcMethod<In, Out> => (params: In): Promise<Out> => {
-    const desc = applyDefaults(defaultsForMethodDescriptor(), descriptor);
+  ): RpcMethod<In, Out> => {
+    return (params: In): Promise<Out> => {
+      const desc = applyDefaults(defaultsForMethodDescriptor(), descriptor);
 
-    return Promise.resolve(params)
-      .then(desc.serialize || identity)
-      .then(
-        whenMatching(
-          p => p instanceof Object,
-          pipe(
-            p => applyDefaults(desc.defaults, p),
-            p => desc.order.map(n => p[n]),
-            mapLeafs(whenMatching(BigNumber.isBigNumber, bigNumberToHexString)),
+      return Promise.resolve(params)
+        .then(desc.serialize || identity)
+        .then(
+          whenMatching(
+            p => p instanceof Object,
+            pipe(
+              p => applyDefaults(desc.defaults, p),
+              p => desc.order.map(n => p[n]),
+              mapLeafs(whenMatching(x => x instanceof BigNumber, bigNumberToHexString)),
+            ),
           ),
-        ),
-      )
-      .then(parameters =>
-        this._request(
-          {
-            hostname: this._host,
-            method: 'POST',
-            path: '/',
-            port: this._port,
-            ca: this._ca,
-          },
-          {
-            jsonrpc: '2.0',
-            method: desc.name,
-            params: parameters,
-          },
-        ),
-      )
-      .then(desc.deserialize || identity);
+        )
+        .then(tap(taggedLog(`${desc.name}][req`)))
+        .then(parameters =>
+          this._request(
+            {
+              hostname: this._host,
+              method: 'POST',
+              path: '/',
+              port: this._port,
+              ca: this._ca,
+            },
+            {
+              jsonrpc: '2.0',
+              method: desc.name,
+              params: parameters,
+            },
+          ),
+        )
+        .then(desc.deserialize || identity)
+        .then(tap(taggedLog(`${desc.name}][res`)), tapError(taggedError(`${desc.name}][err`)));
+    };
   };
 
   // region Daedalus methods
-  daedalusChangePassphrase: RpcMethod<{ walletId: string, oldPassword: ?string, newPassword: ?string }, EtcAccountPassphrase> = this.method({
+  daedalusChangePassphrase: RpcMethod<
+    { walletId: string, oldPassword: ?string, newPassword: ?string },
+    EtcAccountPassphrase,
+  > = this.method({
     name: 'daedalus_changePassphrase',
     order: ['walletId', 'oldPassword', 'newPassword'],
     defaults: {
@@ -114,10 +123,13 @@ export class EthRpc {
     order: [],
     deserialize: hexStringToNumber,
   });
-  ethCall: RpcMethod<{
-  tx: EtcTransactionParams,
-  block: string,
-}, string[]> = this.method({
+  ethCall: RpcMethod<
+    {
+      tx: EtcTransactionParams,
+      block: string,
+    },
+    string[],
+  > = this.method({
     name: 'eth_call',
     order: ['tx', 'block'],
   });
@@ -135,10 +147,13 @@ export class EthRpc {
     deserialize: hexStringToBigNumber,
   });
   // TODO: verify typings and deserialization
-  ethGetBlockByHash: RpcMethod<{
-  blockHash: string,
-  full?: boolean,
-}, EtcBlockResponse> = this.method({
+  ethGetBlockByHash: RpcMethod<
+    {
+      blockHash: string,
+      full?: boolean,
+    },
+    EtcBlockResponse,
+  > = this.method({
     name: 'eth_getBlockByHash',
     order: ['blockHash', 'full'],
     defaults: { full: true },

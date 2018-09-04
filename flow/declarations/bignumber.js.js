@@ -326,8 +326,6 @@ declare module 'bignumber.js' {
      */
     static EUCLID: RoundingMode;
 
-    static isBigNumber(val: mixed): boolean;
-
     /**
      * Returns a new independent BigNumber constructor with configuration as described by `obj` (see `config`), or with
      * the default configuration if `obj` is `null` or `undefined`.

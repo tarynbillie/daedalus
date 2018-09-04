@@ -1,6 +1,6 @@
 // @flow
 import { BigNumber } from 'bignumber.js';
-import { tap } from 'ramda';
+import { isNil, tap } from 'ramda';
 import { isAddress } from 'web3-utils/src/utils';
 
 import { isValidMnemonic } from '../../../../common/decrypt';
@@ -35,7 +35,15 @@ import { EthRpc } from './EthRpc';
 import { mnemonicToSeedHex, quantityToBigNumber, unixTimestampToDate } from './lib/utils';
 import type { BugReportFormData } from './sendEtcBugReport';
 import { sendEtcBugReport } from './sendEtcBugReport';
-import type { EtcAccounts, EtcBlockNumber, EtcBlockResponse, EtcRecoveryPassphrase, EtcTxHash, EtcWalletBalance, EtcWalletId, } from './types';
+import type {
+  EtcAccounts,
+  EtcBlockNumber,
+  EtcBlockResponse,
+  EtcRecoveryPassphrase,
+  EtcTxHash,
+  EtcWalletBalance,
+  EtcWalletId,
+} from './types';
 
 /**
  * The ETC api layer that handles all requests to the
@@ -46,13 +54,8 @@ import type { EtcAccounts, EtcBlockNumber, EtcBlockResponse, EtcRecoveryPassphra
 export type ImportWalletResponse = Wallet;
 export type UpdateWalletRequest = Wallet;
 
-export type ImportWalletRequest = {
-  name: string,
-  privateKey: string,
-  password: ?string,
-};
-
 export type GetEstimatedGasPriceResponse = Promise<BigNumber>;
+export type CreateTransactionParams = { tx: SendEtcTransactionParams, password: string };
 
 export class EtcApi {
   _ethRpc: EthRpc;
@@ -122,7 +125,7 @@ export class EtcApi {
     }
   };
 
-  async importWallet(request: ImportWalletRequest): Promise<ImportWalletResponse> {
+  async importWallet(request: { name: string, privateKey: string, password: ?string }): Promise<ImportWalletResponse> {
     Logger.debug('EtcApi::importWallet called');
     const { name, privateKey, password } = request;
     try {
@@ -173,13 +176,13 @@ export class EtcApi {
     }
   }
 
-  async createTransaction(params: SendEtcTransactionParams, password: string): Promise<CreateTransactionResponse> {
+  createTransaction = async ({ tx, password }: CreateTransactionParams): Promise<CreateTransactionResponse> => {
     Logger.debug('EtcApi::createTransaction called');
     try {
-      const senderAccount = params.from;
-      const gas = await this._ethRpc.ethEstimateGas({ tx: params });
+      const senderAccount = tx.from;
+      const gas = await this._ethRpc.ethEstimateGas({ tx });
       const txHash: EtcTxHash = await this._ethRpc.personalSendTransaction({
-        tx: withGas(gas)(params),
+        tx: withGas(gas)(tx),
         password,
       });
       Logger.debug('EtcApi::createTransaction success: ' + stringifyData(txHash));
@@ -191,7 +194,7 @@ export class EtcApi {
       }
       throw new GenericApiError(error);
     }
-  }
+  };
 
   async updateWallet(request: UpdateWalletRequest): Promise<UpdateWalletResponse> {
     Logger.debug('EtcApi::updateWallet called: ' + stringifyData(request));
@@ -212,14 +215,14 @@ export class EtcApi {
     }
   }
 
-  async updateWalletPassword(request: UpdateWalletPasswordRequest): Promise<UpdateWalletPasswordResponse> {
+  updateWalletPassword = async (request: UpdateWalletPasswordRequest): Promise<UpdateWalletPasswordResponse> => {
     Logger.debug('EtcApi::updateWalletPassword called');
     const { walletId, oldPassword, newPassword } = request;
     try {
       await this._ethRpc.daedalusChangePassphrase({ walletId, oldPassword, newPassword });
       Logger.debug('EtcApi::updateWalletPassword success');
-      const hasPassword = newPassword !== null;
-      const passwordUpdateDate = hasPassword ? new Date() : null;
+      const hasPassword = !isNil(newPassword);
+      const passwordUpdateDate = new Date();
       await updateEtcWalletData({ id: walletId, hasPassword, passwordUpdateDate });
       return true;
     } catch (error) {
@@ -229,9 +232,9 @@ export class EtcApi {
       }
       throw new GenericApiError(error);
     }
-  }
+  };
 
-  async deleteWallet(request: DeleteWalletRequest): Promise<DeleteWalletResponse> {
+  deleteWallet = async (request: DeleteWalletRequest): Promise<DeleteWalletResponse> => {
     Logger.debug('EtcApi::deleteWallet called: ' + stringifyData(request));
     const { walletId } = request;
     try {
@@ -243,7 +246,7 @@ export class EtcApi {
       Logger.error('EtcApi::deleteWallet error: ' + stringifyError(error));
       throw new GenericApiError(error);
     }
-  }
+  };
 
   restoreWallet = async (request: RestoreWalletRequest): Promise<RestoreWalletResponse> => {
     Logger.debug('EtcApi::restoreWallet called');
@@ -266,7 +269,7 @@ export class EtcApi {
 
   isValidAddress = (address: string) => Promise.resolve(isAddress(address));
 
-  async getEstimatedGasPriceResponse(request: $Shape<EtcTransactionParams>): GetEstimatedGasPriceResponse {
+  getEstimatedGasPriceResponse = async (request: $Shape<EtcTransactionParams>): GetEstimatedGasPriceResponse => {
     Logger.debug('EtcApi::getEstimatedGasPriceResponse called');
     try {
       const estimatedGas = await this._ethRpc.ethEstimateGas({ tx: request });
@@ -276,7 +279,7 @@ export class EtcApi {
       Logger.error('EtcApi::getEstimatedGasPriceResponse error: ' + stringifyError(error));
       throw new GenericApiError(error);
     }
-  }
+  };
 
   async sendBugReport(request: BugReportFormData): Promise<SendBugReportResponse> {
     Logger.debug('EtcApi::sendBugReport called: ' + stringifyData(request));
