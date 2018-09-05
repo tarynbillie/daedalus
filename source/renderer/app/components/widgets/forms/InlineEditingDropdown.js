@@ -5,6 +5,7 @@ import { defineMessages, intlShape } from 'react-intl';
 import classnames from 'classnames';
 import { Select } from 'react-polymorph/lib/components/Select';
 import { SelectSkin } from 'react-polymorph/lib/skins/simple/SelectSkin';
+
 import styles from './InlineEditingDropdown.scss';
 
 const messages = defineMessages({

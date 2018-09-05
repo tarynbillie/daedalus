@@ -1,9 +1,11 @@
 // @flow
-import { ipcMain } from 'electron';
 import fs from 'fs';
-import archiver from 'archiver';
 import path from 'path';
+
+import { ipcMain } from 'electron';
+import archiver from 'archiver';
 import { get } from 'lodash';
+
 import { appLogsFolderPath, pubLogsFolderPath } from '../config';
 import { Logger, stringifyError } from '../../common/logging';
 import { COMPRESS_LOGS } from '../../common/ipc-api';

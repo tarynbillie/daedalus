@@ -21,20 +21,26 @@ export default class EtcWalletsStore extends WalletStore {
   // REQUESTS
   @observable
   walletsRequest: Request<GetWalletsResponse> = new Request(this.api.etc.getWallets);
+
   @observable
   createWalletRequest: Request<CreateWalletResponse> = new Request(this.api.etc.createWallet);
+
   @observable
   deleteWalletRequest: Request<DeleteWalletResponse> = new Request(this.api.etc.deleteWallet);
+
   @observable
   sendMoneyRequest: Request<CreateTransactionResponse> = new Request(this.api.etc.createTransaction);
+
   @observable
   getEstimatedGasPriceRequest: Request<GetEstimatedGasPriceResponse> = new Request(
     this.api.etc.getEstimatedGasPriceResponse,
   );
+
   @observable
   getWalletRecoveryPhraseRequest: Request<GetWalletRecoveryPhraseResponse> = new Request(
     this.api.etc.getWalletRecoveryPhrase,
   );
+
   @observable
   restoreRequest: Request<RestoreWalletResponse> = new Request(this.api.etc.restoreWallet);
 

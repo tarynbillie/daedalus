@@ -46,4 +46,3 @@ export type EtcSyncProgress = ?{
   currentBlock: BigNumber,
   highestBlock: BigNumber,
 };
-

@@ -1,6 +1,7 @@
 // @flow
 import { observable } from 'mobx';
 import { BigNumber } from 'bignumber.js';
+
 import type { AssuranceMode, AssuranceLevel } from '../types/transactionAssuranceTypes';
 import { assuranceLevels } from '../types/transactionAssuranceTypes';
 
@@ -29,15 +30,26 @@ export const transactionTypes: {
 export default class WalletTransaction {
 
   @observable id: string = '';
+
   @observable type: TransactionType;
+
   @observable title: string = '';
+
   @observable amount: BigNumber;
+
   @observable date: Date;
+
   @observable description: string = '';
+
   @observable numberOfConfirmations: number = 0;
+
   @observable addresses: TrasactionAddresses = { from: [], to: [] };
+
   @observable state: TransactionState;
-  @observable exchange: ?any; // Didn't infer it from usage
+
+  @observable exchange: ?any;
+
+ // Didn't infer it from usage
   @observable conversionRate: ?number;
 
   constructor(data: {

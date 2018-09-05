@@ -6,7 +6,9 @@ import { observer } from 'mobx-react';
 import { defineMessages, intlShape, FormattedHTMLMessage } from 'react-intl';
 import { Button } from 'react-polymorph/lib/components/Button';
 import { ButtonSkin } from 'react-polymorph/lib/skins/simple/ButtonSkin';
+
 import attentionIcon from '../../assets/images/attention-big-light.inline.svg';
+
 import styles from './SystemTimeErrorOverlay.scss';
 
 const messages = defineMessages({

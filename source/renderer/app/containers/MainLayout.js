@@ -1,14 +1,17 @@
 // @flow
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+
 import Sidebar from '../components/sidebar/Sidebar';
-import TopBarContainer from './TopBarContainer';
 import SidebarLayout from '../components/layout/SidebarLayout';
+import type { InjectedContainerProps } from '../types/injectedPropsType';
+import { ROUTES } from '../routes-config';
+
+import TopBarContainer from './TopBarContainer';
 import NodeUpdatePage from './notifications/NodeUpdatePage';
 import WalletSupportRequestPage from './wallet/WalletSupportRequestPage';
 import PaperWalletCreateCertificatePage from './wallet/PaperWalletCreateCertificatePage';
-import type { InjectedContainerProps } from '../types/injectedPropsType';
-import { ROUTES } from '../routes-config';
+
 
 @inject('stores', 'actions') @observer
 export default class MainLayout extends Component<InjectedContainerProps> {

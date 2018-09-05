@@ -3,11 +3,13 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import classnames from 'classnames';
 import { defineMessages, intlShape, FormattedHTMLMessage } from 'react-intl';
-import WalletRecoveryPhraseMnemonic from './WalletRecoveryPhraseMnemonic';
+
 import DialogCloseButton from '../../widgets/DialogCloseButton';
 import Dialog from '../../widgets/Dialog';
-import WalletRecoveryInstructions from './WalletRecoveryInstructions';
 import globalMessages from '../../../i18n/global-messages';
+
+import WalletRecoveryInstructions from './WalletRecoveryInstructions';
+import WalletRecoveryPhraseMnemonic from './WalletRecoveryPhraseMnemonic';
 import styles from './WalletRecoveryPhraseDisplayDialog.scss';
 
 const messages = defineMessages({

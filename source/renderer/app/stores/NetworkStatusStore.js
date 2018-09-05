@@ -7,6 +7,7 @@ import { Logger } from '../../../common/logging';
 import Action from '../actions/lib/Action';
 import type { FullNetworkStatus } from '../api/NetworkStatus';
 import { defaultNetworkStatus } from '../api/NetworkStatus';
+
 import { RxStore } from './lib/RxStore';
 
 type CachedState = {
@@ -19,11 +20,14 @@ let cachedState: ?CachedState = null;
 
 export default class NetworkStatusStore extends RxStore {
   _startTime = Date.now();
+
   _isSyncedAndReadyAction: Action<void>;
+
   _networkStatus$: Observable<FullNetworkStatus>;
 
   @observable
   hasBeenConnected = false;
+
   @observable.ref
   networkStatus: FullNetworkStatus = defaultNetworkStatus;
 
@@ -89,13 +93,11 @@ export default class NetworkStatusStore extends RxStore {
     return Date.now() - this._startTime;
   }
 
-  _logConnectionTime = () =>
-    Logger.info(
+  _logConnectionTime = () => Logger.info(
       `========== Connected after ${this._getStartupTimeDelta()} milliseconds ==========`,
     );
 
-  _logSyncTime = () =>
-    Logger.info(`========== Synced after ${this._getStartupTimeDelta()} milliseconds ==========`);
+  _logSyncTime = () => Logger.info(`========== Synced after ${this._getStartupTimeDelta()} milliseconds ==========`);
 
   _updateCache() {
     // Save current state into the cache

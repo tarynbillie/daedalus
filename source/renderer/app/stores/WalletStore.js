@@ -1,13 +1,15 @@
 // @flow
 import { observable, action, computed, runInAction } from 'mobx';
 import _ from 'lodash';
-import Store from './lib/Store';
+
 import Wallet from '../domains/Wallet';
-import Request from './lib/LocalizedRequest';
 import { buildRoute, matchRoute } from '../utils/routing';
 import { ROUTES } from '../routes-config';
 import type { GetWalletRecoveryPhraseResponse } from '../api/common';
 import environment from '../../../common/environment';
+
+import Request from './lib/LocalizedRequest';
+import Store from './lib/Store';
 
 /**
  * The base wallet store that contains the shared logic
@@ -19,12 +21,19 @@ export default class WalletsStore extends Store {
   WALLET_REFRESH_INTERVAL = 5000;
 
   @observable active: ?Wallet = null;
+
   @observable walletsRequest: Request<any>;
+
   @observable createWalletRequest: Request<any>;
+
   @observable deleteWalletRequest: Request<any>;
+
   @observable getWalletRecoveryPhraseRequest: Request<any>;
+
   @observable restoreRequest: Request<any>;
+
   @observable isRestoreActive: boolean = false;
+
   @observable lastDiscardedAntivirusRestorationSlowdownNotificationWalletId: ?string = null;
 
   _newWalletDetails: { name: string, mnemonic: string, password: ?string } = {

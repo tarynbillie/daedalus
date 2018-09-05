@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { BarChart, Bar, YAxis, XAxis, Cell, ReferenceLine } from 'recharts';
+
 import StakingChartTooltip from './StakingChartTooltip';
 import styles from './StakingChart.scss';
 

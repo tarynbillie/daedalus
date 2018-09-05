@@ -1,5 +1,6 @@
 // @flow
 import { observable, action, runInAction } from 'mobx';
+
 import Store from '../lib/Store';
 import Request from '../lib/LocalizedRequest';
 import type {
@@ -10,15 +11,21 @@ import { NODE_UPDATE_POLL_INTERVAL } from '../../config/timingConfig';
 export default class NodeUpdateStore extends Store {
 
   @observable isUpdateAvailable = false;
+
   @observable isUpdatePostponed = false;
+
   @observable isNotificationExpanded = false;
+
   @observable isUpdateInstalled = false;
+
   @observable updateVersion = null;
 
   // REQUESTS
   /* eslint-disable max-len */
   @observable nextUpdateRequest: Request<NextUpdateResponse> = new Request(this.api.ada.nextUpdate);
+
   @observable postponeUpdateRequest: Request<PostponeUpdateResponse> = new Request(this.api.ada.postponeUpdate);
+
   @observable applyUpdateRequest: Request<ApplyUpdateResponse> = new Request(this.api.ada.applyUpdate);
   /* eslint-disable max-len */
 

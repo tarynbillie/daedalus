@@ -2,9 +2,11 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { defineMessages, intlShape } from 'react-intl';
-import styles from './AdaRedemptionChoices.scss';
+
 import { ADA_REDEMPTION_TYPES } from '../../../types/redemptionTypes';
 import type { RedemptionTypeChoices } from '../../../types/redemptionTypes';
+
+import styles from './AdaRedemptionChoices.scss';
 
 const messages = defineMessages({
   regularTabTitle: {

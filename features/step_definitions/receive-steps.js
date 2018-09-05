@@ -1,5 +1,6 @@
 import { Given, When, Then } from 'cucumber';
 import { expect } from 'chai';
+
 import { waitAndClick, getVisibleElementsCountForSelector } from '../support/helpers/shared-helpers';
 
 Given('I generate {int} addresses', async function (numberOfAddresses) {

@@ -1,4 +1,5 @@
 import path from 'path';
+
 import getRuntimeFolderPath from './utils/getRuntimeFolderPath';
 import { launcherConfig } from './utils/launcherConfig';
 

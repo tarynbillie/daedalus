@@ -1,8 +1,10 @@
 // @flow
+import fs from 'fs';
+
 import PDFDocument from 'pdfkit';
 import qr from 'qr-image';
 import { defineMessages } from 'react-intl';
-import fs from 'fs';
+
 import paperWalletFontPath from '../assets/pdf/paper-wallet-certificate-font.ttf';
 import paperWalletPage1Path from '../assets/pdf/paper-wallet-certificate-page-1.png';
 import paperWalletPage2Path from '../assets/pdf/paper-wallet-certificate-page-2.png';

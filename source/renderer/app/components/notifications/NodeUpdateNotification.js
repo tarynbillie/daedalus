@@ -6,8 +6,10 @@ import { defineMessages, intlShape } from 'react-intl';
 import classnames from 'classnames';
 import { Button } from 'react-polymorph/lib/components/Button';
 import { ButtonSkin } from 'react-polymorph/lib/skins/simple/ButtonSkin';
-import styles from './NodeUpdateNotification.scss';
+
 import arrowIcon from '../../assets/images/arrow.inline.svg';
+
+import styles from './NodeUpdateNotification.scss';
 
 const messages = defineMessages({
   acceptLabel: {
@@ -59,9 +61,9 @@ export default class NodeUpdateNotification extends Component<Props> {
     const arrowClasses = classnames([
       isExpanded ? styles.arrow : styles.arrowCollapsed
     ]);
-    const title = version ?
-      intl.formatMessage(messages.titleWithVersion, { version }) :
-      intl.formatMessage(messages.titleWithoutVersion);
+    const title = version
+      ? intl.formatMessage(messages.titleWithVersion, { version })
+      : intl.formatMessage(messages.titleWithoutVersion);
 
     return (
       <div className={styles.component}>

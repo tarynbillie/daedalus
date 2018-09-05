@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+
 import ChangeWalletPasswordDialog from '../../../../components/wallet/settings/ChangeWalletPasswordDialog';
 import type { InjectedProps } from '../../../../types/injectedPropsType';
 import environment from '../../../../../../common/environment';

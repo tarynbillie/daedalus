@@ -2,8 +2,10 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { defineMessages, intlShape, FormattedMessage } from 'react-intl';
-import styles from './SupportSettings.scss';
+
 import globalMessages from '../../../i18n/global-messages.js';
+
+import styles from './SupportSettings.scss';
 
 const messages = defineMessages({
   faqTitle: {

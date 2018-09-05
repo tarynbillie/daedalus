@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+
 import DisplaySettings from '../../../components/settings/categories/DisplaySettings';
 import type { InjectedProps } from '../../../types/injectedPropsType';
 

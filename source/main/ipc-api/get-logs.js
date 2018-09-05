@@ -1,8 +1,10 @@
 // @flow
-import { ipcMain } from 'electron';
-import { includes, sortBy } from 'lodash';
 import fs from 'fs';
 import path from 'path';
+
+import { ipcMain } from 'electron';
+import { includes, sortBy } from 'lodash';
+
 import { pubLogsFolderPath } from '../config';
 import { GET_LOGS } from '../../common/ipc-api';
 

@@ -6,6 +6,7 @@ import { Modal } from 'react-polymorph/lib/components/Modal';
 import { Button } from 'react-polymorph/lib/components/Button';
 import { ButtonSkin } from 'react-polymorph/lib/skins/simple/ButtonSkin';
 import { ModalSkin } from 'react-polymorph/lib/skins/simple/ModalSkin';
+
 import styles from './Dialog.scss';
 
 type Action = {

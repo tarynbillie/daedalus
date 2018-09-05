@@ -3,11 +3,13 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 import { observer } from 'mobx-react';
 import { defineMessages, intlShape } from 'react-intl';
-import styles from './DisplaySettings.scss';
+
 import themeLightBluePreview from '../../../assets/images/themes/light-blue.png';
 import themeCardanoPreview from '../../../assets/images/themes/cardano.png';
 import themeDarkBluePreview from '../../../assets/images/themes/dark-blue.png';
 import { THEMES } from '../../../themes/index';
+
+import styles from './DisplaySettings.scss';
 
 const messages = defineMessages({
   themeLabel: {

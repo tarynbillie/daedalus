@@ -4,11 +4,11 @@ import { join } from 'lodash';
 import { observer } from 'mobx-react';
 import React, { Component } from 'react';
 import { defineMessages, intlShape } from 'react-intl';
-
 import { Autocomplete } from 'react-polymorph/lib/components/Autocomplete';
 import { Checkbox } from 'react-polymorph/lib/components/Checkbox';
 import { AutocompleteSkin } from 'react-polymorph/lib/skins/simple/AutocompleteSkin';
 import { CheckboxSkin } from 'react-polymorph/lib/skins/simple/CheckboxSkin';
+
 import {
   PAPER_WALLET_PRINTED_WORDS_COUNT,
   PAPER_WALLET_RECOVERY_PHRASE_WORD_COUNT,
@@ -20,54 +20,55 @@ import globalMessages from '../../../i18n/global-messages';
 import { ReactToolboxMobxForm } from '../../../utils/ReactToolboxMobxForm';
 import Dialog from '../../widgets/Dialog';
 import DialogCloseButton from '../../widgets/DialogCloseButton';
+
 import styles from './VerificationDialog.scss';
 
 const messages = defineMessages({
   headline: {
     id: 'paper.wallet.create.certificate.verification.dialog.headline',
     defaultMessage: '!!!Verify certificate',
-    description: 'Headline for the "Paper wallet create certificate verification dialog".'
+    description: 'Headline for the "Paper wallet create certificate verification dialog".',
   },
   subtitle: {
     id: 'paper.wallet.create.certificate.verification.dialog.subtitle',
     defaultMessage: '!!!Enter your paper wallet recovery phrase to verify your paper wallet certificate.',
-    description: '"Paper wallet create certificate verification dialog" subtitle.'
+    description: '"Paper wallet create certificate verification dialog" subtitle.',
   },
   instructions: {
     id: 'paper.wallet.create.certificate.verification.dialog.instructions',
     defaultMessage: `!!!Make sure you enter all {fullPhraseWordCount} words for the paper wallet recovery phrase,
      first {printedWordCount} words printed on the certificate followed by the {writtenWordCount} words you wrote by hand.`,
-    description: '"Paper wallet create certificate verification dialog" subtitle.'
+    description: '"Paper wallet create certificate verification dialog" subtitle.',
   },
   recoveryPhraseLabel: {
     id: 'paper.wallet.create.certificate.verification.dialog.recoveryPhrase.label',
     defaultMessage: '!!!Paper wallet recovery phrase',
-    description: '"Paper wallet create certificate verification dialog" recovery phrase label.'
+    description: '"Paper wallet create certificate verification dialog" recovery phrase label.',
   },
   recoveryPhraseHint: {
     id: 'paper.wallet.create.certificate.verification.dialog.recoveryPhrase.hint',
     defaultMessage: '!!!Enter recovery phrase',
-    description: '"Paper wallet create certificate verification dialog" recovery phrase hint.'
+    description: '"Paper wallet create certificate verification dialog" recovery phrase hint.',
   },
   recoveryPhraseNoResults: {
     id: 'paper.wallet.create.certificate.verification.dialog.recoveryPhrase.noResults',
     defaultMessage: '!!!No results',
-    description: '"Paper wallet create certificate verification dialog" recovery phrase no results label.'
+    description: '"Paper wallet create certificate verification dialog" recovery phrase no results label.',
   },
   clearButtonLabel: {
     id: 'paper.wallet.create.certificate.verification.dialog.button.clearLabel',
     defaultMessage: '!!!Clear',
-    description: '"Paper wallet create certificate verification dialog" button clear label.'
+    description: '"Paper wallet create certificate verification dialog" button clear label.',
   },
   storingUnderstandanceLabel: {
     id: 'paper.wallet.create.certificate.verification.dialog.storingUnderstandanceConfirmationLabel',
     defaultMessage: '!!!I understand that the paper wallet I create will not be stored in Daedalus.',
-    description: '"Paper wallet create certificate verification dialog" storing understandance confirmation.'
+    description: '"Paper wallet create certificate verification dialog" storing understandance confirmation.',
   },
   recoveringUnderstandanceLabel: {
     id: 'paper.wallet.create.certificate.verification.dialog.recoveringUnderstandanceConfirmationLabel',
     defaultMessage: '!!!I understand that my paper wallet can be recovered only by using my paper wallet certificate.',
-    description: '"Paper wallet create certificate verification dialog" recovering understandance confirmation.'
+    description: '"Paper wallet create certificate verification dialog" recovering understandance confirmation.',
   },
 });
 
@@ -87,7 +88,6 @@ type Props = {
 
 @observer
 export default class VerificationDialog extends Component<Props, State> {
-
   static contextTypes = {
     intl: intlShape.isRequired,
   };
@@ -100,52 +100,54 @@ export default class VerificationDialog extends Component<Props, State> {
 
   recoveryPhraseAutocomplete: Autocomplete;
 
-  form = new ReactToolboxMobxForm({
-    fields: {
-      recoveryPhrase: {
-        label: this.context.intl.formatMessage(messages.recoveryPhraseLabel),
-        placeholder: this.context.intl.formatMessage(messages.recoveryPhraseHint),
-        value: [],
-        validators: [({ field }) => {
-          const { intl } = this.context;
-          const { walletCertificateRecoveryPhrase, additionalMnemonicWords } = this.props;
-          const {
-            storingConfirmed,
-            recoveringConfirmed,
-          } = this.state;
-          const enteredWordsArray = field.value;
-          if (enteredWordsArray.length < PAPER_WALLET_RECOVERY_PHRASE_WORD_COUNT) {
-            // If user hasn't entered all words of the paper wallet recovery phrase yet
-            return [false, intl.formatMessage(globalMessages.incompleteMnemonic, {
-              expected: PAPER_WALLET_RECOVERY_PHRASE_WORD_COUNT
-            })];
-          }
-          const fullRecoveryPhrase = `${walletCertificateRecoveryPhrase} ${additionalMnemonicWords}`;
-          const enteredRecoveryPhrase = join(enteredWordsArray, ' ');
-          const isRecoveryPhraseValid = fullRecoveryPhrase === enteredRecoveryPhrase;
-          this.setState({
-            isRecoveryPhraseValid,
-            // disabled and uncheck confirmation checkboxes if recovery phrase is not valid
-            storingConfirmed: isRecoveryPhraseValid ? storingConfirmed : false,
-            recoveringConfirmed: isRecoveryPhraseValid ? recoveringConfirmed : false,
-          });
-          return [
-            isRecoveryPhraseValid,
-            this.context.intl.formatMessage(new InvalidMnemonicError())
-          ];
-        }],
+  form = new ReactToolboxMobxForm(
+    {
+      fields: {
+        recoveryPhrase: {
+          label: this.context.intl.formatMessage(messages.recoveryPhraseLabel),
+          placeholder: this.context.intl.formatMessage(messages.recoveryPhraseHint),
+          value: [],
+          validators: [
+            ({ field }) => {
+              const { intl } = this.context;
+              const { walletCertificateRecoveryPhrase, additionalMnemonicWords } = this.props;
+              const { storingConfirmed, recoveringConfirmed } = this.state;
+              const enteredWordsArray = field.value;
+              if (enteredWordsArray.length < PAPER_WALLET_RECOVERY_PHRASE_WORD_COUNT) {
+                // If user hasn't entered all words of the paper wallet recovery phrase yet
+                return [
+                  false,
+                  intl.formatMessage(globalMessages.incompleteMnemonic, {
+                    expected: PAPER_WALLET_RECOVERY_PHRASE_WORD_COUNT,
+                  }),
+                ];
+              }
+              const fullRecoveryPhrase = `${walletCertificateRecoveryPhrase} ${additionalMnemonicWords}`;
+              const enteredRecoveryPhrase = join(enteredWordsArray, ' ');
+              const isRecoveryPhraseValid = fullRecoveryPhrase === enteredRecoveryPhrase;
+              this.setState({
+                isRecoveryPhraseValid,
+                // disabled and uncheck confirmation checkboxes if recovery phrase is not valid
+                storingConfirmed: isRecoveryPhraseValid ? storingConfirmed : false,
+                recoveringConfirmed: isRecoveryPhraseValid ? recoveringConfirmed : false,
+              });
+              return [isRecoveryPhraseValid, this.context.intl.formatMessage(new InvalidMnemonicError())];
+            },
+          ],
+        },
       },
     },
-  }, {
-    options: {
-      validateOnChange: true,
-      validationDebounceWait: FORM_VALIDATION_DEBOUNCE_WAIT,
+    {
+      options: {
+        validateOnChange: true,
+        validationDebounceWait: FORM_VALIDATION_DEBOUNCE_WAIT,
+      },
     },
-  });
+  );
 
   submit = () => {
     this.form.submit({
-      onSuccess: (form) => {
+      onSuccess: form => {
         const { recoveryPhrase } = form.values();
         this.props.onContinue({ recoveryPhrase });
       },
@@ -156,7 +158,9 @@ export default class VerificationDialog extends Component<Props, State> {
   resetForm = () => {
     const { form } = this;
     // Cancel all debounced field validations
-    form.each((field) => { field.debouncedValidation.cancel(); });
+    form.each(field => {
+      field.debouncedValidation.cancel();
+    });
     form.reset();
     form.showErrors(false);
 
@@ -177,20 +181,11 @@ export default class VerificationDialog extends Component<Props, State> {
 
     const recoveryPhraseField = form.$('recoveryPhrase');
 
-    const dialogClasses = classnames([
-      styles.dialog,
-      'verificationDialog',
-    ]);
+    const dialogClasses = classnames([styles.dialog, 'verificationDialog']);
 
-    const storingUnderstandanceCheckboxClasses = classnames([
-      styles.checkbox,
-      'storingUnderstandance',
-    ]);
+    const storingUnderstandanceCheckboxClasses = classnames([styles.checkbox, 'storingUnderstandance']);
 
-    const recoveringUnderstandanceCheckboxClasses = classnames([
-      styles.checkbox,
-      'recoveringUnderstandance'
-    ]);
+    const recoveringUnderstandanceCheckboxClasses = classnames([styles.checkbox, 'recoveringUnderstandance']);
 
     const actions = [
       {
@@ -215,7 +210,6 @@ export default class VerificationDialog extends Component<Props, State> {
         onClose={onClose}
         closeButton={<DialogCloseButton />}
       >
-
         <div className={styles.verificationContentWrapper}>
           <p className={styles.subtitle}>{intl.formatMessage(messages.subtitle)}</p>
           <p className={styles.instructions}>
@@ -223,17 +217,18 @@ export default class VerificationDialog extends Component<Props, State> {
               {intl.formatMessage(messages.instructions, {
                 fullPhraseWordCount: PAPER_WALLET_RECOVERY_PHRASE_WORD_COUNT,
                 printedWordCount: PAPER_WALLET_PRINTED_WORDS_COUNT,
-                writtenWordCount: PAPER_WALLET_WRITTEN_WORDS_COUNT
+                writtenWordCount: PAPER_WALLET_WRITTEN_WORDS_COUNT,
               })}
             </strong>
           </p>
           <div className={styles.content}>
-
             <Autocomplete
               className={styles.recoveryPhrase}
               options={suggestedMnemonics}
               maxSelections={PAPER_WALLET_RECOVERY_PHRASE_WORD_COUNT}
-              ref={(autocomplete) => { this.recoveryPhraseAutocomplete = autocomplete; }}
+              ref={autocomplete => {
+                this.recoveryPhraseAutocomplete = autocomplete;
+              }}
               {...recoveryPhraseField.bind()}
               error={recoveryPhraseField.error}
               maxVisibleOptions={5}
@@ -264,15 +259,7 @@ export default class VerificationDialog extends Component<Props, State> {
     );
   }
 
-  onStoringConfirmationChange = () => {
-    this.setState({
-      storingConfirmed: !this.state.storingConfirmed,
-    });
-  };
+  onStoringConfirmationChange = () => this.setState(state => ({ storingConfirmed: !state.storingConfirmed }));
 
-  onRecoveringConfirmationChange = () => {
-    this.setState({
-      recoveringConfirmed: !this.state.recoveringConfirmed,
-    });
-  };
+  onRecoveringConfirmationChange = () => this.setState(state => ({ recoveringConfirmed: !state.recoveringConfirmed }));
 }

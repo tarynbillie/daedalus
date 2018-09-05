@@ -1,4 +1,5 @@
 import { Given, When, Then } from 'cucumber';
+
 import sidebar from '../support/helpers/sidebar-helpers';
 
 Given(/^the sidebar submenu is (hidden|visible)/, async function (state) {

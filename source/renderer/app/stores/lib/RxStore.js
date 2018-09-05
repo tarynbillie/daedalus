@@ -1,5 +1,6 @@
 // @flow strict
 import { Subscription } from 'rxjs';
+
 import type { StoreLifecycle } from './Store';
 
 export class RxStore implements StoreLifecycle {

@@ -1,9 +1,11 @@
 // @flow
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+
 import WalletSettings from '../../components/wallet/WalletSettings';
 import type { InjectedProps } from '../../types/injectedPropsType';
 import { isValidWalletName } from '../../utils/validations';
+
 import ChangeWalletPasswordDialogContainer from './dialogs/settings/ChangeWalletPasswordDialogContainer';
 import DeleteWalletDialogContainer from './dialogs/settings/DeleteWalletDialogContainer';
 import ExportWalletToFileDialogContainer from './dialogs/settings/ExportWalletToFileDialogContainer';

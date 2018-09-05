@@ -3,9 +3,11 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { inject } from 'mobx-react/index';
 import ReactModal from 'react-modal';
+
 import About from '../../components/static/About';
-import styles from './AboutDialog.scss';
 import type { InjectedProps } from '../../types/injectedPropsType';
+
+import styles from './AboutDialog.scss';
 
 type Props = InjectedProps;
 

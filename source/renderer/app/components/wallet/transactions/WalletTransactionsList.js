@@ -10,6 +10,7 @@ import { ButtonSkin } from 'react-polymorph/lib/skins/simple/ButtonSkin';
 import WalletTransaction from '../../../domains/WalletTransaction';
 import type { AssuranceMode } from '../../../types/transactionAssuranceTypes';
 import LoadingSpinner from '../../widgets/LoadingSpinner';
+
 import Transaction from './Transaction';
 import styles from './WalletTransactionsList.scss';
 
@@ -68,7 +69,9 @@ export default class WalletTransactionsList extends Component<Props> {
   }
 
   list: HTMLElement;
+
   loadingSpinner: ?LoadingSpinner;
+
   localizedDateFormat: string;
 
   groupTransactionsByDay(transactions: Array<WalletTransaction>): TransactionGroup[] {
@@ -169,13 +172,15 @@ export default class WalletTransactionsList extends Component<Props> {
 
         {loadingSpinner}
 
-        {showMoreTransactionsButton &&
+        {showMoreTransactionsButton
+          && (
           <Button
             className={buttonClasses}
             label={intl.formatMessage(messages.showMoreTransactionsButtonLabel)}
             onClick={this.onShowMoreTransactions.bind(this, walletId)}
             skin={ButtonSkin}
           />
+)
         }
       </div>
     );

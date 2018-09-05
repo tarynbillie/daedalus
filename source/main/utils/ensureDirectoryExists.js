@@ -1,5 +1,6 @@
-import mkdirp from 'mkdirp';
 import fs from 'fs';
+
+import mkdirp from 'mkdirp';
 
 export default (filepath) => {
   let stats;

@@ -1,5 +1,6 @@
 // @flow
 import { app, ipcMain } from 'electron';
+
 import { GET_GPU_STATUS } from '../../common/ipc-api';
 
 export default () => {

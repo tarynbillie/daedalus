@@ -1,11 +1,14 @@
 // @flow
 import { observable, action } from 'mobx';
+
 import Store from './lib/Store';
 
 export default class UiDialogsStore extends Store {
 
   @observable activeDialog: ?Function = null;
+
   @observable secondsSinceActiveDialogIsOpen: number = 0;
+
   @observable dataForActiveDialog: Object = {};
 
   _secondsTimerInterval: ?IntervalID = null;

@@ -27,13 +27,12 @@ type AddTokenFormState = {
   check: null | ERC20Check;
 }
 
-const CheckResult = (props: { check: ERC20Check | null }) =>
-  props.check && (
-    <span>
-      {props.check.isERC20
+const CheckResult = (props: { check: ERC20Check | null }) => props.check && (
+<span>
+  {props.check.isERC20
         ? 'Contract at given address seems to be a valid ERC-20 token'
         : "This contract doesn't seem to be a valid ERC-20 token"}
-    </span>
+</span>
   );
 
 class AddTokenFormComponent extends React.PureComponent<AddTokenFormProps, AddTokenFormState> {
@@ -42,6 +41,7 @@ class AddTokenFormComponent extends React.PureComponent<AddTokenFormProps, AddTo
       this._addToken();
     }
   });
+
   subscription: Subscription;
 
   state: AddTokenFormState = {
@@ -100,8 +100,7 @@ class AddTokenFormComponent extends React.PureComponent<AddTokenFormProps, AddTo
 
   _canAddToken = () => !!this.state.check && this.state.check.isERC20 && this.tokenForm.isValid;
 
-  _addToken = () =>
-    this.props.tokenStore.addToken({
+  _addToken = () => this.props.tokenStore.addToken({
       address: this.tokenForm.addressField.value,
       name: this.tokenForm.nameField.value,
       symbol: this.tokenForm.symbolField.value,

@@ -4,10 +4,12 @@ import { observer } from 'mobx-react';
 import SVGInline from 'react-svg-inline';
 import Dropzone from 'react-dropzone';
 import { intlShape } from 'react-intl';
+
 import certificateNormalIcon from '../../../assets/images/cert-ic.inline.svg';
 import certificateLockedIcon from '../../../assets/images/cert-locked-ic.inline.svg';
 import certificateInvalidIcon from '../../../assets/images/cert-bad-ic.inline.svg';
 import closeCrossIcon from '../../../assets/images/close-cross.inline.svg';
+
 import styles from './AdaCertificateUploadWidget.scss';
 import { messages } from './ImageUploadWidget';
 

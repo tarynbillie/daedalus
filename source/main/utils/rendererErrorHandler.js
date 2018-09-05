@@ -1,6 +1,7 @@
 // @flow
 import { BrowserWindow } from 'electron';
 import unhandled from 'electron-unhandled';
+
 import { Logger, stringifyError } from '../../common/logging';
 
 unhandled({
@@ -10,8 +11,11 @@ unhandled({
 
 export default class RendererErrorHandler {
   count: number = 0;
+
   maxReloads: number = 1;
+
   window: ?BrowserWindow = null;
+
   createMainWindow: ?Function = null;
 
   setup(window: BrowserWindow, createMainWindow: Function) {

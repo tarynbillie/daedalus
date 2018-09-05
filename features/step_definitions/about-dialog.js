@@ -1,5 +1,6 @@
 import { Given, When, Then } from 'cucumber';
 import { expect } from 'chai';
+
 import packageJson from '../../package.json';
 
 Given(/^I open the About dialog$/, async function () {

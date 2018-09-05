@@ -1,5 +1,6 @@
 import { Given, When, Then } from 'cucumber';
 import { expect } from 'chai';
+
 import { createWallets, getWalletByName } from '../support/helpers/wallets-helpers';
 import { MAX_ADA_WALLETS_COUNT } from '../../source/renderer/app/config/numbersConfig';
 import sidebar from '../support/helpers/sidebar-helpers';

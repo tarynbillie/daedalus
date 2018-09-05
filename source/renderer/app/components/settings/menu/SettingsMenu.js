@@ -2,9 +2,11 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { defineMessages, intlShape } from 'react-intl';
+
+import { ROUTES } from '../../../routes-config';
+
 import SettingsMenuItem from './SettingsMenuItem';
 import styles from './SettingsMenu.scss';
-import { ROUTES } from '../../../routes-config';
 
 const messages = defineMessages({
   general: {

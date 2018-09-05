@@ -1,6 +1,8 @@
 // @flow
 import os from 'os';
+
 import { uniq } from 'lodash';
+
 import { version } from '../../package.json';
 
 // Only require electron / remote if we are in a node.js environment

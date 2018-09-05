@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { get } from 'lodash';
 import { shell } from 'electron';
+
 import MainLayout from '../MainLayout';
 import WalletWithNavigation from '../../components/wallet/layouts/WalletWithNavigation';
 import LoadingSpinner from '../../components/widgets/LoadingSpinner';
@@ -86,9 +87,9 @@ export default class Wallet extends Component<Props> {
           />
         ) : null}
         {
-          environment.isWindows() &&
-          isRestoreActive &&
-          !wallets.hasDiscardedAntivirusRestorationSlowdownNotificationForActiveWallet ? (
+          environment.isWindows()
+          && isRestoreActive
+          && !wallets.hasDiscardedAntivirusRestorationSlowdownNotificationForActiveWallet ? (
             <AntivirusRestaurationSlowdownNotification
               onDiscard={this.handleAntivirusNotificationDiscard}
               onFaqLinkClick={this.openExternalLinkInDefaultBrowser}

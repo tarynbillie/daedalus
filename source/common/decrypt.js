@@ -1,7 +1,9 @@
+import crypto from 'crypto';
+
 import aesjs from 'aes-js';
 import bip39 from 'bip39';
 import blakejs from 'blakejs';
-import crypto from 'crypto';
+
 import validWords from './valid-words.en';
 
 const iv = Buffer.alloc(16); // it's iv = 0 simply
@@ -44,8 +46,8 @@ const hashData = (data) => {
 
 export const decryptRegularVend = (key, data) => decryptWithAES(blake2b(fromMnemonic(key)), data);
 export const decryptForceVend = (key, data) => (
-  decryptWithAES(blake2b(key[0].trim().toLowerCase() +
-    hashData(key[1].trim()).hexSlice() + key[2].trim()), data)
+  decryptWithAES(blake2b(key[0].trim().toLowerCase()
+    + hashData(key[1].trim()).hexSlice() + key[2].trim()), data)
 );
 
 // Recovery service certificates decryption

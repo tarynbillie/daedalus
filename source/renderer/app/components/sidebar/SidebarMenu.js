@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import type { Node } from 'react';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
+
 import styles from './SidebarMenu.scss';
 
 type Props = {

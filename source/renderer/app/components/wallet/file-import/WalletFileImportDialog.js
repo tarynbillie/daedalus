@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import classnames from 'classnames';
 import { defineMessages, intlShape } from 'react-intl';
+
 // import { Input } from 'react-polymorph/lib/components/Input';
 // import { Checkbox } from 'react-polymorph/lib/components/Checkbox';
 // import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
@@ -15,8 +16,9 @@ import FileUploadWidget from '../../widgets/forms/FileUploadWidget';
 import { isValidWalletName, isValidWalletPassword, isValidRepeatPassword } from '../../../utils/validations';
 import globalMessages from '../../../i18n/global-messages';
 import LocalizableError from '../../../i18n/LocalizableError';
-import styles from './WalletFileImportDialog.scss';
 import { FORM_VALIDATION_DEBOUNCE_WAIT } from '../../../config/timingConfig';
+
+import styles from './WalletFileImportDialog.scss';
 
 const messages = defineMessages({
   headline: {

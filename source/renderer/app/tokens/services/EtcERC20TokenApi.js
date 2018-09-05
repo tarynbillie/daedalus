@@ -144,8 +144,7 @@ export class EtcERC20TokenApi {
     const callData = this._buildCallData(methodName, params);
 
     return this._getGasEstimation(callData)
-      .then(gasEstimation =>
-        this._ethRpc.personalSendTransaction({
+      .then(gasEstimation => this._ethRpc.personalSendTransaction({
           tx: {
             type: 'execute_function',
             block: 'latest',
@@ -160,13 +159,11 @@ export class EtcERC20TokenApi {
       .then(hash => this._pollForReceipt(hash));
   }
 
-  _pollForReceipt = (txHash: string): Promise<{ transaction: EtcTransaction, receipt: Receipt }> =>
-    interval(TRANSACTION_POLL_INTERVAL)
+  _pollForReceipt = (txHash: string): Promise<{ transaction: EtcTransaction, receipt: Receipt }> => interval(TRANSACTION_POLL_INTERVAL)
       .pipe(
         concatMap(() => this._ethRpc.ethGetTransactionByHash({ txHash })),
         filter(tx => !!tx.blockHash),
-        concatMap(transaction =>
-          this._ethRpc.ethGetTransactionReceipt({ txHash }).then(receipt => ({
+        concatMap(transaction => this._ethRpc.ethGetTransactionReceipt({ txHash }).then(receipt => ({
             transaction,
             receipt,
           })),

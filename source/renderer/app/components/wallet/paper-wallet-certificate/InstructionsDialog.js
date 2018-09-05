@@ -3,14 +3,16 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import classnames from 'classnames';
 import { defineMessages, intlShape, FormattedMessage } from 'react-intl';
+
 import Dialog from '../../widgets/Dialog';
 import DialogCloseButton from '../../widgets/DialogCloseButton';
-import styles from './InstructionsDialog.scss';
 import {
   PAPER_WALLET_RECOVERY_PHRASE_WORD_COUNT,
   PAPER_WALLET_WRITTEN_WORDS_COUNT,
   WALLET_RECOVERY_PHRASE_WORD_COUNT
 } from '../../../config/cryptoConfig';
+
+import styles from './InstructionsDialog.scss';
 
 const messages = defineMessages({
   headline: {

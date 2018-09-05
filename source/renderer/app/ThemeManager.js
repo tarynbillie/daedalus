@@ -17,6 +17,7 @@ export default class ThemeManager extends Component {
       document.documentElement.style.setProperty(prop, value);
     });
   }
+
   render() {
     return <div>{this.props.children}</div>;
   }

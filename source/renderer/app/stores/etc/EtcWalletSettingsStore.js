@@ -1,6 +1,7 @@
 // @flow
 import { observable, action } from 'mobx';
 import { findIndex } from 'lodash';
+
 import WalletSettingsStore from '../WalletSettingsStore';
 import Request from '../lib/LocalizedRequest';
 import type { UpdateWalletPasswordResponse, UpdateWalletResponse } from '../../api/common';
@@ -8,6 +9,7 @@ import type { UpdateWalletPasswordResponse, UpdateWalletResponse } from '../../a
 export default class EtcWalletSettingsStore extends WalletSettingsStore {
   @observable
   updateWalletRequest: Request<UpdateWalletResponse> = new Request(this.api.etc.updateWallet);
+
   @observable
   updateWalletPasswordRequest: Request<UpdateWalletPasswordResponse> = new Request(this.api.etc.updateWalletPassword);
 

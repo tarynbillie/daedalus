@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+
 import WalletFileImportDialog from '../../../components/wallet/file-import/WalletFileImportDialog';
 import type { InjectedDialogContainerProps } from '../../../types/injectedPropsType';
 

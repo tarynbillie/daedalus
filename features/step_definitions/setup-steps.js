@@ -1,4 +1,5 @@
 import { Given } from 'cucumber';
+
 import termsOfUse from '../support/helpers/terms-of-use-helpers';
 import languageSelection from '../support/helpers/language-selection-helpers';
 

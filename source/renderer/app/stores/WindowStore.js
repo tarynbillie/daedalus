@@ -1,7 +1,9 @@
 // @flow
 import { ipcRenderer } from 'electron';
-import Store from './lib/Store';
+
 import environment from '../../../common/environment';
+
+import Store from './lib/Store';
 
 export default class WindowStore extends Store {
 

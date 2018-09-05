@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import SVGInline from 'react-svg-inline';
 import classnames from 'classnames';
+
 import styles from './BigButtonForDialogs.scss';
 
 type Props = {

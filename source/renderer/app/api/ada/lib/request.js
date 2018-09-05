@@ -1,9 +1,13 @@
 // @flow
 import https from 'https';
-import { size, has, get, omit } from 'lodash';
 import querystring from 'querystring';
-import { encryptPassphrase } from './encryptPassphrase';
+
+import { size, has, get, omit } from 'lodash';
+
 import { getContentLength } from '../../lib/utils';
+
+import { encryptPassphrase } from './encryptPassphrase';
+
 
 export type RequestOptions = {
   hostname: string,

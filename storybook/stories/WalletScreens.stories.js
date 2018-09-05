@@ -10,10 +10,6 @@ import faker from 'faker';
 import startCase from 'lodash/startCase';
 
 // Assets and helpers
-import StoryLayout from './support/StoryLayout';
-import StoryProvider from './support/StoryProvider';
-import StoryDecorator from './support/StoryDecorator';
-import { generateTransaction, generateAddress, promise } from './support/utils';
 import { formattedWalletAmount } from '../../source/renderer/app/utils/ada/formatters';
 import { transactionTypes } from '../../source/renderer/app/domains/WalletTransaction';
 import WalletWithNavigation from '../../source/renderer/app/components/wallet/layouts/WalletWithNavigation';
@@ -28,6 +24,11 @@ import { assuranceModeOptions } from '../../source/renderer/app/types/transactio
 import ChangeWalletPasswordDialog from '../../source/renderer/app/components/wallet/settings/ChangeWalletPasswordDialog';
 import DeleteWalletConfirmationDialog from '../../source/renderer/app/components/wallet/settings/DeleteWalletConfirmationDialog';
 import ExportWalletToFileDialog from '../../source/renderer/app/components/wallet/settings/ExportWalletToFileDialog';
+
+import { generateTransaction, generateAddress, promise } from './support/utils';
+import StoryDecorator from './support/StoryDecorator';
+import StoryProvider from './support/StoryProvider';
+import StoryLayout from './support/StoryLayout';
 
 storiesOf('WalletScreens', module)
 
@@ -115,15 +116,13 @@ storiesOf('WalletScreens', module)
   .add('Transactions', () => (
     <WalletTransactionsList
       transactions={[
-        ...Array.from(Array(number('Transactions Sent', 1))).map((x, i) =>
-          generateTransaction(
+        ...Array.from(Array(number('Transactions Sent', 1))).map((x, i) => generateTransaction(
             transactionTypes.EXPEND,
             moment().subtract(i, 'days').toDate(),
             new BigNumber(faker.random.number(5))
           )
         ),
-        ...Array.from(Array(number('Transactions Received', 1))).map((x, i) =>
-          generateTransaction(
+        ...Array.from(Array(number('Transactions Received', 1))).map((x, i) => generateTransaction(
             transactionTypes.INCOME,
             moment().subtract(i, 'days').toDate(),
             new BigNumber(faker.random.number(5))
@@ -183,7 +182,7 @@ storiesOf('WalletScreens', module)
       walletAssurance={assuranceModeOptions.NORMAL}
       walletName={text('Wallet Name', 'Wallet Name')}
       walletPasswordUpdateDate={moment().subtract(1, 'month').toDate()}
-      changeWalletPasswordDialog={
+      changeWalletPasswordDialog={(
         <ChangeWalletPasswordDialog
           currentPasswordValue="current"
           newPasswordValue="new"
@@ -196,8 +195,8 @@ storiesOf('WalletScreens', module)
           isSubmitting={boolean('Change Password - isSubmitting', false)}
           error={null}
         />
-      }
-      deleteWalletDialogContainer={
+)}
+      deleteWalletDialogContainer={(
         <DeleteWalletConfirmationDialog
           walletName={text('DeleteWalletConfirmationDialog: Wallet Name', 'Wallet To Delete')}
           hasWalletFunds={boolean('hasWalletFunds', false)}
@@ -210,8 +209,8 @@ storiesOf('WalletScreens', module)
           onConfirmationValueChange={action('Delete Wallet - onConfirmationValueChange')}
           isSubmitting={boolean('Delete Wallet - isSubmitting', false)}
         />
-      }
-      exportWalletDialogContainer={
+)}
+      exportWalletDialogContainer={(
         <ExportWalletToFileDialog
           walletName={text('Wallet Name', 'Wallet Name')}
           hasSpendingPassword={boolean('isWalletPasswordSet', false)}
@@ -219,6 +218,6 @@ storiesOf('WalletScreens', module)
           onSubmit={action('Export Wallet - onSubmit')}
           onClose={action('Export Wallet - onClose')}
         />
-      }
+)}
     />
   ));

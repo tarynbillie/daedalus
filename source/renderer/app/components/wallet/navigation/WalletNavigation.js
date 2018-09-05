@@ -2,14 +2,16 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { defineMessages, intlShape } from 'react-intl';
+
 import environment from '../../../../../common/environment';
-import styles from './WalletNavigation.scss';
-import WalletNavButton from './WalletNavButton';
 import summaryIcon from '../../../assets/images/wallet-nav/summary-ic.inline.svg';
 import sendIcon from '../../../assets/images/wallet-nav/send-ic.inline.svg';
 import receiveIcon from '../../../assets/images/wallet-nav/receive-ic.inline.svg';
 import transactionsIcon from '../../../assets/images/wallet-nav/transactions-ic.inline.svg';
 import settingsIcon from '../../../assets/images/wallet-nav/wallet-settings-2-ic.inline.svg';
+
+import WalletNavButton from './WalletNavButton';
+import styles from './WalletNavigation.scss';
 
 const messages = defineMessages({
   summary: {

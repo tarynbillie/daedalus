@@ -2,7 +2,9 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
+
 import ProgressBar from '../../widgets/ProgressBar';
+
 import styles from './SidebarWalletMenuItem.scss';
 
 type Props = {

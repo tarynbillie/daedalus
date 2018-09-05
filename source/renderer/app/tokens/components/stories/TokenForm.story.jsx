@@ -57,6 +57,9 @@ storiesOf('Wallet/Tokens/TokenForm', module)
   ))
   .add('With custom content', context => (
     <TokenForm form={context.form} onAddressChange={addressChange}>
-      <div>Is valid: {formattedYesNo(context.form.isValid)}</div>
+      <div>
+Is valid:
+        {formattedYesNo(context.form.isValid)}
+      </div>
     </TokenForm>
   ));

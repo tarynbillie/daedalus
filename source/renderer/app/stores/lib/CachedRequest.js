@@ -1,12 +1,14 @@
 // @flow
 import { action } from 'mobx';
 import { isEqual, remove } from 'lodash';
+
 import Request from './Request';
 import type { ApiCallType } from './Request';
 
 export default class CachedRequest<Result, Error> extends Request<Result, Error> {
 
   _apiCalls: Array<ApiCallType> = [];
+
   _isInvalidated: boolean = true;
 
   execute(...callArgs: Array<any>): CachedRequest<Result, Error> {

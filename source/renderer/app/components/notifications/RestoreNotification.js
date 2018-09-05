@@ -5,7 +5,9 @@ import { observer } from 'mobx-react';
 import SVGInline from 'react-svg-inline';
 import humanizeDuration from 'humanize-duration';
 import { defineMessages, intlShape } from 'react-intl';
+
 import spinnerIcon from '../../assets/images/spinner-dark.inline.svg';
+
 import styles from './RestoreNotification.scss';
 
 const messages = defineMessages({
@@ -64,8 +66,13 @@ export default class RestoreNotification extends Component<Props> {
     return (
       <div className={restoreNotificationClasses}>
         <span className={styles.text}>
-          {intl.formatMessage(messages.activeRestoreMessage)}: {restoreProgress}%
-          ({estimatedCompletionTime})
+          {intl.formatMessage(messages.activeRestoreMessage)}
+:
+          {restoreProgress}
+%
+          (
+          {estimatedCompletionTime}
+)
         </span>
         <SVGInline svg={spinnerIcon} className={styles.icon} />
       </div>

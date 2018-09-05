@@ -26,8 +26,7 @@ export const generateTransaction = (
   amount: BigNumber,
   confirmations: number = 1,
   state: TransactionState = transactionStates.OK,
-) =>
-  new WalletTransaction({
+) => new WalletTransaction({
     id: faker.random.uuid(),
     title: '',
     type,
@@ -42,8 +41,7 @@ export const generateTransaction = (
     },
   });
 
-export const generateRandomTransaction = (index: number) =>
-  generateTransaction(
+export const generateRandomTransaction = (index: number) => generateTransaction(
     transactionTypes.INCOME,
     moment()
       .subtract(index, 'days')
@@ -57,8 +55,7 @@ export const generateAddress = (isUsed: boolean = false): WalletAddress => new W
   isUsed,
 });
 
-export const promise = <T>(returnValue: T): Promise<T> =>
-  new Promise(resolve => {
+export const promise = <T>(returnValue: T): Promise<T> => new Promise(resolve => {
     setTimeout(() => {
       resolve(returnValue);
     }, 2000);

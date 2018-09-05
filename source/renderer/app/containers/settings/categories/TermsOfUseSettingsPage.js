@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+
 import TermsOfUseSettings from '../../../components/settings/categories/TermsOfUseSettings';
 import type { InjectedProps } from '../../../types/injectedPropsType';
 

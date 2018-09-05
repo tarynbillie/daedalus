@@ -1,7 +1,13 @@
 import os from 'os';
+
 import { app, globalShortcut, Menu } from 'electron';
 import log from 'electron-log';
 import { client } from 'electron-connect';
+
+import environment from '../common/environment';
+import { OPEN_ABOUT_DIALOG_CHANNEL } from '../common/ipc-api/open-about-dialog';
+import { GO_TO_ADA_REDEMPTION_SCREEN_CHANNEL } from '../common/ipc-api/go-to-ada-redemption-screen';
+
 import { setupLogging } from './utils/setupLogging';
 import { setupTls } from './utils/setupTls';
 import { makeEnvironmentGlobal } from './utils/makeEnvironmentGlobal';
@@ -9,9 +15,6 @@ import { createMainWindow } from './windows/main';
 import { winLinuxMenu } from './menus/win-linux';
 import { osxMenu } from './menus/osx';
 import { installChromeExtensions } from './utils/installChromeExtensions';
-import environment from '../common/environment';
-import { OPEN_ABOUT_DIALOG_CHANNEL } from '../common/ipc-api/open-about-dialog';
-import { GO_TO_ADA_REDEMPTION_SCREEN_CHANNEL } from '../common/ipc-api/go-to-ada-redemption-screen';
 import mainErrorHandler from './utils/mainErrorHandler';
 
 setupLogging();

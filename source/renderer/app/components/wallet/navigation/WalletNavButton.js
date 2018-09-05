@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import SVGInline from 'react-svg-inline';
 import { observer } from 'mobx-react';
 import classnames from 'classnames';
+
 import styles from './WalletNavButton.scss';
 
 type Props = {

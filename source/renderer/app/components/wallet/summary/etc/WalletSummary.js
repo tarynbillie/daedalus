@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import SVGInline from 'react-svg-inline';
+
 import etcSymbol from '../../../../assets/images/etc-logo.inline.svg';
 import BorderedBox from '../../../widgets/BorderedBox';
 import styles from '../WalletSummary.scss';
@@ -25,7 +26,10 @@ export default class WalletSummary extends Component<Props> {
           <div className={styles.walletName}>{walletName}</div>
           <div className={styles.walletAmount}>
             {amountInteger}
-            <span className={styles.decimal}>.{amountDecimal}</span>
+            <span className={styles.decimal}>
+.
+              {amountDecimal}
+            </span>
             <SVGInline svg={etcSymbol} className={styles.currencySymbolBig} />
           </div>
         </BorderedBox>

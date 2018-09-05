@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+
 import Sidebar from '../../components/sidebar/Sidebar';
 import TopBarContainer from '../TopBarContainer';
 import SidebarLayout from '../../components/layout/SidebarLayout';

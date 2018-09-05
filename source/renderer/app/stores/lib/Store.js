@@ -1,8 +1,9 @@
 // @flow
-import Reaction from './Reaction';
 import type { ActionsMap } from '../../actions/index';
-import type { StoresMap } from '../../stores/index';
+import type { StoresMap } from '../index';
 import type { Api } from '../../api/index';
+
+import Reaction from './Reaction';
 
 export interface StoreLifecycle {
   initialize(): void;
@@ -12,7 +13,9 @@ export interface StoreLifecycle {
 export default class Store implements StoreLifecycle {
 
   stores: StoresMap;
+
   api: Api;
+
   actions: ActionsMap;
 
   _reactions: Array<Reaction> = [];

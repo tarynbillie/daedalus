@@ -2,6 +2,7 @@
 import * as React from 'react';
 import SVGInline from 'react-svg-inline';
 import classNames from 'classnames';
+
 import styles from './NotificationMessage.scss';
 
 type Props = {

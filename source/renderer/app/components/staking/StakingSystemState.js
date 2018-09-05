@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
+
 import StakingSystemStateElement from './StakingSystemStateElement';
 import styles from './StakingSystemState.scss';
 

@@ -41,8 +41,11 @@ const defaultsForMethodDescriptor = (): $Shape<MethodDescriptor<*, *, *, *>> => 
 
 export class EthRpc {
   _request: typeof request;
+
   _ca: string;
+
   _host: string;
+
   _port: number;
 
   constructor(doRequest: typeof request, ca: string, host: string, port: number) {
@@ -71,8 +74,7 @@ export class EthRpc {
           ),
         )
         .then(tap(taggedLog(`${desc.name}][req`)))
-        .then(parameters =>
-          this._request(
+        .then(parameters => this._request(
             {
               hostname: this._host,
               method: 'POST',
@@ -104,10 +106,12 @@ export class EthRpc {
       newPassword: '',
     },
   });
+
   daedalusDeleteWallet: RpcMethod<{ walletAddress: string }, boolean> = this.method({
     name: 'daedalus_deleteWallet',
     order: ['walletAddress'],
   });
+
   daedalusGetAccountTransactions: RpcMethod<
     { walletId: string, fromBlock: number, toBlock: number },
     EtcTransactions,
@@ -123,6 +127,7 @@ export class EthRpc {
     order: [],
     deserialize: hexStringToNumber,
   });
+
   ethCall: RpcMethod<
     {
       tx: EtcTransactionParams,
@@ -133,11 +138,13 @@ export class EthRpc {
     name: 'eth_call',
     order: ['tx', 'block'],
   });
+
   ethEstimateGas: RpcMethod<{ tx: $Shape<EtcTransactionParams> }, BigNumber> = this.method({
     name: 'eth_estimateGas',
     order: ['tx'],
     deserialize: hexStringToBigNumber,
   });
+
   ethGetBalance: RpcMethod<
     { walletId: string, status: 'latest' | 'earliest' | 'pending' },
     EtcWalletBalance,
@@ -146,6 +153,7 @@ export class EthRpc {
     order: ['walletId', 'status'],
     deserialize: hexStringToBigNumber,
   });
+
   // TODO: verify typings and deserialization
   ethGetBlockByHash: RpcMethod<
     {
@@ -158,16 +166,19 @@ export class EthRpc {
     order: ['blockHash', 'full'],
     defaults: { full: true },
   });
+
   // TODO: verify typings and deserialization
   ethGetTransactionByHash: RpcMethod<{ txHash: string }, EtcTransaction> = this.method({
     name: 'eth_getTransactionByHash',
     order: ['txHash'],
   });
+
   // TODO: verify typings and deserialization
   ethGetTransactionReceipt: RpcMethod<{ txHash: string }, EtcTransactionReceipt> = this.method({
     name: 'eth_getTransactionReceipt',
     order: ['txHash'],
   });
+
   ethSyncing: RpcMethod<void, EtcSyncProgress> = this.method({
     name: 'eth_syncing',
     order: [],
@@ -189,10 +200,12 @@ export class EthRpc {
     order: ['privateKey', 'password'],
     defaults: { password: '' },
   });
+
   personalListAccounts: RpcMethod<void, EtcAccounts> = this.method({
     name: 'personal_listAccounts',
     order: [],
   });
+
   personalSendTransaction: RpcMethod<{ tx: SendEtcTransactionParams, password: string }, EtcTxHash> = this.method({
     name: 'personal_sendTransaction',
     order: ['tx', 'password'],

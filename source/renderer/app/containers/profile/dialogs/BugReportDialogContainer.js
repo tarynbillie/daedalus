@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { remote } from 'electron';
 import { get } from 'lodash';
 import { observer, inject } from 'mobx-react';
+
 import BugReportDialog from '../../../components/profile/bug-report/BugReportDialog';
 import type { InjectedProps } from '../../../types/injectedPropsType';
 import { generateFileNameWithTimestamp } from '../../../../../common/fileName';

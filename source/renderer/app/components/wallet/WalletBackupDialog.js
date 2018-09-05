@@ -1,11 +1,13 @@
 // @flow
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import WalletBackupPrivacyWarningDialog from '../../components/wallet/backup-recovery/WalletBackupPrivacyWarningDialog';
-import WalletRecoveryPhraseDisplayDialog from '../../components/wallet/backup-recovery/WalletRecoveryPhraseDisplayDialog';
-import WalletRecoveryPhraseEntryDialog from '../../components/wallet/backup-recovery/WalletRecoveryPhraseEntryDialog';
+
 import type { walletBackupStep } from '../../types/walletBackupTypes';
 import { WALLET_BACKUP_STEPS } from '../../types/walletBackupTypes';
+
+import WalletBackupPrivacyWarningDialog from './backup-recovery/WalletBackupPrivacyWarningDialog';
+import WalletRecoveryPhraseDisplayDialog from './backup-recovery/WalletRecoveryPhraseDisplayDialog';
+import WalletRecoveryPhraseEntryDialog from './backup-recovery/WalletRecoveryPhraseEntryDialog';
 
 type Props = {
   currentStep: walletBackupStep,

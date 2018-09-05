@@ -40,7 +40,8 @@ export default class AmountInputSkin extends Component<Props> {
           </span>
         )}
         <span className={styles.total}>
-          {total && !error && `= ${total.toString()} `}{currency}
+          {total && !error && `= ${total.toString()} `}
+          {currency}
         </span>
       </div>
     );

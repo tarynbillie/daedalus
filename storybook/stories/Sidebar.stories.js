@@ -3,10 +3,12 @@ import React from 'react';
 import { observable, runInAction } from 'mobx';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import StoryDecorator from './support/StoryDecorator';
+
 import Sidebar from '../../source/renderer/app/components/sidebar/Sidebar';
 import walletsIcon from '../../source/renderer/app/assets/images/sidebar/wallet-ic.inline.svg';
 import settingsIcon from '../../source/renderer/app/assets/images/sidebar/settings-ic.inline.svg';
+
+import StoryDecorator from './support/StoryDecorator';
 
 const SIDEBAR_CATEGORIES = [
   {

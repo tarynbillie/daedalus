@@ -1,10 +1,11 @@
 // @flow
 import { defineMessages } from 'react-intl';
+
 import Wallet from '../domains/Wallet';
 import WalletTransaction from '../domains/WalletTransaction';
 import globalMessages from '../i18n/global-messages';
-
 import LocalizableError from '../i18n/LocalizableError';
+
 import type { BugReportFormData } from './etc/sendEtcBugReport';
 
 const messages = defineMessages({

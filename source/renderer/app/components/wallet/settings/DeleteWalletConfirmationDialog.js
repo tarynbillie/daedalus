@@ -7,13 +7,15 @@ import { Input } from 'react-polymorph/lib/components/Input';
 import { CheckboxSkin } from 'react-polymorph/lib/skins/simple/CheckboxSkin';
 import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
 import { defineMessages, intlShape, FormattedHTMLMessage } from 'react-intl';
+
 import DialogCloseButton from '../../widgets/DialogCloseButton';
 import Dialog from '../../widgets/Dialog';
-import styles from './DeleteWalletConfirmationDialog.scss';
 import globalMessages from '../../../i18n/global-messages';
 import environment from '../../../../../common/environment';
 import { DELETE_WALLET_COUNTDOWN } from '../../../config/timingConfig';
 import { submitOnEnter } from '../../../utils/form';
+
+import styles from './DeleteWalletConfirmationDialog.scss';
 
 const messages = defineMessages({
   dialogTitle: {

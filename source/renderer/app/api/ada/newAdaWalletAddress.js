@@ -19,4 +19,3 @@ export const newAdaWalletAddress = (
     ca,
   }, { passphrase: password }, accountId)
 );
-

@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
+
 import styles from './StakingChartTooltipItem.scss';
 
 type Props = {
@@ -15,7 +16,9 @@ export default class StakingChartTooltipItem extends Component<Props> {
     const { value, label } = this.props;
     return (
       <div className={styles.component}>
-        <span className={styles.value}>{value}</span> {label}
+        <span className={styles.value}>{value}</span>
+        {' '}
+        {label}
       </div>
     );
   }

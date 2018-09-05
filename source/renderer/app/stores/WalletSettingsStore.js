@@ -14,6 +14,7 @@ export default class WalletSettingsStore extends Store {
   ];
 
   @observable walletFieldBeingEdited = null;
+
   @observable lastUpdatedWalletField = null;
 
   @action startEditingWalletField = ({ field }: { field: string }) => {

@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import { Input } from 'react-polymorph/lib/components/Input';
 import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
 import { intlShape } from 'react-intl';
+
 import { ReactToolboxMobxForm } from '../../../utils/ReactToolboxMobxForm';
 import Dialog from '../../widgets/Dialog';
 import DialogCloseButton from '../../widgets/DialogCloseButton';
@@ -132,23 +133,33 @@ export default class WalletSendConfirmationDialog extends Component<Props> {
           <div className={styles.amountFeesWrapper}>
             <div className={styles.amountWrapper}>
               <div className={styles.amountLabel}>{intl.formatMessage(messages.amountLabel)}</div>
-              <div className={styles.amount}>{formattedAmount}
-                <span className={styles.currencySymbol}>&nbsp;{currencyUnit}</span>
+              <div className={styles.amount}>
+                {formattedAmount}
+                <span className={styles.currencySymbol}>
+                  {currencyUnit}
+                </span>
               </div>
             </div>
 
             <div className={styles.feesWrapper}>
               <div className={styles.feesLabel}>{intl.formatMessage(messages.feesLabel)}</div>
-              <div className={styles.fees}>+{formattedTransactionFee}
-                <span className={styles.currencySymbol}>&nbsp;{currencyUnit}</span>
+              <div className={styles.fees}>
++
+                {formattedTransactionFee}
+                <span className={styles.currencySymbol}>
+                  {currencyUnit}
+                </span>
               </div>
             </div>
           </div>
 
           <div className={styles.totalAmountWrapper}>
             <div className={styles.totalAmountLabel}>{intl.formatMessage(messages.totalLabel)}</div>
-            <div className={styles.totalAmount}>{formattedTotalAmount}
-              <span className={styles.currencySymbol}>&nbsp;{currencyUnit}</span>
+            <div className={styles.totalAmount}>
+              {formattedTotalAmount}
+              <span className={styles.currencySymbol}>
+                {currencyUnit}
+              </span>
             </div>
           </div>
 

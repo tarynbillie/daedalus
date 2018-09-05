@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { defineMessages, FormattedHTMLMessage } from 'react-intl';
 import { observer, inject } from 'mobx-react';
+
 import { ellipsis } from '../../utils/strings';
 import WalletReceive from '../../components/wallet/WalletReceive';
 import VerticalFlexContainer from '../../components/layout/VerticalFlexContainer';

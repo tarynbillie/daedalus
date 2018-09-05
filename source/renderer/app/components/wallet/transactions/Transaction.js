@@ -13,6 +13,7 @@ import type { TransactionState } from '../../../domains/WalletTransaction';
 import WalletTransaction, { transactionStates, transactionTypes } from '../../../domains/WalletTransaction';
 import { environmentSpecificMessages } from '../../../i18n/global-messages';
 import { assuranceLevels } from '../../../types/transactionAssuranceTypes';
+
 import styles from './Transaction.scss';
 import TransactionTypeIcon from './TransactionTypeIcon';
 
@@ -148,7 +149,7 @@ export default class Transaction extends React.Component<Props, State> {
   };
 
   toggleDetails() {
-    this.setState({ isExpanded: !this.state.isExpanded });
+    this.setState(state => ({ isExpanded: !state.isExpanded }));
   }
 
   handleOpenExplorer(type: string, param: string, e: Event) {
@@ -176,8 +177,7 @@ export default class Transaction extends React.Component<Props, State> {
 
     const hasConfirmations = data.numberOfConfirmations > 0;
     const isFailedTransaction = state === transactionStates.FAILED;
-    const isPendingTransaction =
-      state === transactionStates.PENDING || (state === transactionStates.OK && !hasConfirmations);
+    const isPendingTransaction = state === transactionStates.PENDING || (state === transactionStates.OK && !hasConfirmations);
 
     // transaction state is mutated in order to capture zero-confirmations status as pending state
     const transactionState = isPendingTransaction ? transactionStates.PENDING : state;
@@ -227,7 +227,9 @@ export default class Transaction extends React.Component<Props, State> {
 
             <div className={styles.details}>
               <div className={styles.type}>
-                {intl.formatMessage(messages.type, { currency })},{' '}
+                {intl.formatMessage(messages.type, { currency })}
+,
+                {' '}
                 {moment(data.date).format('hh:mm:ss A')}
               </div>
 
@@ -239,8 +241,8 @@ export default class Transaction extends React.Component<Props, State> {
         {/* ==== Toggleable Transaction Details ==== */}
         <div className={contentStyles}>
           <div className={detailsStyles}>
-            {data.exchange &&
-              data.conversionRate && (
+            {data.exchange
+              && data.conversionRate && (
                 <div className={styles.conversion}>
                   <div>
                     <h2>{intl.formatMessage(messages.exchange)}</h2>
@@ -289,8 +291,13 @@ export default class Transaction extends React.Component<Props, State> {
                   <h2>{intl.formatMessage(messages.assuranceLevel)}</h2>
                   {transactionState === transactionStates.OK ? (
                     <span>
-                      <span className={styles.assuranceLevel}>{status}</span>.{' '}
-                      {data.numberOfConfirmations} {intl.formatMessage(messages.confirmations)}.
+                      <span className={styles.assuranceLevel}>{status}</span>
+.
+                      {' '}
+                      {data.numberOfConfirmations}
+                      {' '}
+                      {intl.formatMessage(messages.confirmations)}
+.
                     </span>
                   ) : null}
                 </div>
@@ -331,8 +338,7 @@ export default class Transaction extends React.Component<Props, State> {
   _renderTransactionStateBadge(): React.Element<*> {
     const transactionState = this.props.data.state;
     const msg = this.context.intl.formatMessage(stateTranslations[transactionState]);
-    const style =
-      transactionState === transactionStates.OK
+    const style = transactionState === transactionStates.OK
         ? styles[this.props.assuranceLevel]
         : styles[`${transactionState}Label`];
 

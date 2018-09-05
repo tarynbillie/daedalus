@@ -1,7 +1,8 @@
 // @flow
+import { MAX_ADA_WALLETS_COUNT } from '../../config/numbersConfig';
+
 import type { AdaV1Wallets } from './types';
 import { request } from './lib/v1/request';
-import { MAX_ADA_WALLETS_COUNT } from '../../config/numbersConfig';
 
 export type GetAdaWalletParams = {
   ca: string,

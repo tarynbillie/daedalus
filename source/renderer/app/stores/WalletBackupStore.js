@@ -1,24 +1,37 @@
 // @flow
 import { observable, action, computed } from 'mobx';
-import Store from './lib/Store';
+
 import environment from '../../../common/environment';
 import WalletBackupDialog from '../components/wallet/WalletBackupDialog';
 import type { walletBackupStep } from '../types/walletBackupTypes';
 import { WALLET_BACKUP_STEPS } from '../types/walletBackupTypes';
 
+import Store from './lib/Store';
+
 export default class WalletBackupStore extends Store {
 
   @observable inProgress = false;
+
   @observable currentStep: walletBackupStep = WALLET_BACKUP_STEPS.NOT_INITIATED;
+
   @observable recoveryPhrase = [];
+
   @observable recoveryPhraseWords: {word: string}[] = [];
+
   @observable recoveryPhraseShuffled: Array<{word: string, isActive: boolean}> = [];
+
   @observable completed = false;
+
   @observable enteredPhrase = [];
+
   @observable isPrivacyNoticeAccepted = false;
+
   @observable isEntering = false;
+
   @observable isTermDeviceAccepted = false;
+
   @observable isTermRecoveryAccepted = false;
+
   @observable countdownRemaining = 0;
 
   countdownTimerInterval: ?IntervalID = null;
@@ -94,8 +107,8 @@ export default class WalletBackupStore extends Store {
 
   @computed get isRecoveryPhraseValid(): boolean {
     return (
-      this.recoveryPhraseWords.reduce((words, { word }) => words + word, '') ===
-      this.enteredPhrase.reduce((words, { word }) => words + word, '')
+      this.recoveryPhraseWords.reduce((words, { word }) => words + word, '')
+      === this.enteredPhrase.reduce((words, { word }) => words + word, '')
     );
   }
 

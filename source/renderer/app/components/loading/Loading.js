@@ -6,12 +6,14 @@ import { defineMessages, intlShape } from 'react-intl';
 import classNames from 'classnames';
 import { Button } from 'react-polymorph/lib/components/Button';
 import { ButtonSkin } from 'react-polymorph/lib/skins/simple/ButtonSkin';
+
 import LoadingSpinner from '../widgets/LoadingSpinner';
 import daedalusLogo from '../../assets/images/daedalus-logo-loading-grey.inline.svg';
-import styles from './Loading.scss';
 import type { ReactIntlMessage } from '../../types/i18nTypes';
 import environment from '../../../../common/environment';
 import { REPORT_ISSUE_TIME_TRIGGER } from '../../config/timingConfig';
+
+import styles from './Loading.scss';
 
 let connectingInterval = null;
 let syncingInterval = null;
@@ -85,8 +87,7 @@ export default class Loading extends React.Component<Props, State> {
 
   componentWillReceiveProps(nextProps: Props) {
     const startConnectingTimer = nextProps.isConnecting && connectingInterval === null;
-    const stopConnectingTimer =
-      this.props.isConnecting && !nextProps.isConnecting && connectingInterval !== null;
+    const stopConnectingTimer = this.props.isConnecting && !nextProps.isConnecting && connectingInterval !== null;
 
     if (startConnectingTimer) {
       connectingInterval = setInterval(this.connectingTimer, 1000);
@@ -95,8 +96,7 @@ export default class Loading extends React.Component<Props, State> {
     }
 
     const startSyncingTimer = nextProps.isSyncing && syncingInterval === null;
-    const stopSyncingTimer =
-      this.props.isSyncing && !nextProps.isSyncing && syncingInterval !== null;
+    const stopSyncingTimer = this.props.isSyncing && !nextProps.isSyncing && syncingInterval !== null;
 
     if (startSyncingTimer) {
       syncingInterval = setInterval(this.syncingTimer, 1000);
@@ -187,7 +187,7 @@ export default class Loading extends React.Component<Props, State> {
   }
 
   connectingTimer = () => {
-    this.setState({ connectingTime: this.state.connectingTime + 1 });
+    this.setState(state => ({ connectingTime: state.connectingTime + 1 }));
   };
 
   resetConnectingTimer = () => {
@@ -202,7 +202,7 @@ export default class Loading extends React.Component<Props, State> {
     const syncPercentage = this.props.syncPercentage.toFixed(2);
     if (syncPercentage === this.state.syncPercentage) {
       // syncPercentage not increased, increase syncing time
-      this.setState({ syncingTime: this.state.syncingTime + 1 });
+      this.setState(state => ({ syncingTime: state.syncingTime + 1 }));
     } else {
       // reset syncingTime and set new max percentage
       this.setState({ syncingTime: 0, syncPercentage });
@@ -229,10 +229,7 @@ export default class Loading extends React.Component<Props, State> {
     } = this.props;
 
     if (isConnecting) {
-      const connectingMessage = this._getConnectingMessage(
-        hasBeenConnected,
-        hasBlockSyncingStarted,
-      );
+      const connectingMessage = this._getConnectingMessage(hasBeenConnected, hasBlockSyncingStarted);
       return (
         <div className={styles.connecting}>
           <h1 className={styles.headline}>{intl.formatMessage(connectingMessage)}</h1>
@@ -242,7 +239,10 @@ export default class Loading extends React.Component<Props, State> {
       return (
         <div className={styles.syncing}>
           <h1 className={styles.headline}>
-            {intl.formatMessage(messages.syncing)} {syncPercentage.toFixed(2)}%
+            {intl.formatMessage(messages.syncing)}
+            {' '}
+            {syncPercentage.toFixed(2)}
+%
           </h1>
         </div>
       );

@@ -1,18 +1,20 @@
 // @flow
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+
 import WalletAdd from '../../components/wallet/WalletAdd';
 import WalletCreateDialog from '../../components/wallet/WalletCreateDialog';
 import WalletRestoreDialog from '../../components/wallet/WalletRestoreDialog';
 import WalletFileImportDialog from '../../components/wallet/file-import/WalletFileImportDialog';
 import WalletBackupDialog from '../../components/wallet/WalletBackupDialog';
-import WalletFileImportDialogContainer from '../wallet/dialogs/WalletFileImportDialogContainer';
-import WalletRestoreDialogContainer from '../wallet/dialogs/WalletRestoreDialogContainer';
-import WalletBackupDialogContainer from '../wallet/dialogs/WalletBackupDialogContainer';
-import WalletCreateDialogContainer from '../wallet/dialogs/WalletCreateDialogContainer';
 import type { InjectedProps } from '../../types/injectedPropsType';
 import resolver from '../../utils/imports';
 import environment from '../../../../common/environment';
+
+import WalletFileImportDialogContainer from './dialogs/WalletFileImportDialogContainer';
+import WalletRestoreDialogContainer from './dialogs/WalletRestoreDialogContainer';
+import WalletBackupDialogContainer from './dialogs/WalletBackupDialogContainer';
+import WalletCreateDialogContainer from './dialogs/WalletCreateDialogContainer';
 
 type Props = InjectedProps;
 const Layout = resolver('containers/MainLayout');

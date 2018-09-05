@@ -1,6 +1,7 @@
 // @flow
-import type { AdaWalletRecoveryPhraseFromCertificateResponse } from './types';
 import { unscramblePaperWalletMnemonic } from '../../utils/crypto';
+
+import type { AdaWalletRecoveryPhraseFromCertificateResponse } from './types';
 
 export type GetAdaWalletRecoveryPhraseFromCertificateParams = {
   passphrase: string, // 9-word mnemonic

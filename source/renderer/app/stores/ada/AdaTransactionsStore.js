@@ -1,6 +1,7 @@
 // @flow
 import { computed } from 'mobx';
 import { BigNumber } from 'bignumber.js';
+
 import type { UnconfirmedAmount } from '../../types/unconfirmedAmountType';
 import { isValidAmountInLovelaces } from '../../utils/validations';
 import TransactionsStore from '../TransactionsStore';

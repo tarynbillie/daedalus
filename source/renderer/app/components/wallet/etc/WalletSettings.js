@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { intlShape } from 'react-intl';
 import moment from 'moment';
+
 import LocalizableError from '../../../i18n/LocalizableError';
 import BorderedBox from '../../widgets/BorderedBox';
 import InlineEditingInput from '../../widgets/forms/InlineEditingInput';

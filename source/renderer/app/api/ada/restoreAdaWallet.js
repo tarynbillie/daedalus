@@ -19,4 +19,3 @@ export const restoreAdaWallet = (
     ca,
   }, { passphrase: walletPassword }, walletInitData)
 );
-

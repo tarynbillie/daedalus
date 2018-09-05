@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { Input } from 'react-polymorph/lib/components/Input';
 import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
+
 import styles from './MnemonicInputWidget.scss';
 
 type Props = {

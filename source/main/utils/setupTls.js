@@ -1,8 +1,11 @@
 import path from 'path';
 import fs from 'fs';
+
 import log from 'electron-log';
-import { launcherConfig } from './launcherConfig';
+
 import { runtimeFolderPath } from '../config';
+
+import { launcherConfig } from './launcherConfig';
 
 const isProd = process.env.NODE_ENV === 'production';
 const caDevelopmentPath = process.env.CARDANO_TLS_PATH || '';

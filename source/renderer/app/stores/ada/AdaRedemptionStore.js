@@ -2,6 +2,7 @@
 import { action, computed, observable, runInAction } from 'mobx';
 import { ipcRenderer } from 'electron';
 import { isString } from 'lodash';
+
 import Store from '../lib/Store';
 import Request from '../lib/LocalizedRequest';
 import { Logger } from '../../../../common/logging';
@@ -24,22 +25,37 @@ import { ADA_REDEMPTION_TYPES } from '../../types/redemptionTypes';
 export default class AdaRedemptionStore extends Store {
 
   @observable redemptionType: RedemptionTypeChoices = ADA_REDEMPTION_TYPES.REGULAR;
+
   @observable certificate: ?File = null;
+
   @observable isCertificateEncrypted = false;
+
   @observable passPhrase: ?string = null;
+
   @observable shieldedRedemptionKey: ?string = null;
+
   @observable email: ?string = null;
+
   @observable adaPasscode: ?string = null;
+
   @observable adaAmount: ?string = null;
+
   @observable decryptionKey: ?string = null;
+
   @observable redemptionCode: string = '';
+
   @observable walletId: ?string = null;
+
   @observable error: ?LocalizableError = null;
+
   @observable amountRedeemed: number = 0;
+
   @observable showAdaRedemptionSuccessMessage: boolean = false;
+
   @observable redeemAdaRequest: Request<Wallet> = new Request(this.api.ada.redeemAda);
   // eslint-disable-next-line
   @observable redeemPaperVendedAdaRequest: Request<RedeemPaperVendedAdaResponse> = new Request(this.api.ada.redeemPaperVendedAda);
+
   @observable isRedemptionDisclaimerAccepted = false;
 
   setup() {
@@ -143,8 +159,8 @@ export default class AdaRedemptionStore extends Store {
 
   _parseCodeFromCertificate() {
     if (
-      this.redemptionType === ADA_REDEMPTION_TYPES.REGULAR ||
-      this.redemptionType === ADA_REDEMPTION_TYPES.RECOVERY_REGULAR
+      this.redemptionType === ADA_REDEMPTION_TYPES.REGULAR
+      || this.redemptionType === ADA_REDEMPTION_TYPES.RECOVERY_REGULAR
     ) {
       if (!this.passPhrase && this.isCertificateEncrypted) return;
     }
@@ -162,21 +178,21 @@ export default class AdaRedemptionStore extends Store {
     Logger.debug('Parsing ADA Redemption code from certificate: ' + path);
     let decryptionKey = null;
     if ((
-      this.redemptionType === ADA_REDEMPTION_TYPES.REGULAR ||
-      this.redemptionType === ADA_REDEMPTION_TYPES.RECOVERY_REGULAR) &&
-      this.isCertificateEncrypted
+      this.redemptionType === ADA_REDEMPTION_TYPES.REGULAR
+      || this.redemptionType === ADA_REDEMPTION_TYPES.RECOVERY_REGULAR)
+      && this.isCertificateEncrypted
     ) {
       decryptionKey = this.passPhrase;
     }
     if (
-      this.redemptionType === ADA_REDEMPTION_TYPES.FORCE_VENDED &&
-      this.isCertificateEncrypted
+      this.redemptionType === ADA_REDEMPTION_TYPES.FORCE_VENDED
+      && this.isCertificateEncrypted
     ) {
       decryptionKey = [this.email, this.adaPasscode, this.adaAmount];
     }
     if (
-      this.redemptionType === ADA_REDEMPTION_TYPES.RECOVERY_FORCE_VENDED &&
-      this.isCertificateEncrypted
+      this.redemptionType === ADA_REDEMPTION_TYPES.RECOVERY_FORCE_VENDED
+      && this.isCertificateEncrypted
     ) {
       decryptionKey = this.decryptionKey;
     }

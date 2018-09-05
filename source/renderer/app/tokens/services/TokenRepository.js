@@ -7,6 +7,7 @@ import type { ERC20Token, TokensMap } from '../models/ERC20';
 
 export class TokenRepository {
   _store: Store;
+
   _keyBuilder: WalletTokensKeyBuilder;
 
   constructor(store: Store, keyBuilder: WalletTokensKeyBuilder) {
@@ -35,8 +36,7 @@ export class TokenRepository {
       .then(this._setWalletTokens(walletId));
   }
 
-  _setWalletTokens = (walletId: string) => (tokens: TokensMap): Promise<TokensMap> =>
-    new Promise(resolve => {
+  _setWalletTokens = (walletId: string) => (tokens: TokensMap): Promise<TokensMap> => new Promise(resolve => {
       const walletKey = this._keyBuilder(walletId);
       this._store.set(walletKey, tokens);
       resolve(tokens);

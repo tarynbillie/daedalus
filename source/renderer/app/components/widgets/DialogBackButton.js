@@ -1,7 +1,9 @@
 // @flow
 import React, { Component } from 'react';
 import SVGInline from 'react-svg-inline';
+
 import backArrow from '../../assets/images/back-arrow-ic.inline.svg';
+
 import styles from './DialogBackButton.scss';
 
 type Props = {

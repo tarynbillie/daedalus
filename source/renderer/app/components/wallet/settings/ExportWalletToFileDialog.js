@@ -5,14 +5,16 @@ import classnames from 'classnames';
 import { defineMessages, intlShape, FormattedHTMLMessage } from 'react-intl';
 import { Input } from 'react-polymorph/lib/components/Input';
 import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
+
 import DialogCloseButton from '../../widgets/DialogCloseButton';
 import { ReactToolboxMobxForm } from '../../../utils/ReactToolboxMobxForm';
 import globalMessages from '../../../i18n/global-messages';
 import Dialog from '../../widgets/Dialog';
 import LocalizableError from '../../../i18n/LocalizableError';
-import styles from './ExportWalletToFileDialog.scss';
 import { FORM_VALIDATION_DEBOUNCE_WAIT } from '../../../config/timingConfig';
 import { submitOnEnter } from '../../../utils/form';
+
+import styles from './ExportWalletToFileDialog.scss';
 
 const messages = defineMessages({
   headline: {

@@ -12,15 +12,17 @@ import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
 import { TextAreaSkin } from 'react-polymorph/lib/skins/simple/TextAreaSkin';
 import { SwitchSkin } from 'react-polymorph/lib/skins/simple/SwitchSkin';
 import { IDENTIFIERS } from 'react-polymorph/lib/themes/API';
+
 import { ReactToolboxMobxForm } from '../../../utils/ReactToolboxMobxForm';
 import DialogCloseButton from '../../widgets/DialogCloseButton';
 import Dialog from '../../widgets/Dialog';
 import { InvalidEmailError, FieldRequiredError } from '../../../i18n/errors';
 import LocalizableError from '../../../i18n/LocalizableError';
-import styles from './BugReportDialog.scss';
 import type { LogFiles } from '../../../types/LogTypes';
 import { FORM_VALIDATION_DEBOUNCE_WAIT } from '../../../config/timingConfig';
 import { submitOnEnter } from '../../../utils/form';
+
+import styles from './BugReportDialog.scss';
 
 const messages = defineMessages({
   title: {
@@ -154,8 +156,8 @@ export default class BugReportDialog extends Component<Props, State> {
 
   componentWillReceiveProps(nextProps: Object) {
     const compressedLogsFileChanged = (
-      !this.props.compressedLogsFile &&
-      !!nextProps.compressedLogsFile
+      !this.props.compressedLogsFile
+      && !!nextProps.compressedLogsFile
     );
     const { compressedLogsFile } = this.state;
     if (compressedLogsFile) return false;
@@ -300,12 +302,12 @@ export default class BugReportDialog extends Component<Props, State> {
         actions={!error ? actions : alternativeActions}
         closeOnOverlayClick
         onClose={this.onClose}
-        closeButton={
+        closeButton={(
           <DialogCloseButton
             disabled={isSubmittingBugReport}
             onClose={this.onClose}
           />
-        }
+)}
       >
         {error ? (
           <div>

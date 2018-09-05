@@ -7,10 +7,12 @@ import { Checkbox } from 'react-polymorph/lib/components/Checkbox';
 import { ButtonSkin } from 'react-polymorph/lib/skins/simple/ButtonSkin';
 import { CheckboxSkin } from 'react-polymorph/lib/skins/simple/CheckboxSkin';
 import { defineMessages, intlShape } from 'react-intl';
+
 import LocalizableError from '../../../i18n/LocalizableError';
+import environment from '../../../../../common/environment';
+
 import TermsOfUseText from './TermsOfUseText';
 import styles from './TermsOfUseForm.scss';
-import environment from '../../../../../common/environment';
 
 const messages = defineMessages({
   checkboxLabel: {
@@ -52,9 +54,7 @@ export default class TermsOfUseForm extends Component<Props, State> {
     areTermsOfUseAccepted: false,
   };
 
-  toggleAcceptance() {
-    this.setState({ areTermsOfUseAccepted: !this.state.areTermsOfUseAccepted });
-  }
+  toggleAcceptance = () => this.setState(state => ({ areTermsOfUseAccepted: !state.areTermsOfUseAccepted }));
 
   submit = () => {
     this.props.onSubmit();
@@ -80,7 +80,7 @@ export default class TermsOfUseForm extends Component<Props, State> {
           <div className={styles.checkbox}>
             <Checkbox
               label={intl.formatMessage(messages[checkboxLabel])}
-              onChange={this.toggleAcceptance.bind(this)}
+              onChange={this.toggleAcceptance}
               checked={areTermsOfUseAccepted}
               skin={CheckboxSkin}
             />

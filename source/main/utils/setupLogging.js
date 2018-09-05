@@ -1,10 +1,13 @@
 import fs from 'fs';
 import path from 'path';
+
 import log from 'electron-log';
 import moment from 'moment';
-import ensureDirectoryExists from './ensureDirectoryExists';
+
 import { pubLogsFolderPath, appLogsFolderPath, APP_NAME } from '../config';
 import { isFileNameWithTimestamp } from '../../common/fileName';
+
+import ensureDirectoryExists from './ensureDirectoryExists';
 
 const isTest = process.env.NODE_ENV === 'test';
 

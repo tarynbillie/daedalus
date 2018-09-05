@@ -55,8 +55,7 @@ export const peerCountConnectionChecker = (
   checkInterval: number,
   getPeerCount: () => Promise<number>,
   logger: typeof Logger,
-): Observable<boolean> =>
-  interval(checkInterval).pipe(
+): Observable<boolean> => interval(checkInterval).pipe(
     concatMap(getPeerCount),
     catchError(logError(logger)),
     catchError(restoreWith(0)),
@@ -68,8 +67,7 @@ export const validResponseConnectionChecker = (
   checkInterval: number,
   doRequest: () => Promise<*>,
   logger: typeof Logger,
-): Observable<boolean> =>
-  interval(checkInterval).pipe(
+): Observable<boolean> => interval(checkInterval).pipe(
     concatMap(doRequest),
     mapTo(true),
     catchError(logError(logger)),
@@ -80,10 +78,8 @@ export const validResponseConnectionChecker = (
 export const networkStatusFactory = (
   connectionStatus$: Observable<boolean>,
   getSyncProgress: () => Promise<Maybe<SyncProgress>>,
-): Observable<FullNetworkStatus> =>
-  connectionStatus$.pipe(
-    concatMap(isConnected =>
-      getSyncProgress()
+): Observable<FullNetworkStatus> => connectionStatus$.pipe(
+    concatMap(isConnected => getSyncProgress()
         .catch(toNothing)
         .then(syncProgress => ({ isConnected, syncProgress })),
     ),

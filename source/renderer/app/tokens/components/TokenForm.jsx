@@ -9,6 +9,7 @@ import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
 
 import BorderedBox from '../../components/widgets/BorderedBox';
 import { TokenForm as TokenFormModel } from '../forms/TokenForm';
+
 import styles from './styles/TokenForm.scss';
 
 interface TokenFormProps {

@@ -2,12 +2,14 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import SVGInline from 'react-svg-inline';
+
 import expendIcon from '../../../assets/images/wallet-nav/send-ic.inline.svg';
 import incomeIcon from '../../../assets/images/wallet-nav/receive-ic.inline.svg';
 import exchangeIcon from '../../../assets/images/exchange-ic.inline.svg';
 import failedIcon from '../../../assets/images/wallet-nav/deny-ic.inline.svg';
-import styles from './TransactionTypeIcon.scss';
 import { transactionStates, transactionTypes } from '../../../domains/WalletTransaction';
+
+import styles from './TransactionTypeIcon.scss';
 
 type Props = {
   iconType: string,

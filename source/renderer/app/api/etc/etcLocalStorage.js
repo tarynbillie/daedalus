@@ -36,19 +36,15 @@ type UpdatedWalletData = {
 
 const walletKey = (walletId: string) => `${storageKeys.WALLETS}.${walletId}`;
 
-export const getEtcWalletData = (walletId: string): Promise<EtcWalletData> =>
-  tryAsync(() => store.get(walletKey(walletId)));
+export const getEtcWalletData = (walletId: string): Promise<EtcWalletData> => tryAsync(() => store.get(walletKey(walletId)));
 
-export const setEtcWalletData = (walletData: EtcWalletData): Promise<void> =>
-  tryAsync(() => store.set(walletKey(walletData.id), walletData));
+export const setEtcWalletData = (walletData: EtcWalletData): Promise<void> => tryAsync(() => store.set(walletKey(walletData.id), walletData));
 
-export const updateEtcWalletData = (updatedWalletData: UpdatedWalletData): Promise<void> =>
-  getEtcWalletData(updatedWalletData.id)
+export const updateEtcWalletData = (updatedWalletData: UpdatedWalletData): Promise<void> => getEtcWalletData(updatedWalletData.id)
     .then(walletData => ({ ...walletData, ...updatedWalletData }))
     .then(setEtcWalletData);
 
-export const unsetEtcWalletData = (walletId: string): Promise<void> =>
-  tryAsync(() => store.delete(walletKey(walletId)));
+export const unsetEtcWalletData = (walletId: string): Promise<void> => tryAsync(() => store.delete(walletKey(walletId)));
 
 export const unsetEtcWalletsData = (): Promise<void> => tryAsync(() => store.delete(storageKeys.WALLETS));
 

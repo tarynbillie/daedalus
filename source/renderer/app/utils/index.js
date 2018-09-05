@@ -44,8 +44,7 @@ export const toDict = curry(
 
 export const toNothing: * => Maybe<*> = always(Maybe.Nothing());
 
-export const findMaybe = <T>(predicate: T => boolean) =>
-  pipe(
+export const findMaybe = <T>(predicate: T => boolean) => pipe(
     find(predicate),
     Maybe.fromNullable,
   );

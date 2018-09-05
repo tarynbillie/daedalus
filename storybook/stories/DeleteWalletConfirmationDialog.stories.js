@@ -3,8 +3,9 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import StoryDecorator from './support/StoryDecorator';
 import DeleteWalletConfirmationDialog from '../../source/renderer/app/components/wallet/settings/DeleteWalletConfirmationDialog';
+
+import StoryDecorator from './support/StoryDecorator';
 
 storiesOf('DeleteWalletConfirmationDialog', module)
 
@@ -112,4 +113,3 @@ storiesOf('DeleteWalletConfirmationDialog', module)
       />
     </div>
   ));
-

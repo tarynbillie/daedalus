@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
+
 import styles from './BlockGenerationInfo.scss';
 
 @observer
@@ -17,7 +18,11 @@ export default class BlockGenerationInfo extends Component<any> {
         </div>
         <div className={styles.info}>
           be online and you will be rewarded
-          or you can <span className={styles.link}>delegate</span> this process to the pool
+          or you can
+          {' '}
+          <span className={styles.link}>delegate</span>
+          {' '}
+this process to the pool
         </div>
       </div>
     );

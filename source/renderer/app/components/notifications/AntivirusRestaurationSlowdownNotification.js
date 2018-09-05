@@ -9,9 +9,11 @@ import {
   FormattedMessage,
   FormattedHTMLMessage,
 } from 'react-intl';
-import styles from './AntivirusRestaurationSlowdownNotification.scss';
+
 import closeCrossWhite from '../../assets/images/close-cross-white.inline.svg';
 import globalMessages from '../../i18n/global-messages';
+
+import styles from './AntivirusRestaurationSlowdownNotification.scss';
 
 const messages = defineMessages({
   note: {

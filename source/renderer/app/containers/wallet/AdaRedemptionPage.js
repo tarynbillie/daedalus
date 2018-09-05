@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+
 import Layout from '../MainLayout';
 import AdaRedemptionForm from '../../components/wallet/ada-redemption/AdaRedemptionForm';
 import AdaRedemptionNoWallets from '../../components/wallet/ada-redemption/AdaRedemptionNoWallets';
@@ -62,23 +63,23 @@ export default class AdaRedemptionPage extends Component<Props> {
 
     if (selectableWallets.length === 0) return <Layout><LoadingSpinner /></Layout>;
 
-    const request = (redemptionType === ADA_REDEMPTION_TYPES.PAPER_VENDED ?
-      redeemPaperVendedAdaRequest : redeemAdaRequest
+    const request = (redemptionType === ADA_REDEMPTION_TYPES.PAPER_VENDED
+      ? redeemPaperVendedAdaRequest : redeemAdaRequest
     );
     const isCertificateSelected = adaRedemption.certificate !== null;
 
     const showInputsForDecryptingForceVendedCertificate = (
-      isCertificateSelected && isCertificateEncrypted &&
-      redemptionType === ADA_REDEMPTION_TYPES.FORCE_VENDED
+      isCertificateSelected && isCertificateEncrypted
+      && redemptionType === ADA_REDEMPTION_TYPES.FORCE_VENDED
     );
     const showInputForDecryptionKey = (
-      isCertificateSelected && isCertificateEncrypted &&
-      redemptionType === ADA_REDEMPTION_TYPES.RECOVERY_FORCE_VENDED
+      isCertificateSelected && isCertificateEncrypted
+      && redemptionType === ADA_REDEMPTION_TYPES.RECOVERY_FORCE_VENDED
     );
     const showPassPhraseWidget = redemptionType === ADA_REDEMPTION_TYPES.PAPER_VENDED || (
       isCertificateSelected && isCertificateEncrypted && (
-        redemptionType === ADA_REDEMPTION_TYPES.REGULAR ||
-        redemptionType === ADA_REDEMPTION_TYPES.RECOVERY_REGULAR
+        redemptionType === ADA_REDEMPTION_TYPES.REGULAR
+        || redemptionType === ADA_REDEMPTION_TYPES.RECOVERY_REGULAR
       )
     );
 
@@ -106,8 +107,8 @@ export default class AdaRedemptionPage extends Component<Props> {
           isSubmitting={request.isExecuting}
           error={adaRedemption.error}
           onRemoveCertificate={removeCertificate.trigger}
-          onSubmit={(redemptionType === ADA_REDEMPTION_TYPES.PAPER_VENDED ?
-            this.onSubmitPaperVended : this.onSubmit
+          onSubmit={(redemptionType === ADA_REDEMPTION_TYPES.PAPER_VENDED
+            ? this.onSubmitPaperVended : this.onSubmit
           )}
           mnemonicValidator={isValidRedemptionMnemonic}
           redemptionCodeValidator={isValidRedemptionKey}

@@ -1,12 +1,13 @@
 // @flow
 import { observable, action, computed, runInAction } from 'mobx';
 import { get, chunk, find } from 'lodash';
+
 import WalletStore from '../WalletStore';
 import Wallet from '../../domains/Wallet';
 import { MAX_ADA_WALLETS_COUNT } from '../../config/numbersConfig';
 import { matchRoute, buildRoute } from '../../utils/routing';
 import { i18nContext } from '../../utils/i18nContext';
-import Request from '.././lib/LocalizedRequest';
+import Request from '../lib/LocalizedRequest';
 import { ROUTES } from '../../routes-config';
 import { mnemonicToSeedHex } from '../../utils/crypto';
 import { downloadPaperWalletCertificate } from '../../utils/paperWalletPdfGenerator';
@@ -29,27 +30,46 @@ export default class AdaWalletsStore extends WalletStore {
   // REQUESTS
   /* eslint-disable max-len */
   @observable walletsRequest: Request<GetWalletsResponse> = new Request(this.api.ada.getWallets);
+
   @observable importFromFileRequest: Request<ImportWalletFromFileResponse> = new Request(this.api.ada.importWalletFromFile);
+
   @observable createWalletRequest: Request<CreateWalletResponse> = new Request(this.api.ada.createWallet);
+
   @observable getWalletAddressesRequest: Request<any> = new Request(this.api.ada.getAddresses);
+
   @observable deleteWalletRequest: Request<DeleteWalletResponse> = new Request(this.api.ada.deleteWallet);
+
   @observable sendMoneyRequest: Request<CreateTransactionResponse> = new Request(this.api.ada.createTransaction);
+
   @observable getWalletRecoveryPhraseRequest: Request<GetWalletRecoveryPhraseResponse> = new Request(this.api.ada.getWalletRecoveryPhrase);
+
   @observable getWalletCertificateAdditionalMnemonicsRequest: Request<GetWalletCertificateAdditionalMnemonicsResponse> = new Request(this.api.ada.getWalletCertificateAdditionalMnemonics);
+
   @observable getWalletCertificateRecoveryPhraseRequest: Request<GetWalletCertificateRecoveryPhraseResponse> = new Request(this.api.ada.getWalletCertificateRecoveryPhrase);
+
   @observable getWalletRecoveryPhraseFromCertificateRequest: Request<GetWalletRecoveryPhraseFromCertificateResponse> = new Request(this.api.ada.getWalletRecoveryPhraseFromCertificate);
+
   @observable restoreRequest: Request<RestoreWalletResponse> = new Request(this.api.ada.restoreWallet);
   /* eslint-enable max-len */
 
   @observable walletExportType: walletExportTypeChoices = 'paperWallet';
+
   @observable walletExportMnemonic = 'marine joke dry silk ticket thing sugar stereo aim';
+
   @observable createPaperWalletCertificateStep = 0;
+
   @observable walletCertificatePassword = null;
+
   @observable walletCertificateAddress = null;
+
   @observable walletCertificateRecoveryPhrase = null;
+
   @observable generatingCertificateInProgress = false;
+
   @observable certificateStep = null;
+
   @observable certificateTemplate = null;
+
   @observable additionalMnemonicWords = null;
 
   _pollingBlocked = false;

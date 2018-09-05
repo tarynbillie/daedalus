@@ -1,8 +1,10 @@
 // @flow
+import fs from 'fs';
+
 import { PDFExtract } from 'pdf.js-extract';
 import { ipcMain } from 'electron';
-import fs from 'fs';
 import log from 'electron-log';
+
 import {
   decryptRegularVend, decryptForceVend,
   decryptRecoveryRegularVend, decryptRecoveryForceVend,

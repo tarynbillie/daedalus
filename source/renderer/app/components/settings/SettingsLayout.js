@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import type { Node } from 'react';
 import { observer } from 'mobx-react';
+
 import styles from './SettingsLayout.scss';
 
 type Props = {

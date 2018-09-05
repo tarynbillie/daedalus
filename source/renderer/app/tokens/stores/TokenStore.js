@@ -19,11 +19,14 @@ const TOKEN_BALANCE_REFRESH_INTERVAL = 10000;
 export class TokenStore extends RxStore {
   @observable.ref
   tokens: ERC20Token[] = [];
+
   @observable.ref
   tokenBalances: { [string]: number } = {};
 
   _tokenRepository: TokenRepository;
+
   _erc20TokenApi: EtcERC20TokenApi;
+
   _walletStore: WalletsStore;
 
   _currentWalletId: string;
@@ -91,13 +94,11 @@ export class TokenStore extends RxStore {
     return this._erc20TokenApi.sendTokens(token.address, this._currentWalletId, amount, receiver);
   }
 
-  _updateTokens = (): Promise<void> =>
-    this._tokenRepository
+  _updateTokens = (): Promise<void> => this._tokenRepository
       .getWalletTokens(this._currentWalletId)
       .then(tokens => this._setTokens(tokens));
 
-  _fetchBalance = (token: ERC20Token): Promise<TokenWithBalance> =>
-    this._erc20TokenApi
+  _fetchBalance = (token: ERC20Token): Promise<TokenWithBalance> => this._erc20TokenApi
       .getBalanceOf(token.address, this._currentWalletId)
       .then(balance => ({ token, balance }));
 

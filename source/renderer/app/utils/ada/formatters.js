@@ -1,5 +1,6 @@
 // @flow
 import { BigNumber } from 'bignumber.js';
+
 import { DECIMAL_PLACES_IN_ADA } from '../../config/numbersConfig';
 
 export const formattedWalletAmount = (

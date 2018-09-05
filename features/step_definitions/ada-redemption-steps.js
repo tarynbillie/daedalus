@@ -1,5 +1,7 @@
-import { Given, When, Then } from 'cucumber';
 import path from 'path';
+
+import { Given, When, Then } from 'cucumber';
+
 import { navigateTo } from '../support/helpers/route-helpers';
 import environment from '../../source/common/environment';
 

@@ -16,7 +16,6 @@ export const formattedAmountToNaturalUnits = (amount: string): string => {
   return cleanedAmount === '' ? '0' : cleanedAmount;
 };
 
-export const formattedAmountWithoutTrailingZeros = (amount: string): string =>
-  amount.replace(/0+$/, '').replace(/\.$/, '');
+export const formattedAmountWithoutTrailingZeros = (amount: string): string => amount.replace(/0+$/, '').replace(/\.$/, '');
 
 export const formattedYesNo = (val: boolean) => (val ? 'yes' : 'no');

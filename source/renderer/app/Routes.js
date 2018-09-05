@@ -1,9 +1,11 @@
 // @flow
 import React from 'react';
 import { Route, IndexRedirect } from 'react-router';
+
+import environment from '../../common/environment';
+
 import { ROUTES } from './routes-config';
 import resolver from './utils/imports';
-import environment from '../../common/environment';
 
 // PAGES
 // import StakingPage from './containers/staking/StakingPage';
@@ -42,8 +44,8 @@ export const Routes = (
       <Route path={ROUTES.WALLETS.SEND} component={WalletSendPage} />
       <Route path={ROUTES.WALLETS.RECEIVE} component={WalletReceivePage} />
       <Route path={ROUTES.WALLETS.SETTINGS} component={WalletSettingsPage} />
-      {environment.isEtcApi() &&
-        environment.ENABLE_TOKENS_UI && (
+      {environment.isEtcApi()
+        && environment.ENABLE_TOKENS_UI && (
           <Route path={ROUTES.WALLETS.TOKENS} component={WalletTokensPage} />
         )}
     </Route>

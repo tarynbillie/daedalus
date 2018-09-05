@@ -3,18 +3,51 @@ import { split, get } from 'lodash';
 import { action } from 'mobx';
 import { ipcRenderer, remote } from 'electron';
 import { BigNumber } from 'bignumber.js';
+
 import { Logger, stringifyData, stringifyError } from '../../../../common/logging';
-import { unixTimestampToDate } from './lib/utils';
 import Wallet from '../../domains/Wallet';
 import WalletTransaction, { transactionTypes } from '../../domains/WalletTransaction';
 import WalletAddress from '../../domains/WalletAddress';
 import { isValidMnemonic } from '../../../../common/decrypt';
 import { isValidRedemptionKey, isValidPaperVendRedemptionKey } from '../../../../common/redemption-key-validation';
 import { LOVELACES_PER_ADA } from '../../config/numbersConfig';
-import { getAdaSyncProgress } from './getAdaSyncProgress';
 import environment from '../../../../common/environment';
-import patchAdaApi from './mocks/patchAdaApi';
+import type {
+  CreateWalletRequest,
+  CreateWalletResponse,
+  CreateTransactionResponse,
+  DeleteWalletRequest,
+  DeleteWalletResponse,
+  GetLocalTimeDifferenceResponse,
+  GetSyncProgressResponse,
+  GetTransactionsRequest,
+  GetTransactionsResponse,
+  GetWalletRecoveryPhraseResponse,
+  GetWalletsResponse,
+  RestoreWalletRequest,
+  RestoreWalletResponse,
+  SendBugReportRequest,
+  SendBugReportResponse,
+  UpdateWalletResponse,
+  UpdateWalletPasswordRequest,
+  UpdateWalletPasswordResponse,
+} from '../common';
+import {
+  GenericApiError,
+  IncorrectWalletPasswordError,
+  WalletAlreadyRestoredError,
+  ReportRequestError, InvalidMnemonicError,
+} from '../common';
+import {
+  ADA_CERTIFICATE_MNEMONIC_LENGHT,
+  ADA_REDEMPTION_PASSPHRASE_LENGHT,
+  WALLET_RECOVERY_PHRASE_WORD_COUNT
+} from '../../config/cryptoConfig';
+import { assuranceModeOptions } from '../../types/transactionAssuranceTypes';
 
+import { unixTimestampToDate } from './lib/utils';
+import { getAdaSyncProgress } from './getAdaSyncProgress';
+import patchAdaApi from './mocks/patchAdaApi';
 import { getAdaWallets } from './getAdaWallets';
 import { changeAdaWalletPassphrase } from './changeAdaWalletPassphrase';
 import { deleteAdaWallet } from './deleteAdaWallet';
@@ -42,7 +75,6 @@ import { getAdaWalletCertificateRecoveryPhrase } from './getAdaWalletCertificate
 import { getAdaWalletRecoveryPhraseFromCertificate } from './getAdaWalletRecoveryPhraseFromCertificate';
 import { getAdaLocalTimeDifference } from './getAdaLocalTimeDifference';
 import { sendAdaBugReport } from './sendAdaBugReport';
-
 import type {
   AdaLocalTimeDifference,
   AdaSyncProgressResponse,
@@ -61,35 +93,6 @@ import type {
   GetWalletCertificateRecoveryPhraseResponse,
   GetWalletRecoveryPhraseFromCertificateResponse,
 } from './types';
-
-import type {
-  CreateWalletRequest,
-  CreateWalletResponse,
-  CreateTransactionResponse,
-  DeleteWalletRequest,
-  DeleteWalletResponse,
-  GetLocalTimeDifferenceResponse,
-  GetSyncProgressResponse,
-  GetTransactionsRequest,
-  GetTransactionsResponse,
-  GetWalletRecoveryPhraseResponse,
-  GetWalletsResponse,
-  RestoreWalletRequest,
-  RestoreWalletResponse,
-  SendBugReportRequest,
-  SendBugReportResponse,
-  UpdateWalletResponse,
-  UpdateWalletPasswordRequest,
-  UpdateWalletPasswordResponse,
-} from '../common';
-
-import {
-  GenericApiError,
-  IncorrectWalletPasswordError,
-  WalletAlreadyRestoredError,
-  ReportRequestError, InvalidMnemonicError,
-} from '../common';
-
 import {
   AllFundsAlreadyAtReceiverAddressError,
   NotAllowedToSendMoneyToRedeemAddressError,
@@ -100,15 +103,8 @@ import {
   WalletAlreadyImportedError,
   WalletFileImportError,
 } from './errors';
-
-import {
-  ADA_CERTIFICATE_MNEMONIC_LENGHT,
-  ADA_REDEMPTION_PASSPHRASE_LENGHT,
-  WALLET_RECOVERY_PHRASE_WORD_COUNT
-} from '../../config/cryptoConfig';
-
 import { AdaV1AssuranceOptions } from './types';
-import { assuranceModeOptions } from '../../types/transactionAssuranceTypes';
+
 
 /**
  * The api layer that is used for all requests to the
@@ -213,6 +209,7 @@ export type GetWalletRecoveryPhraseFromCertificateRequest = {
 export default class AdaApi {
 
   setLocalTimeDifference = () => {};
+
   setNextUpdate = () => {};
 
   constructor() {
@@ -866,8 +863,8 @@ const _createWalletFromServerV1Data = action(
       id,
       amount: new BigNumber(balance).dividedBy(LOVELACES_PER_ADA),
       name,
-      assurance: (assuranceLevel === AdaV1AssuranceOptions.NORMAL ?
-        assuranceModeOptions.NORMAL : assuranceModeOptions.STRICT
+      assurance: (assuranceLevel === AdaV1AssuranceOptions.NORMAL
+        ? assuranceModeOptions.NORMAL : assuranceModeOptions.STRICT
       ),
       hasPassword: hasSpendingPassword,
       passwordUpdateDate: new Date(`${spendingPasswordLastUpdate}Z`),

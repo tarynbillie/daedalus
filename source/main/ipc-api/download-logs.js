@@ -1,6 +1,8 @@
 // @flow
-import { ipcMain } from 'electron';
 import fs from 'fs';
+
+import { ipcMain } from 'electron';
+
 import { DOWNLOAD_LOGS } from '../../common/ipc-api';
 
 export default () => {

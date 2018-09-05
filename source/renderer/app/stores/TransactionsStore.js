@@ -1,11 +1,13 @@
 // @flow
 import { observable, computed, action, extendObservable } from 'mobx';
 import _ from 'lodash';
-import Store from './lib/Store';
-import CachedRequest from './lib/LocalizedCachedRequest';
+
 import WalletTransaction from '../domains/WalletTransaction';
 import type { GetTransactionsResponse } from '../api/common';
 import environment from '../../../common/environment';
+
+import CachedRequest from './lib/LocalizedCachedRequest';
+import Store from './lib/Store';
 
 export type TransactionSearchOptionsStruct = {
   searchTerm: string,
@@ -16,8 +18,11 @@ export type TransactionSearchOptionsStruct = {
 export default class TransactionsStore extends Store {
 
   INITIAL_SEARCH_LIMIT = 1000;
+
   SEARCH_LIMIT_INCREASE = 500;
+
   SEARCH_SKIP = 0;
+
   RECENT_TRANSACTIONS_LIMIT = 5;
 
   @observable transactionsRequests: Array<{

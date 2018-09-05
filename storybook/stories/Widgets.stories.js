@@ -3,7 +3,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { observable, action as mobxAction } from 'mobx';
 import { action } from '@storybook/addon-actions';
-import StoryDecorator from './support/StoryDecorator';
+
 import BigButtonForDialogs from '../../source/renderer/app/components/widgets/BigButtonForDialogs';
 import MnemonicInputWidget from '../../source/renderer/app/components/widgets/forms/MnemonicInputWidget';
 import NotificationMessage from '../../source/renderer/app/components/widgets/NotificationMessage';
@@ -12,6 +12,8 @@ import importIcon from '../../source/renderer/app/assets/images/import-ic.inline
 import joinSharedIcon from '../../source/renderer/app/assets/images/join-shared-ic.inline.svg';
 import NotificationIcon from '../../source/renderer/app/assets/images/success-small.inline.svg';
 import TinySwitch from '../../source/renderer/app/components/widgets/forms/TinySwitch';
+
+import StoryDecorator from './support/StoryDecorator';
 
 
 storiesOf('Widgets', module)
@@ -100,4 +102,3 @@ storiesOf('Widgets', module)
       label="My switch"
     />
   ));
-

@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
+
 import BlockGenerationInfo from './BlockGenerationInfo';
 import StakingSwitch from './StakingSwitch';
 import StakingSystemState from './StakingSystemState';

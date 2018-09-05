@@ -13,11 +13,9 @@ type Path = Array<string | number>;
 
 export const traverseP = <A, B>(fn: A => (Promise<B> | B)) => (arr: A[]): Promise<B[]> => Promise.all(arr.map(fn));
 
-export const mapMatching = <T, K>(matcher: T => boolean, mapper: T => K) =>
-  map(item => (matcher(item) ? mapper(item) : item));
+export const mapMatching = <T, K>(matcher: T => boolean, mapper: T => K) => map(item => (matcher(item) ? mapper(item) : item));
 
-export const whenMatching = <T, K>(matcher: T => boolean, mapper: T => K) => (item: T): T | K =>
-  matcher(item) ? mapper(item) : item;
+export const whenMatching = <T, K>(matcher: T => boolean, mapper: T => K) => (item: T): T | K => matcher(item) ? mapper(item) : item;
 
 export const mapLeafs = <T, U>(mapper: (val: T | SimpleVal, path: Path) => U) => (
   value: Val<T>,
@@ -40,6 +38,5 @@ export const mapLeafs = <T, U>(mapper: (val: T | SimpleVal, path: Path) => U) =>
 };
 
 export const mapValues = curry(
-  <T, K, In: Dict<*>>(mapper: T => K, dict: In): $ObjMap<In, () => K> =>
-    mapObjIndexed(mapper, dict),
+  <T, K, In: Dict<*>>(mapper: T => K, dict: In): $ObjMap<In, () => K> => mapObjIndexed(mapper, dict),
 );

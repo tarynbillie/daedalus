@@ -2,12 +2,14 @@
 import React, { Component } from 'react';
 import SVGInline from 'react-svg-inline';
 import { defineMessages, intlShape, FormattedHTMLMessage } from 'react-intl';
+
 import { environmentSpecificMessages } from '../../i18n/global-messages';
-import styles from './About.scss';
 import daedalusIcon from '../../assets/images/daedalus-logo-loading-grey.inline.svg';
 import cardanoIcon from '../../assets/images/cardano-logo.inline.svg';
 import mantisIcon from '../../assets/images/mantis-logo.inline.svg';
 import environment from '../../../../common/environment';
+
+import styles from './About.scss';
 
 const messages = defineMessages({
   aboutTitle: {
@@ -140,7 +142,8 @@ export default class About extends Component<Props> {
             http://daedaluswallet.io
           </span>
           <div className={styles.copyright}>
-            {intl.formatMessage(messages.aboutCopyright)}&nbsp;
+            {intl.formatMessage(messages.aboutCopyright)}
+&nbsp;
             <span
               onClick={() => onOpenExternalLink('https://github.com/input-output-hk/daedalus/blob/master/LICENSE')}
               className={styles.link}

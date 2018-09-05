@@ -5,6 +5,7 @@ import { Provider, observer } from 'mobx-react';
 import { observable, computed, runInAction } from 'mobx';
 import { BigNumber } from 'bignumber.js';
 import moment from 'moment';
+
 import actions from '../../../source/renderer/app/actions';
 import { assuranceModeOptions } from '../../../source/renderer/app/types/transactionAssuranceTypes.js';
 

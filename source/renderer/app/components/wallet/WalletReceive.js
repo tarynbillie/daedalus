@@ -10,6 +10,7 @@ import { Button } from 'react-polymorph/lib/components/Button';
 import { Input } from 'react-polymorph/lib/components/Input';
 import { ButtonSkin } from 'react-polymorph/lib/skins/simple/ButtonSkin';
 import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
+
 import { ReactToolboxMobxForm } from '../../utils/ReactToolboxMobxForm';
 import BorderedBox from '../widgets/BorderedBox';
 import TinySwitch from '../widgets/forms/TinySwitch';
@@ -17,6 +18,7 @@ import iconCopy from '../../assets/images/clipboard-ic.inline.svg';
 import WalletAddress from '../../domains/WalletAddress';
 import globalMessages from '../../i18n/global-messages';
 import LocalizableError from '../../i18n/LocalizableError';
+
 import styles from './WalletReceive.scss';
 
 const messages = Object.assign({}, defineMessages({
@@ -85,7 +87,7 @@ export default class WalletReceive extends Component<Props, State> {
   };
 
   toggleUsedAddresses = () => {
-    this.setState({ showUsed: !this.state.showUsed });
+    this.setState(state => ({ showUsed: !state.showUsed }));
   };
 
   form = new ReactToolboxMobxForm({
@@ -155,13 +157,15 @@ export default class WalletReceive extends Component<Props, State> {
     const passwordField = form.$('spendingPassword');
     const generateAddressForm = (
       <div className={generateAddressWrapperClasses}>
-        {walletHasPassword &&
+        {walletHasPassword
+          && (
           <Input
             className={styles.spendingPassword}
             {...passwordField.bind()}
             error={passwordField.error}
             skin={InputSkin}
           />
+)
         }
 
         <Button
@@ -174,10 +178,10 @@ export default class WalletReceive extends Component<Props, State> {
     );
 
     // Get QRCode color value from active theme's CSS variable
-    const qrCodeBackgroundColor = document.documentElement ?
-      document.documentElement.style.getPropertyValue('--theme-receive-qr-code-background-color') : 'transparent';
-    const qrCodeForegroundColor = document.documentElement ?
-      document.documentElement.style.getPropertyValue('--theme-receive-qr-code-foreground-color') : '#000';
+    const qrCodeBackgroundColor = document.documentElement
+      ? document.documentElement.style.getPropertyValue('--theme-receive-qr-code-background-color') : 'transparent';
+    const qrCodeForegroundColor = document.documentElement
+      ? document.documentElement.style.getPropertyValue('--theme-receive-qr-code-foreground-color') : '#000';
 
     return (
       <div className={styles.component}>

@@ -5,4 +5,3 @@ const oneHour = 60 * 60 * 1000;
 When(/^I freeze$/, { timeout: oneHour }, (callback) => {
   setTimeout(callback, oneHour);
 });
-

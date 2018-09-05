@@ -5,13 +5,15 @@ import classnames from 'classnames';
 import { Checkbox } from 'react-polymorph/lib/components/Checkbox';
 import { CheckboxSkin } from 'react-polymorph/lib/skins/simple/CheckboxSkin';
 import { defineMessages, intlShape, FormattedHTMLMessage } from 'react-intl';
-import WalletRecoveryPhraseMnemonic from './WalletRecoveryPhraseMnemonic';
+
 import DialogCloseButton from '../../widgets/DialogCloseButton';
 import DialogBackButton from '../../widgets/DialogBackButton';
 import Dialog from '../../widgets/Dialog';
+import globalMessages from '../../../i18n/global-messages';
+
 import WalletRecoveryInstructions from './WalletRecoveryInstructions';
 import MnemonicWord from './MnemonicWord';
-import globalMessages from '../../../i18n/global-messages';
+import WalletRecoveryPhraseMnemonic from './WalletRecoveryPhraseMnemonic';
 import styles from './WalletRecoveryPhraseEntryDialog.scss';
 
 const messages = defineMessages({

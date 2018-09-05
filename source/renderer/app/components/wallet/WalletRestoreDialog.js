@@ -11,6 +11,7 @@ import { SwitchSkin } from 'react-polymorph/lib/skins/simple/SwitchSkin';
 import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
 import { IDENTIFIERS } from 'react-polymorph/lib/themes/API';
 import { defineMessages, intlShape } from 'react-intl';
+
 import type { UnaryFn } from '../../utils';
 import { ReactToolboxMobxForm } from '../../utils/ReactToolboxMobxForm';
 import DialogCloseButton from '../widgets/DialogCloseButton';
@@ -20,8 +21,9 @@ import globalMessages from '../../i18n/global-messages';
 import LocalizableError from '../../i18n/LocalizableError';
 import { PAPER_WALLET_RECOVERY_PHRASE_WORD_COUNT, WALLET_RECOVERY_PHRASE_WORD_COUNT } from '../../config/cryptoConfig';
 import { FORM_VALIDATION_DEBOUNCE_WAIT } from '../../config/timingConfig';
-import styles from './WalletRestoreDialog.scss';
 import { submitOnEnter } from '../../utils/form';
+
+import styles from './WalletRestoreDialog.scss';
 
 const RESTORE_TYPES = {
   REGULAR: 'regular',
@@ -167,8 +169,8 @@ export default class WalletRestoreDialog extends Component<Props, State> {
           const { intl } = this.context;
           const enteredWords = field.value;
           const wordCount = enteredWords.length;
-          const expectedWordCount = (this.isRegular() ?
-            WALLET_RECOVERY_PHRASE_WORD_COUNT : PAPER_WALLET_RECOVERY_PHRASE_WORD_COUNT
+          const expectedWordCount = (this.isRegular()
+            ? WALLET_RECOVERY_PHRASE_WORD_COUNT : PAPER_WALLET_RECOVERY_PHRASE_WORD_COUNT
           );
           const value = join(enteredWords, ' ');
           // Regular mnemonics have 12 and paper wallet recovery needs 27 words
@@ -330,7 +332,8 @@ export default class WalletRestoreDialog extends Component<Props, State> {
         onClose={onCancel}
         closeButton={<DialogCloseButton />}
       >
-        {showCertificateRestore &&
+        {showCertificateRestore
+          && (
           <div className={styles.restoreTypeChoice}>
             <button
               className={regularTabClasses}
@@ -345,6 +348,7 @@ export default class WalletRestoreDialog extends Component<Props, State> {
               {intl.formatMessage(messages.certificateTabTitle)}
             </button>
           </div>
+)
         }
 
         <Input
@@ -367,8 +371,8 @@ export default class WalletRestoreDialog extends Component<Props, State> {
             : intl.formatMessage(messages.shieldedRecoveryPhraseInputHint)
           }
           options={suggestedMnemonics}
-          maxSelections={(this.isCertificate() ?
-            PAPER_WALLET_RECOVERY_PHRASE_WORD_COUNT : WALLET_RECOVERY_PHRASE_WORD_COUNT
+          maxSelections={(this.isCertificate()
+            ? PAPER_WALLET_RECOVERY_PHRASE_WORD_COUNT : WALLET_RECOVERY_PHRASE_WORD_COUNT
           )}
           error={recoveryPhraseField.error}
           maxVisibleOptions={5}

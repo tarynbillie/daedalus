@@ -1,6 +1,7 @@
 // @flow
 import log from 'electron-log';
 import { tap } from 'ramda';
+
 import type { Fn } from './types';
 
 export const Logger = {
@@ -40,4 +41,3 @@ export const stringifyData = (data: any) => JSON.stringify(data, null, 2);
 export const stringifyError = (error: any) => (
   JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
 );
-

@@ -5,7 +5,9 @@ import { BigNumber } from 'bignumber.js';
 export default class WalletAddress {
 
   @observable id: string = '';
+
   @observable amount: BigNumber;
+
   @observable isUsed: boolean = false;
 
   constructor(data: {

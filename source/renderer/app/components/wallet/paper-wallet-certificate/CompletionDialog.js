@@ -4,7 +4,9 @@ import { observer } from 'mobx-react';
 import QRCode from 'qrcode.react';
 import classnames from 'classnames';
 import { defineMessages, intlShape } from 'react-intl';
+
 import Dialog from '../../widgets/Dialog';
+
 import styles from './CompletionDialog.scss';
 
 const messages = defineMessages({
@@ -80,10 +82,10 @@ export default class CompletionDialog extends Component<Props> {
     const cardanoExplorerLink = `https://cardanoexplorer.com/address/${walletCertificateAddress}`;
 
     // Get QRCode color value from active theme's CSS variable
-    const qrCodeBackgroundColor = document.documentElement ?
-      document.documentElement.style.getPropertyValue('--theme-receive-qr-code-background-color') : 'transparent';
-    const qrCodeForegroundColor = document.documentElement ?
-      document.documentElement.style.getPropertyValue('--theme-receive-qr-code-foreground-color') : '#000';
+    const qrCodeBackgroundColor = document.documentElement
+      ? document.documentElement.style.getPropertyValue('--theme-receive-qr-code-background-color') : 'transparent';
+    const qrCodeForegroundColor = document.documentElement
+      ? document.documentElement.style.getPropertyValue('--theme-receive-qr-code-foreground-color') : '#000';
 
     return (
       <Dialog

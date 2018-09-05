@@ -70,13 +70,11 @@ const stores = observable({
 });
 
 const CHECK_INTERVAL = 2000;
-const getConnectionStatus = (ethRpc: EthRpc) =>
-  environment.isDev()
+const getConnectionStatus = (ethRpc: EthRpc) => environment.isDev()
     ? validResponseConnectionChecker(CHECK_INTERVAL, () => getEtcSyncProgress(ethRpc), Logger)
     : peerCountConnectionChecker(CHECK_INTERVAL, () => ethRpc.netPeerCount(), Logger);
 
-const getNetworkStatus = (ethRpc: EthRpc) =>
-  networkStatusFactory(getConnectionStatus(ethRpc), () => getEtcSyncProgress(ethRpc));
+const getNetworkStatus = (ethRpc: EthRpc) => networkStatusFactory(getConnectionStatus(ethRpc), () => getEtcSyncProgress(ethRpc));
 
 // Set up and return the stores for this app -> also used to reset all stores to defaults
 export default action(

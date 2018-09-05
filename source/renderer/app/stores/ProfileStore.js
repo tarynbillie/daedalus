@@ -4,8 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import moment from 'moment/moment';
 import { ipcRenderer } from 'electron';
 import { includes } from 'lodash';
-import Store from './lib/Store';
-import Request from './lib/LocalizedRequest';
+
 import environment from '../../../common/environment';
 import { THEMES } from '../themes/index';
 import { ROUTES } from '../routes-config';
@@ -15,6 +14,9 @@ import globalMessages from '../i18n/global-messages';
 import { WalletSupportRequestLogsCompressError } from '../i18n/errors';
 import type { LogFiles, CompressedLogStatus } from '../types/LogTypes';
 import { generateFileNameWithTimestamp } from '../../../common/fileName';
+
+import Request from './lib/LocalizedRequest';
+import Store from './lib/Store';
 
 export default class SettingsStore extends Store {
 
@@ -38,16 +40,27 @@ export default class SettingsStore extends Store {
 
   /* eslint-disable max-len */
   @observable getProfileLocaleRequest: Request<string> = new Request(this.api.localStorage.getUserLocale);
+
   @observable setProfileLocaleRequest: Request<string> = new Request(this.api.localStorage.setUserLocale);
+
   @observable getTermsOfUseAcceptanceRequest: Request<string> = new Request(this.api.localStorage.getTermsOfUseAcceptance);
+
   @observable setTermsOfUseAcceptanceRequest: Request<string> = new Request(this.api.localStorage.setTermsOfUseAcceptance);
+
   @observable getThemeRequest: Request<string> = new Request(this.api.localStorage.getUserTheme);
+
   @observable setThemeRequest: Request<string> = new Request(this.api.localStorage.setUserTheme);
+
   @observable sendBugReport: Request<any> = new Request(this.api[environment.API].sendBugReport);
+
   @observable error: ?LocalizableError = null;
+
   @observable logFiles: LogFiles = {};
+
   @observable compressedLogsFile: ?string = null;
+
   @observable compressedLogsStatus: CompressedLogStatus = {};
+
   @observable isSubmittingBugReport: boolean = false;
   /* eslint-enable max-len */
 
@@ -95,15 +108,15 @@ export default class SettingsStore extends Store {
 
   @computed get hasLoadedCurrentLocale(): boolean {
     return (
-      this.getProfileLocaleRequest.wasExecuted &&
-      this.getProfileLocaleRequest.result !== null
+      this.getProfileLocaleRequest.wasExecuted
+      && this.getProfileLocaleRequest.result !== null
     );
   }
 
   @computed get isCurrentLocaleSet(): boolean {
     return (
-      this.getProfileLocaleRequest.result !== null &&
-      this.getProfileLocaleRequest.result !== ''
+      this.getProfileLocaleRequest.result !== null
+      && this.getProfileLocaleRequest.result !== ''
     );
   }
 
@@ -118,15 +131,15 @@ export default class SettingsStore extends Store {
 
   @computed get isCurrentThemeSet(): boolean {
     return (
-      this.getThemeRequest.result !== null &&
-      this.getThemeRequest.result !== ''
+      this.getThemeRequest.result !== null
+      && this.getThemeRequest.result !== ''
     );
   }
 
   @computed get hasLoadedCurrentTheme(): boolean {
     return (
-      this.getThemeRequest.wasExecuted &&
-      this.getThemeRequest.result !== null
+      this.getThemeRequest.wasExecuted
+      && this.getThemeRequest.result !== null
     );
   }
 
@@ -137,8 +150,8 @@ export default class SettingsStore extends Store {
 
   @computed get hasLoadedTermsOfUseAcceptance(): boolean {
     return (
-      this.getTermsOfUseAcceptanceRequest.wasExecuted &&
-      this.getTermsOfUseAcceptanceRequest.result !== null
+      this.getTermsOfUseAcceptanceRequest.wasExecuted
+      && this.getTermsOfUseAcceptanceRequest.result !== null
     );
   }
 
@@ -149,8 +162,8 @@ export default class SettingsStore extends Store {
   @computed get isSettingsPage(): boolean {
     const { currentRoute } = this.stores.app;
     return (
-      includes(ROUTES.PROFILE, currentRoute) ||
-      includes(ROUTES.SETTINGS, currentRoute)
+      includes(ROUTES.PROFILE, currentRoute)
+      || includes(ROUTES.SETTINGS, currentRoute)
     );
   }
 

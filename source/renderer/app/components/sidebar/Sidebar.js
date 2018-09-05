@@ -11,6 +11,7 @@ import { ROUTES } from '../../routes-config';
 import type { SidebarWalletType } from '../../types/sidebarTypes';
 import { pass } from '../../utils';
 import InstructionsDialog from '../wallet/paper-wallet-certificate/InstructionsDialog';
+
 import styles from './Sidebar.scss';
 import SidebarCategory from './SidebarCategory';
 import SidebarWalletsMenu from './wallets/SidebarWalletsMenu';

@@ -1,6 +1,8 @@
 // @flow
-import moment from 'moment';
 import url from 'url';
+
+import moment from 'moment';
+
 import { request } from '../lib/reportRequest';
 import environment from '../../../../common/environment';
 

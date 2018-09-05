@@ -1,18 +1,20 @@
 // @flow
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+
 import InstructionsDialog from '../../components/wallet/paper-wallet-certificate/InstructionsDialog';
-import InstructionsDialogContainer from './dialogs/paper-wallet-certificate/InstructionsDialogContainer';
 import PrintDialog from '../../components/wallet/paper-wallet-certificate/PrintDialog';
-import PrintDialogContainer from './dialogs/paper-wallet-certificate/PrintDialogContainer';
 import SecuringPasswordDialog from '../../components/wallet/paper-wallet-certificate/SecuringPasswordDialog';
-import SecuringPasswordDialogContainer from './dialogs/paper-wallet-certificate/SecuringPasswordDialogContainer';
 import VerificationDialog from '../../components/wallet/paper-wallet-certificate/VerificationDialog';
-import VerificationDialogContainer from './dialogs/paper-wallet-certificate/VerificationDialogContainer';
 import CompletionDialog from '../../components/wallet/paper-wallet-certificate/CompletionDialog';
-import CompletionDialogContainer from './dialogs/paper-wallet-certificate/CompletionDialogContainer';
 import ConfirmationDialog from '../../components/wallet/paper-wallet-certificate/ConfirmationDialog';
 import type { InjectedProps } from '../../types/injectedPropsType';
+
+import CompletionDialogContainer from './dialogs/paper-wallet-certificate/CompletionDialogContainer';
+import VerificationDialogContainer from './dialogs/paper-wallet-certificate/VerificationDialogContainer';
+import SecuringPasswordDialogContainer from './dialogs/paper-wallet-certificate/SecuringPasswordDialogContainer';
+import PrintDialogContainer from './dialogs/paper-wallet-certificate/PrintDialogContainer';
+import InstructionsDialogContainer from './dialogs/paper-wallet-certificate/InstructionsDialogContainer';
 
 type Props = InjectedProps;
 
@@ -114,10 +116,11 @@ export default class PaperWalletCreateCertificatePage extends Component<Props, S
     this.setState({ currentStep: nextStep });
   };
 
+  getPreviousStep = (state: State) => state.currentStep ? state.currentStep - 1 : 0;
+
   onBack = () => {
-    const prevStep = this.state.currentStep ? this.state.currentStep - 1 : 0;
-    const prevDialog = this.CREATE_CERTIFICATE_DIALOGS[prevStep];
-    this.setState({ currentStep: prevStep });
+    const prevDialog = this.CREATE_CERTIFICATE_DIALOGS[this.getPreviousStep(this.state)];
+    this.setState(prevState => ({ currentStep: this.getPreviousStep(prevState) }));
     this.switchDialog(prevDialog);
     this.props.actions.ada.wallets.updateCertificateStep.trigger(true);
   };

@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
+
 import Staking from '../../components/staking/Staking';
 import resolver from '../../utils/imports';
 

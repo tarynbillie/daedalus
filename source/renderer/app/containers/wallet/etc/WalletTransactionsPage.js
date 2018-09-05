@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { intlShape } from 'react-intl';
+
 import WalletTransactionsList from '../../../components/wallet/transactions/WalletTransactionsList';
 // import WalletTransactionsSearch from '../../components/wallet/summary/WalletTransactionsSearch';
 import WalletNoTransactions from '../../../components/wallet/transactions/WalletNoTransactions';

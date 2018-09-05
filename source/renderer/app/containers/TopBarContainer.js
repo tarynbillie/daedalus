@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+
 import TopBar from '../components/layout/TopBar';
 import NodeSyncStatusIcon from '../components/widgets/NodeSyncStatusIcon';
 import WalletTestEnvironmentLabel from '../components/widgets/WalletTestEnvironmentLabel';

@@ -4,10 +4,11 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import wordlist from 'bip39/wordlists/english';
 
-import StoryDecorator from './support/StoryDecorator';
 import AdaRedemptionForm from '../../source/renderer/app/components/wallet/ada-redemption/AdaRedemptionForm';
 import AdaRedemptionChoices from '../../source/renderer/app/components/wallet/ada-redemption/AdaRedemptionChoices';
 import { ADA_REDEMPTION_TYPES } from '../../source/renderer/app/types/redemptionTypes';
+
+import StoryDecorator from './support/StoryDecorator';
 
 storiesOf('AdaRedemptionForm', module)
 

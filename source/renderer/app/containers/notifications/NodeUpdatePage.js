@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+
 import NodeUpdateNotification from '../../components/notifications/NodeUpdateNotification';
 import type { InjectedProps } from '../../types/injectedPropsType';
 

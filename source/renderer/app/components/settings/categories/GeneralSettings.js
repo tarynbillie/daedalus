@@ -5,10 +5,12 @@ import classNames from 'classnames';
 import { Select } from 'react-polymorph/lib/components/Select';
 import { SelectSkin } from 'react-polymorph/lib/skins/simple/SelectSkin';
 import { defineMessages, intlShape } from 'react-intl';
+
 import { ReactToolboxMobxForm } from '../../../utils/ReactToolboxMobxForm';
 import LocalizableError from '../../../i18n/LocalizableError';
-import styles from './GeneralSettings.scss';
 import type { ReactIntlMessage } from '../../../types/i18nTypes';
+
+import styles from './GeneralSettings.scss';
 
 const messages = defineMessages({
   languageSelectLabel: {

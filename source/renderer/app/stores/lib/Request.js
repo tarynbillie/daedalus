@@ -16,15 +16,21 @@ export type ApiCallType = {
 export default class Request<Result, Error> {
 
   @observable result: ?Result = null;
+
   @observable error: ?Error = null;
+
   @observable isExecuting: boolean = false;
+
   @observable isError: boolean = false;
+
   @observable wasExecuted: boolean = false;
 
   promise: ?Promise<Result> = null;
 
   method: Function;
+
   isWaitingForResponse: boolean = false;
+
   currentApiCall: ?ApiCallType = null;
 
   constructor(method: Function) {
@@ -80,8 +86,8 @@ export default class Request<Result, Error> {
 
   isExecutingWithArgs(...args: Array<any>): boolean {
     return (
-      this.isExecuting &&
-      (this.currentApiCall != null)
+      this.isExecuting
+      && (this.currentApiCall != null)
       && isEqual(this.currentApiCall.args, args)
     );
   }

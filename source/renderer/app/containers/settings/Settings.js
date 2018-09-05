@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+
 import SettingsLayout from '../../components/settings/SettingsLayout';
 import SettingsMenu from '../../components/settings/menu/SettingsMenu';
 import resolver from '../../utils/imports';

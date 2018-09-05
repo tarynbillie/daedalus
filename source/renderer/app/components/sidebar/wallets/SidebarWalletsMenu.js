@@ -3,11 +3,14 @@ import React, { Component } from 'react';
 import SVGInline from 'react-svg-inline';
 import { observer } from 'mobx-react';
 import { defineMessages, intlShape } from 'react-intl';
+
 import SidebarSubMenu from '../SidebarMenu';
-import styles from './SidebarWalletsMenu.scss';
 import addWalletIcon from '../../../assets/images/sidebar/add-wallet-ic.inline.svg';
-import SidebarWalletMenuItem from './SidebarWalletMenuItem';
 import type { SidebarWalletType } from '../../../types/sidebarTypes';
+
+import styles from './SidebarWalletsMenu.scss';
+import SidebarWalletMenuItem from './SidebarWalletMenuItem';
+
 
 const messages = defineMessages({
   addAdaWallet: {

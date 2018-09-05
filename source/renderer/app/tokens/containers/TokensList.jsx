@@ -57,8 +57,8 @@ export const TokensList = pipe(
               />
             </div>
           ))}
-          {this.state.sendingToken &&
-            this.state.sendingForm && (
+          {this.state.sendingToken
+            && this.state.sendingForm && (
               <div>
                 <Dialog
                   closeOnOverlayClick
@@ -74,12 +74,10 @@ export const TokensList = pipe(
       );
     }
 
-    _stopWatching = memoizeWith(x => x.address, (token: ERC20Token) => () =>
-      this.props.tokenStore.stopWatching(token)
+    _stopWatching = memoizeWith(x => x.address, (token: ERC20Token) => () => this.props.tokenStore.stopWatching(token)
     );
 
-    _openSendForm = memoizeWith(x => x.address, (token: ERC20Token) => () =>
-      this.setState({
+    _openSendForm = memoizeWith(x => x.address, (token: ERC20Token) => () => this.setState({
         sendingToken: token,
         sendingForm: new SendTokensForm(this.props.intl, {
           onSuccess: form => {
@@ -95,8 +93,7 @@ export const TokensList = pipe(
 
     _closeSendForm = () => this.setState({ sendingToken: null, sendingForm: null });
 
-    _showResultMessage = (result: boolean) =>
-      this.setState({
+    _showResultMessage = (result: boolean) => this.setState({
         resultMessage: result
           ? 'Tokens were sent successfully'
           : 'An error occurred when sending tokens'

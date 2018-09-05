@@ -13,20 +13,22 @@ import { ButtonSkin } from 'react-polymorph/lib/skins/simple/ButtonSkin';
 import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
 import { SelectSkin } from 'react-polymorph/lib/skins/simple/SelectSkin';
 import { defineMessages, intlShape, FormattedHTMLMessage } from 'react-intl';
+
 import { ReactToolboxMobxForm } from '../../../utils/ReactToolboxMobxForm';
 import AdaCertificateUploadWidget from '../../widgets/forms/AdaCertificateUploadWidget';
-import AdaRedemptionChoices from './AdaRedemptionChoices';
-import AdaRedemptionDisclaimer from './AdaRedemptionDisclaimer';
 import BorderedBox from '../../widgets/BorderedBox';
 import LocalizableError from '../../../i18n/LocalizableError';
 import { InvalidMnemonicError, InvalidEmailError, FieldRequiredError } from '../../../i18n/errors';
 import globalMessages from '../../../i18n/global-messages';
-import styles from './AdaRedemptionForm.scss';
 import { FORM_VALIDATION_DEBOUNCE_WAIT } from '../../../config/timingConfig';
 import { ADA_REDEMPTION_PASSPHRASE_LENGHT } from '../../../config/cryptoConfig';
 import { ADA_REDEMPTION_TYPES } from '../../../types/redemptionTypes';
 import type { RedemptionTypeChoices } from '../../../types/redemptionTypes';
 import { submitOnEnter } from '../../../utils/form';
+
+import styles from './AdaRedemptionForm.scss';
+import AdaRedemptionDisclaimer from './AdaRedemptionDisclaimer';
+import AdaRedemptionChoices from './AdaRedemptionChoices';
 
 const messages = Object.assign({}, defineMessages({
   headline: {
@@ -439,30 +441,30 @@ export default class AdaRedemptionForm extends Component<Props> {
 
     const showUploadWidget = redemptionType !== ADA_REDEMPTION_TYPES.PAPER_VENDED;
     const isRecovery = (
-      redemptionType === ADA_REDEMPTION_TYPES.RECOVERY_REGULAR ||
-      redemptionType === ADA_REDEMPTION_TYPES.RECOVERY_FORCE_VENDED
+      redemptionType === ADA_REDEMPTION_TYPES.RECOVERY_REGULAR
+      || redemptionType === ADA_REDEMPTION_TYPES.RECOVERY_FORCE_VENDED
     );
 
     const passwordSubmittable = !walletHasPassword || walletPasswordField.value !== '';
 
     let canSubmit = false;
     if ((
-      redemptionType === ADA_REDEMPTION_TYPES.REGULAR ||
-      redemptionType === ADA_REDEMPTION_TYPES.RECOVERY_REGULAR) &&
-      redemptionCode !== '' &&
-      passwordSubmittable
+      redemptionType === ADA_REDEMPTION_TYPES.REGULAR
+      || redemptionType === ADA_REDEMPTION_TYPES.RECOVERY_REGULAR)
+      && redemptionCode !== ''
+      && passwordSubmittable
     ) canSubmit = true;
     if ((
-      redemptionType === ADA_REDEMPTION_TYPES.FORCE_VENDED ||
-      redemptionType === ADA_REDEMPTION_TYPES.RECOVERY_FORCE_VENDED) &&
-      redemptionCode !== '' &&
-      passwordSubmittable
+      redemptionType === ADA_REDEMPTION_TYPES.FORCE_VENDED
+      || redemptionType === ADA_REDEMPTION_TYPES.RECOVERY_FORCE_VENDED)
+      && redemptionCode !== ''
+      && passwordSubmittable
     ) canSubmit = true;
     if (
-      redemptionType === ADA_REDEMPTION_TYPES.PAPER_VENDED &&
-      shieldedRedemptionKeyField.isDirty &&
-      passPhraseField.isDirty &&
-      passwordSubmittable
+      redemptionType === ADA_REDEMPTION_TYPES.PAPER_VENDED
+      && shieldedRedemptionKeyField.isDirty
+      && passPhraseField.isDirty
+      && passwordSubmittable
     ) canSubmit = true;
 
     let instructionMessage = '';

@@ -1,5 +1,6 @@
 // @flow
 import https from 'https';
+
 import { getContentLength } from '../../lib/utils';
 
 export type RequestOptions = {

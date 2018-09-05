@@ -1,6 +1,8 @@
+import path from 'path';
+
 import { Given, When, Then } from 'cucumber';
 import { expect } from 'chai';
-import path from 'path';
+
 import { fillOutWalletSendForm } from '../support/helpers/wallets-helpers';
 import { waitUntilTextInSelector } from '../support/helpers/shared-helpers';
 

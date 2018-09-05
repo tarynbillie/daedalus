@@ -1,7 +1,9 @@
 // @flow
-import { ipcMain } from 'electron';
 import fs from 'fs';
 import path from 'path';
+
+import { ipcMain } from 'electron';
+
 import { LOAD_ASSET_CHANNEL } from '../../common/ipc-api/load-asset';
 import type { LoadAssetRequest } from '../../common/ipc-api/load-asset';
 

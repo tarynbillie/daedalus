@@ -3,9 +3,10 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import StoryDecorator from './support/StoryDecorator';
 import AntivirusRestaurationSlowdownNotification
   from '../../source/renderer/app/components/notifications/AntivirusRestaurationSlowdownNotification';
+
+import StoryDecorator from './support/StoryDecorator';
 
 storiesOf('AntivirusRestaurationSlodownNotification', module)
 

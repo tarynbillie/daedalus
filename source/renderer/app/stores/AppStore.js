@@ -1,7 +1,7 @@
 // @flow
 import { observable, computed, action } from 'mobx';
 import { ipcRenderer, shell } from 'electron';
-import Store from './lib/Store';
+
 import LocalizableError from '../i18n/LocalizableError';
 import { buildRoute } from '../utils/routing';
 import { OPEN_ABOUT_DIALOG_CHANNEL } from '../../../common/ipc-api/open-about-dialog';
@@ -11,10 +11,14 @@ import { ROUTES } from '../routes-config';
 import environment from '../../../common/environment';
 import type { GpuStatus } from '../types/gpuStatus';
 
+import Store from './lib/Store';
+
 export default class AppStore extends Store {
 
   @observable error: ?LocalizableError = null;
+
   @observable isAboutDialogOpen = false;
+
   @observable gpuStatus: ?GpuStatus = null;
 
   setup() {
@@ -64,8 +68,8 @@ export default class AppStore extends Store {
 
   @computed get isSetupPage(): boolean {
     return (
-      this.currentRoute === ROUTES.PROFILE.LANGUAGE_SELECTION ||
-      this.currentRoute === ROUTES.PROFILE.TERMS_OF_USE
+      this.currentRoute === ROUTES.PROFILE.LANGUAGE_SELECTION
+      || this.currentRoute === ROUTES.PROFILE.TERMS_OF_USE
     );
   }
 

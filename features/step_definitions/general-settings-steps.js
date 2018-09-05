@@ -1,5 +1,6 @@
 import { Given, When, Then } from 'cucumber';
 import _ from 'lodash';
+
 import {
   navigateTo,
   waitUntilUrlEquals,

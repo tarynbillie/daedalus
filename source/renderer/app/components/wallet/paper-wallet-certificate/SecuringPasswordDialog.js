@@ -5,36 +5,39 @@ import classnames from 'classnames';
 import { defineMessages, intlShape } from 'react-intl';
 import { Checkbox } from 'react-polymorph/lib/components/Checkbox';
 import { CheckboxSkin } from 'react-polymorph/lib/skins/simple/CheckboxSkin';
+
 import Dialog from '../../widgets/Dialog';
 import DialogCloseButton from '../../widgets/DialogCloseButton';
 import paperWalletImage from '../../../assets/images/paper-wallet-certificate/certificate.png';
 import globalMessages from '../../../i18n/global-messages';
-import styles from './SecuringPasswordDialog.scss';
 import { PAPER_WALLET_WRITTEN_WORDS_COUNT } from '../../../config/cryptoConfig';
+
+import styles from './SecuringPasswordDialog.scss';
 
 const messages = defineMessages({
   headline: {
     id: 'paper.wallet.create.certificate.securingPassword.dialog.headline',
     defaultMessage: '!!!Complete your certificate',
-    description: 'Headline for the "Paper wallet create certificate securing password dialog".'
+    description: 'Headline for the "Paper wallet create certificate securing password dialog".',
   },
   infoLabel1: {
     id: 'paper.wallet.create.certificate.securingPassword.dialog.infoLabel1',
     defaultMessage: `!!!To complete your paper wallet certificate you will need to
       write the remaining {paperWalletWrittenWordsCount} words of your paper wallet recovery
       phrase on your certificate.`,
-    description: '"Paper wallet create certificate securing password dialog" first info label.'
+    description: '"Paper wallet create certificate securing password dialog" first info label.',
   },
   infoLabel2: {
     id: 'paper.wallet.create.certificate.securingPassword.dialog.infoLabel2',
-    defaultMessage: '!!!The password can optionally be written on the certificate or kept securely in other location. Here is the placeholder on the certificate intended for your password.',
-    description: 'You may write the remaining words here:'
+    defaultMessage:
+      '!!!The password can optionally be written on the certificate or kept securely in other location. Here is the placeholder on the certificate intended for your password.',
+    description: 'You may write the remaining words here:',
   },
   securingPasswordConfirmation: {
     id: 'paper.wallet.create.certificate.securingPassword.dialog.securingPasswordConfirmation',
     defaultMessage: '!!!I have written the remaining {paperWalletWrittenWordsCount} words on the certificate.',
-    description: '"Paper wallet create certificate securing password dialog" secure password confirmation.'
-  }
+    description: '"Paper wallet create certificate securing password dialog" secure password confirmation.',
+  },
 });
 
 type State = {
@@ -49,13 +52,12 @@ type Props = {
 
 @observer
 export default class SecuringPasswordDialog extends Component<Props, State> {
-
   static contextTypes = {
     intl: intlShape.isRequired,
   };
 
   state = {
-    securePasswordConfirmed: false
+    securePasswordConfirmed: false,
   };
 
   render() {
@@ -63,10 +65,7 @@ export default class SecuringPasswordDialog extends Component<Props, State> {
     const { securePasswordConfirmed } = this.state;
     const { additionalMnemonics, onContinue, onClose } = this.props;
 
-    const dialogClasses = classnames([
-      styles.component,
-      'SecuringPasswordDialog',
-    ]);
+    const dialogClasses = classnames([styles.component, 'SecuringPasswordDialog']);
 
     const actions = [
       {
@@ -75,7 +74,7 @@ export default class SecuringPasswordDialog extends Component<Props, State> {
         primary: true,
         disabled: !securePasswordConfirmed,
         onClick: onContinue,
-      }
+      },
     ];
 
     return (
@@ -86,18 +85,15 @@ export default class SecuringPasswordDialog extends Component<Props, State> {
         onClose={onClose}
         closeButton={<DialogCloseButton />}
       >
-
         <div className={styles.securingPasswordContentWrapper}>
           <div className={styles.content}>
             <p className={styles.infoLabel}>
               {intl.formatMessage(messages.infoLabel1, {
-                paperWalletWrittenWordsCount: PAPER_WALLET_WRITTEN_WORDS_COUNT
+                paperWalletWrittenWordsCount: PAPER_WALLET_WRITTEN_WORDS_COUNT,
               })}
             </p>
 
-            <div className={styles.recoveryPhrase}>
-              { additionalMnemonics }
-            </div>
+            <div className={styles.recoveryPhrase}>{additionalMnemonics}</div>
 
             <p className={styles.infoLabel}>{intl.formatMessage(messages.infoLabel2)}</p>
 
@@ -108,7 +104,7 @@ export default class SecuringPasswordDialog extends Component<Props, State> {
             <Checkbox
               className={styles.securingPasswordConfirmation}
               label={intl.formatMessage(messages.securingPasswordConfirmation, {
-                paperWalletWrittenWordsCount: PAPER_WALLET_WRITTEN_WORDS_COUNT
+                paperWalletWrittenWordsCount: PAPER_WALLET_WRITTEN_WORDS_COUNT,
               })}
               onChange={this.onSecurePasswordConfirmationChange.bind(this)}
               checked={securePasswordConfirmed}
@@ -116,12 +112,11 @@ export default class SecuringPasswordDialog extends Component<Props, State> {
             />
           </div>
         </div>
-
       </Dialog>
     );
   }
 
   onSecurePasswordConfirmationChange = () => {
-    this.setState({ securePasswordConfirmed: !this.state.securePasswordConfirmed });
-  };
+    this.setState(state => ({ securePasswordConfirmed: !state.securePasswordConfirmed }));
+  }
 }

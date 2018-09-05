@@ -8,14 +8,16 @@ import { SwitchSkin } from 'react-polymorph/lib/skins/simple/SwitchSkin';
 import { InputSkin } from 'react-polymorph/lib/skins/simple/InputSkin';
 import { IDENTIFIERS } from 'react-polymorph/lib/themes/API';
 import { defineMessages, intlShape } from 'react-intl';
+
 import { ReactToolboxMobxForm } from '../../utils/ReactToolboxMobxForm';
 import DialogCloseButton from '../widgets/DialogCloseButton';
 import Dialog from '../widgets/Dialog';
 import { isValidWalletName, isValidWalletPassword, isValidRepeatPassword } from '../../utils/validations';
 import globalMessages from '../../i18n/global-messages';
-import styles from './WalletCreateDialog.scss';
 import { FORM_VALIDATION_DEBOUNCE_WAIT } from '../../config/timingConfig';
 import { submitOnEnter } from '../../utils/form';
+
+import styles from './WalletCreateDialog.scss';
 
 const messages = defineMessages({
   dialogTitle: {

@@ -1,7 +1,9 @@
 // @flow
 import http from 'http';
-import FormData from 'form-data/lib/form_data';
 import fs from 'fs';
+
+import FormData from 'form-data/lib/form_data';
+
 import { extractFileNameFromPath } from '../../../../common/fileName';
 
 export type RequestOptions = {

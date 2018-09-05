@@ -2,8 +2,10 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import SVGInline from 'react-svg-inline';
+
 import spinnerIconBig from '../../assets/images/spinner-dark-big.inline.svg';
 import spinnerIconSmall from '../../assets/images/spinner-dark.inline.svg';
+
 import styles from './LoadingSpinner.scss';
 
 type Props = {

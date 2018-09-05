@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import classnames from 'classnames';
 import { defineMessages, intlShape, FormattedHTMLMessage } from 'react-intl';
-import styles from './WalletAdd.scss';
+
 import BigButtonForDialogs from '../widgets/BigButtonForDialogs';
 import createIcon from '../../assets/images/create-ic.inline.svg';
 import importIcon from '../../assets/images/import-ic.inline.svg';
@@ -11,6 +11,8 @@ import joinSharedIcon from '../../assets/images/join-shared-ic.inline.svg';
 import restoreIcon from '../../assets/images/restore-ic.inline.svg';
 import environment from '../../../../common/environment';
 import { MAX_ADA_WALLETS_COUNT } from '../../config/numbersConfig';
+
+import styles from './WalletAdd.scss';
 
 const messages = defineMessages({
   title: {
@@ -146,10 +148,10 @@ export default class WalletAdd extends Component<Props> {
               label={intl.formatMessage(messages.importLabel)}
               description={intl.formatMessage(messages.importDescription)}
               isDisabled={
-                isMaxNumberOfWalletsReached ||
-                isRestoreActive ||
-                environment.isEtcApi() ||
-                (environment.isAdaApi() && environment.isMainnet())
+                isMaxNumberOfWalletsReached
+                || isRestoreActive
+                || environment.isEtcApi()
+                || (environment.isAdaApi() && environment.isMainnet())
               }
             />
           </div>

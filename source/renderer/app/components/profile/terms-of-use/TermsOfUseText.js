@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import ReactMarkdown from 'react-markdown';
+
 import styles from './TermsOfUseText.scss';
 
 type Props = {

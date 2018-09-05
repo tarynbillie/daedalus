@@ -3,6 +3,7 @@ import * as React from 'react';
 import { ThemeProvider } from 'react-polymorph/lib/components/ThemeProvider';
 import { IntlProvider } from 'react-intl';
 import { observer } from 'mobx-react';
+
 import { daedalusTheme } from '../../../source/renderer/app/themes/daedalus';
 import translations from '../../../source/renderer/app/i18n/translations';
 import ThemeManager from '../../../source/renderer/app/ThemeManager';

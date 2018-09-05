@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { Checkbox } from 'react-polymorph/lib/components/Checkbox';
 import { SwitchSkin } from 'react-polymorph/lib/skins/simple/SwitchSkin';
 import { IDENTIFIERS } from 'react-polymorph/lib/themes/API';
+
 import styles from './StakingSwitch.scss';
 
 type Props = {

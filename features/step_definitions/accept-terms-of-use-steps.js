@@ -1,5 +1,6 @@
 import { Given, When, Then } from 'cucumber';
 import { expect } from 'chai';
+
 import termsOfUse from '../support/helpers/terms-of-use-helpers';
 
 const TERMS_OF_USE_FORM = '.TermsOfUseForm_component';

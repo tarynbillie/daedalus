@@ -1,10 +1,12 @@
 // @flow
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+
 import resolver from '../utils/imports';
 import environment from '../../../common/environment';
-import WalletAddPage from './wallet/WalletAddPage';
 import type { InjectedContainerProps } from '../types/injectedPropsType';
+
+import WalletAddPage from './wallet/WalletAddPage';
 
 const LoadingPage = resolver('containers/LoadingPage');
 
@@ -34,4 +36,3 @@ export default class Root extends Component<Props> {
     return React.Children.only(children);
   }
 }
-

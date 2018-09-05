@@ -5,11 +5,13 @@ import classnames from 'classnames';
 import { Checkbox } from 'react-polymorph/lib/components/Checkbox';
 import { CheckboxSkin } from 'react-polymorph/lib/skins/simple/CheckboxSkin';
 import { defineMessages, intlShape } from 'react-intl';
+
 import Dialog from '../../widgets/Dialog';
 import DialogCloseButton from '../../widgets/DialogCloseButton';
-import WalletRecoveryInstructions from './WalletRecoveryInstructions';
 import globalMessages from '../../../i18n/global-messages';
 import { WALLET_RECOVERY_PHRASE_WORD_COUNT } from '../../../config/cryptoConfig';
+
+import WalletRecoveryInstructions from './WalletRecoveryInstructions';
 import styles from './WalletBackupPrivacyWarningDialog.scss';
 
 const messages = defineMessages({

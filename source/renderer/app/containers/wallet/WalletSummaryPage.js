@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { get } from 'lodash';
 import { observer, inject } from 'mobx-react';
 import { defineMessages, intlShape } from 'react-intl';
+
 import WalletTransactionsList from '../../components/wallet/transactions/WalletTransactionsList';
 import WalletSummary from '../../components/wallet/summary/WalletSummary';
 import WalletNoTransactions from '../../components/wallet/transactions/WalletNoTransactions';

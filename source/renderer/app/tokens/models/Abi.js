@@ -24,15 +24,10 @@ export type ContractMemberAbi =
   | { type: 'fallback', name?: void };
 export type ContractAbi = ContractMemberAbi[];
 
-export const signatureOf = (abiEntry: ContractEventAbi | ContractFunctionAbi): string =>
-  `${abiEntry.name}(${abiEntry.inputs.map(prop('type')).join(',')})`;
+export const signatureOf = (abiEntry: ContractEventAbi | ContractFunctionAbi): string => `${abiEntry.name}(${abiEntry.inputs.map(prop('type')).join(',')})`;
 
 export const topicOf = (eventAbi: ContractEventAbi): string => utils.sha3(signatureOf(eventAbi));
 
-export const onlyFunctions = (abi: ContractAbi): ContractFunctionAbi[] =>
-  // $FlowIssue, again...
-  filter(member => member.type === 'function', abi);
+export const onlyFunctions = (abi: ContractAbi): ContractFunctionAbi[] => filter(member => member.type === 'function', abi);
 
-export const onlyEvents = (abi: ContractAbi): ContractEventAbi[] =>
-  // $FlowIssue, again...
-  filter(member => member.type === 'event', abi);
+export const onlyEvents = (abi: ContractAbi): ContractEventAbi[] => filter(member => member.type === 'event', abi);

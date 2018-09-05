@@ -3,10 +3,12 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import wordlist from 'bip39/wordlists/english';
-import StoryDecorator from './support/StoryDecorator';
+
 import WalletAdd from '../../source/renderer/app/components/wallet/WalletAdd';
 import WalletRestoreDialog from '../../source/renderer/app/components/wallet/WalletRestoreDialog';
 import WalletFileImportDialog from '../../source/renderer/app/components/wallet/file-import/WalletFileImportDialog';
+
+import StoryDecorator from './support/StoryDecorator';
 
 storiesOf('AddWallet', module)
 
@@ -54,4 +56,3 @@ storiesOf('AddWallet', module)
       />
     </div>
   ));
-

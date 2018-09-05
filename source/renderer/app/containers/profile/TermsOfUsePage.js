@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+
 import TopBar from '../../components/layout/TopBar';
 import TopBarLayout from '../../components/layout/TopBarLayout';
 import TermsOfUseForm from '../../components/profile/terms-of-use/TermsOfUseForm';

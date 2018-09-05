@@ -65,13 +65,10 @@ export class EtcApi {
   }
 
   getWallets = (): Promise<GetWalletsResponse> => {
-    const getWallet = (id: string): Promise<Wallet> =>
-      this.getAccountBalance(id).then(amount =>
-        getEtcWalletData(id)
+    const getWallet = (id: string): Promise<Wallet> => this.getAccountBalance(id).then(amount => getEtcWalletData(id)
           .then(walletData => new Wallet({ ...walletData, id, amount }))
           .catch(
-            () =>
-              new Wallet({
+            () => new Wallet({
                 id,
                 amount,
                 name: 'Untitled Wallet (*)',

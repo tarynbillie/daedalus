@@ -5,8 +5,10 @@ import { defineMessages, intlShape } from 'react-intl';
 import SVGInline from 'react-svg-inline';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import QRCode from 'qrcode.react';
+
 import BorderedBox from '../../widgets/BorderedBox';
 import iconCopy from '../../../assets/images/clipboard-ic.inline.svg';
+
 import styles from './WalletReceiveEtc.scss';
 
 const messages = defineMessages({
@@ -39,10 +41,10 @@ export default class WalletReceive extends Component<Props> {
     const { intl } = this.context;
 
     // Get QRCode color value from active theme's CSS variable
-    const qrCodeBackgroundColor = document.documentElement ?
-      document.documentElement.style.getPropertyValue('--theme-receive-qr-code-background-color') : 'transparent';
-    const qrCodeForegroundColor = document.documentElement ?
-      document.documentElement.style.getPropertyValue('--theme-receive-qr-code-foreground-color') : '#000';
+    const qrCodeBackgroundColor = document.documentElement
+      ? document.documentElement.style.getPropertyValue('--theme-receive-qr-code-background-color') : 'transparent';
+    const qrCodeForegroundColor = document.documentElement
+      ? document.documentElement.style.getPropertyValue('--theme-receive-qr-code-foreground-color') : '#000';
 
     return (
       <div className={styles.component}>

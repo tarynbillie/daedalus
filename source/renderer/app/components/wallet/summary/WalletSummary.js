@@ -3,11 +3,13 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { defineMessages, intlShape } from 'react-intl';
 import SVGInline from 'react-svg-inline';
+
 import adaSymbolBig from '../../../assets/images/ada-symbol-big-dark.inline.svg';
 import adaSymbolSmallest from '../../../assets/images/ada-symbol-smallest-dark.inline.svg';
 import BorderedBox from '../../widgets/BorderedBox';
 import { DECIMAL_PLACES_IN_ADA } from '../../../config/numbersConfig';
 import type { UnconfirmedAmount } from '../../../types/unconfirmedAmountType';
+
 import styles from './WalletSummary.scss';
 
 const messages = defineMessages({
@@ -60,23 +62,33 @@ export default class WalletSummary extends Component<Props> {
             {amount}
             <SVGInline svg={adaSymbolBig} className={styles.currencySymbolBig} />
           </div>
-          {pendingAmount.incoming.greaterThan(0) &&
+          {pendingAmount.incoming.greaterThan(0)
+            && (
             <div className={styles.pendingConfirmation}>
               {`${intl.formatMessage(messages.pendingIncomingConfirmationLabel)}`}
-              : {pendingAmount.incoming.toFormat(DECIMAL_PLACES_IN_ADA)}
+              :
+              {' '}
+              {pendingAmount.incoming.toFormat(DECIMAL_PLACES_IN_ADA)}
               <SVGInline svg={adaSymbolSmallest} className={styles.currencySymbolSmallest} />
             </div>
+)
           }
-          {pendingAmount.outgoing.greaterThan(0) &&
+          {pendingAmount.outgoing.greaterThan(0)
+            && (
             <div className={styles.pendingConfirmation}>
               {`${intl.formatMessage(messages.pendingOutgoingConfirmationLabel)}`}
-              : {pendingAmount.outgoing.toFormat(DECIMAL_PLACES_IN_ADA)}
+              :
+              {' '}
+              {pendingAmount.outgoing.toFormat(DECIMAL_PLACES_IN_ADA)}
               <SVGInline svg={adaSymbolSmallest} className={styles.currencySymbolSmallest} />
             </div>
+)
           }
           {!isLoadingTransactions ? (
             <div className={styles.numberOfTransactions}>
-              {intl.formatMessage(messages.transactionsLabel)}: {numberOfTransactions}
+              {intl.formatMessage(messages.transactionsLabel)}
+:
+              {numberOfTransactions}
             </div>
           ) : null}
         </BorderedBox>

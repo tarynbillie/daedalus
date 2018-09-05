@@ -2,8 +2,10 @@
 import React, { Component } from 'react';
 import { defineMessages, intlShape } from 'react-intl';
 import classNames from 'classnames';
+
 import spinnerIcon from '../../assets/images/top-bar/node-sync-spinner.png';
 import syncedIcon from '../../assets/images/top-bar/node-sync-synced.png';
+
 import styles from './NodeSyncStatusIcon.scss';
 
 const messages = defineMessages({

@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
+
 import styles from './SettingsMenuItem.scss';
 
 type Props = {

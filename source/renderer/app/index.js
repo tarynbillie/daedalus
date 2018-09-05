@@ -9,8 +9,10 @@ import hr from 'react-intl/locale-data/hr';
 import ja from 'react-intl/locale-data/ja';
 import { RouterStore, syncHistoryWithStore } from 'mobx-react-router';
 import { hashHistory } from 'react-router';
-import App from './App';
+
 import environment from '../../common/environment';
+
+import App from './App';
 import setupStores from './stores';
 import actions from './actions';
 import utils from './utils';

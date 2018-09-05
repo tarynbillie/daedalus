@@ -3,7 +3,9 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import SVGInline from 'react-svg-inline';
 import Dropzone from 'react-dropzone';
+
 import attachIcon from '../../../assets/images/attach-ic.inline.svg';
+
 import styles from './FileUploadWidget.scss';
 
 type Props = {

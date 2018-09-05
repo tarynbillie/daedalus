@@ -12,15 +12,16 @@ import { BigNumber } from 'bignumber.js';
 
 import { ReactToolboxMobxForm } from '../../utils/ReactToolboxMobxForm';
 import { submitOnEnter } from '../../utils/form';
-import AmountInputSkin from './skins/AmountInputSkin';
 import BorderedBox from '../widgets/BorderedBox';
 import LoadingSpinner from '../widgets/LoadingSpinner';
-import styles from './WalletSendForm.scss';
 import globalMessages from '../../i18n/global-messages';
-import WalletSendConfirmationDialog from './WalletSendConfirmationDialog';
 import WalletSendConfirmationDialogContainer from '../../containers/wallet/dialogs/WalletSendConfirmationDialogContainer';
 import { formattedAmountToBigNumber, formattedAmountToNaturalUnits } from '../../utils/formatters';
 import { FORM_VALIDATION_DEBOUNCE_WAIT } from '../../config/timingConfig';
+
+import WalletSendConfirmationDialog from './WalletSendConfirmationDialog';
+import styles from './WalletSendForm.scss';
+import AmountInputSkin from './skins/AmountInputSkin';
 
 export const messages = Object.assign({}, defineMessages({
   titleLabel: {

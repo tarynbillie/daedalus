@@ -3,6 +3,7 @@ import { storiesOf } from '@storybook/react';
 import { BigNumber } from 'bignumber.js';
 import moment from 'moment';
 import React from 'react';
+
 import WalletTransactionsList from '../../source/renderer/app/components/wallet/transactions/WalletTransactionsList';
 import { transactionStates, transactionTypes } from '../../source/renderer/app/domains/WalletTransaction';
 import { formattedWalletAmount } from '../../source/renderer/app/utils/ada/formatters';
