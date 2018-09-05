@@ -84,14 +84,17 @@
     "promise/no-native": 0,
     "promise/param-names": 2,
     "quotes": 1,
+    "react/button-has-type": "warn",
+    "react/destructuring-assignment": "off",
     "react/jsx-closing-bracket-location": 1,
     "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
     "react/jsx-indent": 1,
     "react/jsx-no-bind": "warn",
     "react/no-array-index-key": 0,
     "react/no-unused-prop-types": "off",
-    "react/prefer-stateless-function": "off",
+    "react/prefer-stateless-function": "warn",
     "react/prop-types": 0,
+    "react/require-default-props": "warn",
     "react/sort-comp": 0,
     "spaced-comment": 1
   }

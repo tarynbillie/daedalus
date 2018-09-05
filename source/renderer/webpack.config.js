@@ -1,9 +1,10 @@
 const path = require('path');
+
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const AutoDllPlugin = require('autodll-webpack-plugin');
 const yamljs = require('yamljs');
 const FlowWebpackPlugin = require('flow-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const reportUrl = yamljs.parseFile('launcher-config.yaml').reportServer;
 
@@ -12,7 +13,7 @@ module.exports = {
   entry: './source/renderer/index.js',
   output: {
     path: path.join(__dirname, './dist/renderer'),
-    filename: 'index.js'
+    filename: 'index.js',
   },
   // https://github.com/chentsulin/webpack-target-electron-renderer#how-this-module-works
   target: 'electron-renderer',
@@ -20,8 +21,8 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.node'],
     alias: {
-      'scrypt.js$': path.resolve(__dirname, '..', '..', 'node_modules/scrypt.js/js.js')
-    }
+      'scrypt.js$': path.resolve(__dirname, '..', '..', 'node_modules/scrypt.js/js.js'),
+    },
   },
   module: {
     rules: [
@@ -44,21 +45,19 @@ module.exports = {
       },
       {
         test: /\.scss/,
-        use: ExtractTextPlugin.extract({
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                sourceMap: true,
-                modules: true,
-                localIdentName: '[name]_[local]',
-                importLoaders: true,
-              }
+        use: [
+          { loader: MiniCssExtractPlugin.loader },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+              modules: true,
+              localIdentName: '[name]_[local]',
+              importLoaders: true,
             },
-            { loader: 'sass-loader', options: { sourceMap: true } }
-          ],
-          fallback: 'style-loader'
-        })
+          },
+          { loader: 'sass-loader', options: { sourceMap: true } },
+        ],
       },
       {
         test: /\.inline\.svg$/,
@@ -71,28 +70,25 @@ module.exports = {
           loader: 'file-loader',
           options: {
             name: '[name]-[hash].[ext]',
-            outputPath: 'assets/'
-          }
-        }
+            outputPath: 'assets/',
+          },
+        },
       },
       {
         test: /\.md$/,
-        use: [
-          { loader: 'html-loader', options: { importLoaders: true } },
-          { loader: 'markdown-loader?gfm=false' },
-        ]
+        use: [{ loader: 'html-loader', options: { importLoaders: true } }, { loader: 'markdown-loader?gfm=false' }],
       },
       {
         test: /(pdfkit|linebreak|fontkit|unicode|brotli|png-js).*\.js$/,
         use: {
           loader: 'transform-loader?brfs',
-        }
+        },
       },
-    ]
+    ],
   },
   plugins: [
     // Set the ExtractTextPlugin output filename
-    new ExtractTextPlugin('styles.css', { allChunks: true }),
+    new MiniCssExtractPlugin({ filename: 'styles.css' }),
     new webpack.DefinePlugin({
       'process.env.API': JSON.stringify(process.env.API || 'ada'),
       'process.env.API_VERSION': JSON.stringify(process.env.API_VERSION || 'dev'),
@@ -138,9 +134,9 @@ module.exports = {
           'rxjs',
           'safe-buffer',
           'unorm',
-          'validator'
-        ]
-      }
+          'validator',
+        ],
+      },
     }),
     new FlowWebpackPlugin(),
   ].filter(Boolean),
