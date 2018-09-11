@@ -12,7 +12,6 @@
 [include]
 
 [libs]
-node_modules/mobx/lib/mobx.js.flow
 ./flow-typed/npm/
 ./flow/declarations/
 

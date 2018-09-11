@@ -70,7 +70,7 @@ storiesOf('Widgets', module)
   ))
 
   .add('MnemonicInputWidget - 9 words', () => {
-    const tokens = observable(['', '', '', '', '', '', '', '', '']);
+    const tokens = ['', '', '', '', '', '', '', '', ''];
     return (
       <MnemonicInputWidget
         label="Your Passphrase"

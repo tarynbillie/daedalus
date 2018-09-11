@@ -20,7 +20,7 @@ interface TokenFormProps {
 }
 
 @observer
-export class TokenForm extends React.PureComponent<TokenFormProps> {
+export class TokenForm extends React.Component<TokenFormProps> {
   render() {
     return (
       <BorderedBox>

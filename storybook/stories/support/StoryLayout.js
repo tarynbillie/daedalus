@@ -129,7 +129,7 @@ export default class StoryLayout extends Component<Props> {
 
   getSidebar = (
     activeSidebarCategory: string,
-    sidebarMenus: SidebarMenus,
+    sidebarMenus: ?SidebarMenus,
   ) => (
     <Sidebar
       categories={sidebarCategories}

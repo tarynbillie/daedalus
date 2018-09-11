@@ -46,10 +46,7 @@ export default class NetworkStatusStore extends RxStore {
     return this.networkStatus.syncPercentage;
   }
 
-  constructor(
-    networkStatus$: Observable<FullNetworkStatus>,
-    isSyncedAndReadyAction: Action<void>,
-  ) {
+  constructor(networkStatus$: Observable<FullNetworkStatus>, isSyncedAndReadyAction: Action<void>) {
     super();
     this._networkStatus$ = networkStatus$;
     this._isSyncedAndReadyAction = isSyncedAndReadyAction;
@@ -71,11 +68,7 @@ export default class NetworkStatusStore extends RxStore {
 
     return [
       networkStatus$.subscribe(action(status => this.networkStatus = status), console.error),
-      connectionLost$.subscribe(
-        action(() => {
-          this.hasBeenConnected = true;
-        }),
-      ),
+      connectionLost$.subscribe(action(() => (this.hasBeenConnected = true))),
       networkStatus$.pipe(take(1)).subscribe(this._logConnectionTime),
       syncCompleted$.pipe(take(1)).subscribe(() => {
         this._isSyncedAndReadyAction.trigger();
@@ -93,9 +86,8 @@ export default class NetworkStatusStore extends RxStore {
     return Date.now() - this._startTime;
   }
 
-  _logConnectionTime = () => Logger.info(
-      `========== Connected after ${this._getStartupTimeDelta()} milliseconds ==========`,
-    );
+  _logConnectionTime = () =>
+    Logger.info(`========== Connected after ${this._getStartupTimeDelta()} milliseconds ==========`);
 
   _logSyncTime = () => Logger.info(`========== Synced after ${this._getStartupTimeDelta()} milliseconds ==========`);
 

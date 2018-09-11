@@ -17,11 +17,7 @@ export type EtcStoresMap = {
   transactions: EtcTransactionsStore,
 };
 
-const etcStores: EtcStoresMap = observable({
-  wallets: null,
-  walletSettings: null,
-  transactions: null,
-});
+const etcStores = observable({});
 
 // Set up and return the stores and reset all stores to defaults
 export default action((stores, api, actions): EtcStoresMap => {

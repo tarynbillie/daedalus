@@ -16,23 +16,23 @@ type Props = InjectedContainerProps;
 export default class Root extends Component<Props> {
 
   render() {
-    const { stores, children } = this.props;
+    const { stores } = this.props;
     const { networkStatus, profile, ada } = stores;
     const wallets = stores[environment.API].wallets;
     const isAdaRedemptionPage = environment.isAdaApi() && ada.adaRedemption.isAdaRedemptionPage;
     const isPageThatDoesntNeedWallets = (
       profile.isSettingsPage || isAdaRedemptionPage
     );
+
     // Just render any page that doesn't require wallets to be loaded
     if (networkStatus.isConnected && isPageThatDoesntNeedWallets) {
-      return React.Children.only(children);
-    }
-
-    if (!networkStatus.isSynced || !wallets.hasLoadedWallets) {
+      return this.props.children;
+    } else if (!networkStatus.isSynced || !wallets.hasLoadedWallets) {
       return <LoadingPage />;
     } else if (!wallets.hasAnyWallets) {
       return <WalletAddPage />;
+    } else {
+      return this.props.children;
     }
-    return React.Children.only(children);
   }
 }

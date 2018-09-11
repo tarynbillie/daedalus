@@ -8,7 +8,7 @@ import { IntlProvider } from 'react-intl';
 
 import environment from '../../common/environment';
 
-import { Routes } from './Routes';
+import { renderRoute, rootRoute } from './Routes';
 import { daedalusTheme } from './themes/daedalus';
 import translations from './i18n/translations';
 import type { StoresMap } from './stores/index';
@@ -31,13 +31,13 @@ export default class App extends Component<{
     const themeVars = require(`./themes/daedalus/${currentTheme}.js`); // eslint-disable-line
 
     return (
-      <div>
+      <div style={{ height: '100%' }}>
         <ThemeManager variables={themeVars} />
         <Provider stores={stores} actions={actions}>
           <ThemeProvider theme={daedalusTheme}>
             <IntlProvider {...{ locale, key: locale, messages: translations[locale] }}>
               <div style={{ height: '100%' }}>
-                <Router history={history} routes={Routes} />
+                <Router history={history}>{renderRoute(rootRoute)}</Router>
                 {mobxDevTools}
                 {app.isAboutDialogOpen && <AboutDialog />}
               </div>

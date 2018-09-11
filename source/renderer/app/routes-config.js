@@ -1,4 +1,5 @@
 // @flow
+
 export const ROUTES = {
   ROOT: '/',
   STAKING: '/staking',

@@ -87,7 +87,6 @@ module.exports = {
     ],
   },
   plugins: [
-    // Set the ExtractTextPlugin output filename
     new MiniCssExtractPlugin({ filename: 'styles.css' }),
     new webpack.DefinePlugin({
       'process.env.API': JSON.stringify(process.env.API || 'ada'),
@@ -100,6 +99,7 @@ module.exports = {
     new AutoDllPlugin({
       filename: 'vendor.dll.js',
       context: path.join(__dirname, '..'),
+      inherit: true,
       entry: {
         vendor: [
           'aes-js',

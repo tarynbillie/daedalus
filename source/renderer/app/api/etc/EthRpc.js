@@ -2,7 +2,6 @@
 import { BigNumber } from 'bignumber.js';
 import { identity, pipe } from 'ramda';
 
-import { taggedError, taggedLog, tap, tapError } from '../../utils';
 import { bigNumberToHexString, hexStringToBigNumber, hexStringToNumber } from '../../utils/conversion';
 import { mapLeafs, mapValues, whenMatching } from '../../utils/functor';
 import { applyDefaults } from '../../utils/object';
@@ -73,7 +72,6 @@ export class EthRpc {
             ),
           ),
         )
-        .then(tap(taggedLog(`${desc.name}][req`)))
         .then(parameters => this._request(
             {
               hostname: this._host,
@@ -89,8 +87,7 @@ export class EthRpc {
             },
           ),
         )
-        .then(desc.deserialize || identity)
-        .then(tap(taggedLog(`${desc.name}][res`)), tapError(taggedError(`${desc.name}][err`)));
+        .then(desc.deserialize || identity);
     };
   };
 

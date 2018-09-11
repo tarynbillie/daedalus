@@ -26,7 +26,7 @@ export const TokensList = pipe(
   withStore('tokens', 'tokenStore'),
   injectIntl
 )(
-  class TokensListComponent extends React.PureComponent<
+  class TokensListComponent extends React.Component<
     { tokenStore: TokenStore, intl: IntlShape },
     TokensListState
   > {

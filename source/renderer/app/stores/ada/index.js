@@ -26,14 +26,7 @@ export type AdaStoresMap = {
   addresses: AddressesStore,
 };
 
-const adaStores = observable({
-  wallets: null,
-  transactions: null,
-  adaRedemption: null,
-  nodeUpdate: null,
-  walletSettings: null,
-  addresses: null
-});
+const adaStores = observable({});
 
 // Set up and return the stores and reset all stores to defaults
 export default action((stores, api, actions): AdaStoresMap => {
@@ -43,5 +36,6 @@ export default action((stores, api, actions): AdaStoresMap => {
     adaStores[name] = new adaStoreClasses[name](stores, api, actions);
   });
   storeNames.forEach(name => { if (adaStores[name]) adaStores[name].initialize(); });
-  return adaStores;
+  // $FlowIssue
+  return (adaStores: AdaStoresMap);
 });

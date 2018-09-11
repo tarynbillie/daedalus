@@ -73,49 +73,51 @@ const messages = defineMessages({
   submitButtonLabel: {
     id: 'bugReport.dialog.button.label',
     defaultMessage: '!!!Send request',
-    description: 'Label for the "Send request" button on the wallet settings support dialog.'
+    description: 'Label for the "Send request" button on the wallet settings support dialog.',
   },
   alternativeDescription: {
     id: 'bugReport.dialog.alternative.description',
     defaultMessage: `!!!Alternatively, to help the development team investigate the issue you are experiencing,
     you can send your support request manually. You should first download your logs.
     Please take the following steps to submit your support request:`,
-    description: 'Bug report dialog alternative description text.'
+    description: 'Bug report dialog alternative description text.',
   },
   alternativeErrorMessage: {
     id: 'bugReport.dialog.alternative.errorMessage',
     defaultMessage: '!!!There was a problem sending the support request.',
-    description: 'Bug report dialog alternative error message.'
+    description: 'Bug report dialog alternative error message.',
   },
   alternativeInstructionsStep1: {
     id: 'bugReport.dialog.alternative.instructions.step1',
-    defaultMessage: '!!!Click the Download logs button to retrieve your archived logs, and save the file on your desktop.',
-    description: 'Bug report dialog alternative instructions step one.'
+    defaultMessage:
+      '!!!Click the Download logs button to retrieve your archived logs, and save the file on your desktop.',
+    description: 'Bug report dialog alternative instructions step one.',
   },
   alternativeInstructionsStep2: {
     id: 'bugReport.dialog.alternative.instructions.step2',
-    defaultMessage: '!!!Click the Submit manually button, which will take you to the issue-reporting page on the Daedalus website.',
-    description: 'Bug report dialog alternative instructions step two.'
+    defaultMessage:
+      '!!!Click the Submit manually button, which will take you to the issue-reporting page on the Daedalus website.',
+    description: 'Bug report dialog alternative instructions step two.',
   },
   alternativeInstructionsStep3: {
     id: 'bugReport.dialog.alternative.instructions.step3',
     defaultMessage: '!!!Attach the logs to your support request, fill in your details, and submit the form.',
-    description: 'Bug report dialog alternative instructions step three.'
+    description: 'Bug report dialog alternative instructions step three.',
   },
   submitManuallyButtonLabel: {
     id: 'bugReport.dialog.alternative.submitManually.button.label',
     defaultMessage: '!!!Submit manually',
-    description: 'Label for the "Submit manually" button on the wallet settings support dialog.'
+    description: 'Label for the "Submit manually" button on the wallet settings support dialog.',
   },
   submitManuallyLink: {
     id: 'bugReport.dialog.alternative.submitManually.link',
     defaultMessage: '!!!daedaluswallet.io/problem',
-    description: 'Link to Daedalus website "Problem" page'
+    description: 'Link to Daedalus website "Problem" page',
   },
   downloadButtonLabel: {
     id: 'bugReport.dialog.alternative.download.button.label',
     defaultMessage: '!!!Download',
-    description: 'Label for the "Download" button on the wallet settings support dialog.'
+    description: 'Label for the "Download" button on the wallet settings support dialog.',
   },
 });
 
@@ -140,7 +142,6 @@ type State = {
 
 @observer
 export default class BugReportDialog extends Component<Props, State> {
-
   static contextTypes = {
     intl: intlShape.isRequired,
   };
@@ -155,10 +156,7 @@ export default class BugReportDialog extends Component<Props, State> {
   }
 
   componentWillReceiveProps(nextProps: Object) {
-    const compressedLogsFileChanged = (
-      !this.props.compressedLogsFile
-      && !!nextProps.compressedLogsFile
-    );
+    const compressedLogsFileChanged = !this.props.compressedLogsFile && !!nextProps.compressedLogsFile;
     const { compressedLogsFile } = this.state;
     if (compressedLogsFile) return false;
     if (nextProps.compressedLogsFile && compressedLogsFileChanged && !nextProps.isDownloading) {
@@ -166,55 +164,55 @@ export default class BugReportDialog extends Component<Props, State> {
     }
   }
 
-  form = new ReactToolboxMobxForm({
-    fields: {
-      email: {
-        label: this.context.intl.formatMessage(messages.emailLabel),
-        placeholder: this.context.intl.formatMessage(messages.emailPlaceholder),
-        value: '',
-        validators: [({ field }) => {
-          const email = field.value;
-          return [
-            isEmail(email),
-            this.context.intl.formatMessage(new InvalidEmailError())
-          ];
-        }]
-      },
-      subject: {
-        label: this.context.intl.formatMessage(messages.subjectLabel),
-        placeholder: this.context.intl.formatMessage(messages.subjectPlaceholder),
-        value: '',
-        validators: [({ field }) => {
-          const subject = field.value;
-          return [
-            !isEmpty(subject),
-            this.context.intl.formatMessage(new FieldRequiredError())
-          ];
-        }]
-      },
-      problem: {
-        label: this.context.intl.formatMessage(messages.problemLabel),
-        placeholder: this.context.intl.formatMessage(messages.problemPlaceholder),
-        value: '',
-        validators: [({ field }) => {
-          const problem = field.value;
-          return [
-            !isEmpty(problem),
-            this.context.intl.formatMessage(new FieldRequiredError())
-          ];
-        }]
+  form = new ReactToolboxMobxForm(
+    {
+      fields: {
+        email: {
+          label: this.context.intl.formatMessage(messages.emailLabel),
+          placeholder: this.context.intl.formatMessage(messages.emailPlaceholder),
+          value: '',
+          validators: [
+            ({ field }) => {
+              const email = field.value;
+              return [isEmail(email), this.context.intl.formatMessage(new InvalidEmailError())];
+            },
+          ],
+        },
+        subject: {
+          label: this.context.intl.formatMessage(messages.subjectLabel),
+          placeholder: this.context.intl.formatMessage(messages.subjectPlaceholder),
+          value: '',
+          validators: [
+            ({ field }) => {
+              const subject = field.value;
+              return [!isEmpty(subject), this.context.intl.formatMessage(new FieldRequiredError())];
+            },
+          ],
+        },
+        problem: {
+          label: this.context.intl.formatMessage(messages.problemLabel),
+          placeholder: this.context.intl.formatMessage(messages.problemPlaceholder),
+          value: '',
+          validators: [
+            ({ field }) => {
+              const problem = field.value;
+              return [!isEmpty(problem), this.context.intl.formatMessage(new FieldRequiredError())];
+            },
+          ],
+        },
       },
     },
-  }, {
-    options: {
-      validateOnChange: true,
-      validationDebounceWait: FORM_VALIDATION_DEBOUNCE_WAIT,
+    {
+      options: {
+        validateOnChange: true,
+        validationDebounceWait: FORM_VALIDATION_DEBOUNCE_WAIT,
+      },
     },
-  });
+  );
 
   submit = () => {
     this.form.submit({
-      onSuccess: (form) => {
+      onSuccess: form => {
         const { attachLogs, compressedLogsFile } = this.state;
         if (attachLogs && !compressedLogsFile) {
           this.props.onGetLogsAndCompress();
@@ -222,7 +220,10 @@ export default class BugReportDialog extends Component<Props, State> {
         }
         const { email, subject, problem } = form.values();
         const data = {
-          email, subject, problem, compressedLogsFile
+          email,
+          subject,
+          problem,
+          compressedLogsFile,
         };
         this.props.onSubmit(data);
       },
@@ -240,9 +241,7 @@ export default class BugReportDialog extends Component<Props, State> {
     const { intl } = this.context;
     const { attachLogs } = this.state;
     const { form } = this;
-    const {
-      logFiles, error, onDownload, isDownloading, isSubmittingBugReport
-    } = this.props;
+    const { logFiles, error, onDownload, isDownloading, isSubmittingBugReport } = this.props;
 
     const submitManuallyLink = intl.formatMessage(messages.submitManuallyLink);
 
@@ -250,20 +249,11 @@ export default class BugReportDialog extends Component<Props, State> {
     const logsPath = get(logFiles, 'path');
     const fileNames = get(logFiles, 'files');
 
-    const attachedLogsClasses = classnames([
-      styles.attachedLogs,
-      (attachLogs && logFiles) ? styles.show : null,
-    ]);
+    const attachedLogsClasses = classnames([styles.attachedLogs, attachLogs && logFiles ? styles.show : null]);
 
-    const submitButtonClasses = classnames([
-      'submitButton',
-      isSubmittingBugReport ? styles.isSubmitting : null,
-    ]);
+    const submitButtonClasses = classnames(['submitButton', isSubmittingBugReport ? styles.isSubmitting : null]);
 
-    const downloadButtonClasses = classnames([
-      'downloadButton',
-      isDownloading ? styles.isSubmitting : null,
-    ]);
+    const downloadButtonClasses = classnames(['downloadButton', isDownloading ? styles.isSubmitting : null]);
 
     const emailField = form.$('email');
     const subjectField = form.$('subject');
@@ -302,22 +292,25 @@ export default class BugReportDialog extends Component<Props, State> {
         actions={!error ? actions : alternativeActions}
         closeOnOverlayClick
         onClose={this.onClose}
-        closeButton={(
-          <DialogCloseButton
-            disabled={isSubmittingBugReport}
-            onClose={this.onClose}
-          />
-)}
+        closeButton={<DialogCloseButton disabled={isSubmittingBugReport} onClose={this.onClose} />}
       >
         {error ? (
           <div>
             <p className={styles.error}>{intl.formatMessage(messages.alternativeErrorMessage)}</p>
             <div className={styles.bugReportAlternativeText}>
-              <p><FormattedHTMLMessage {...messages.alternativeDescription} /></p>
+              <p>
+                <FormattedHTMLMessage {...messages.alternativeDescription} />
+              </p>
               <ol>
-                <li><FormattedHTMLMessage {...messages.alternativeInstructionsStep1} /></li>
-                <li><FormattedHTMLMessage {...messages.alternativeInstructionsStep2} /></li>
-                <li><FormattedHTMLMessage {...messages.alternativeInstructionsStep3} /></li>
+                <li>
+                  <FormattedHTMLMessage {...messages.alternativeInstructionsStep1} />
+                </li>
+                <li>
+                  <FormattedHTMLMessage {...messages.alternativeInstructionsStep2} />
+                </li>
+                <li>
+                  <FormattedHTMLMessage {...messages.alternativeInstructionsStep3} />
+                </li>
               </ol>
             </div>
           </div>
@@ -356,9 +349,7 @@ export default class BugReportDialog extends Component<Props, State> {
 
             <div className={styles.logsWrapper}>
               <div className={styles.logsSwitch}>
-                <div className={styles.logsSwitchlabel}>
-                  {intl.formatMessage(messages.logsSwitchLabel)}
-                </div>
+                <div className={styles.logsSwitchlabel}>{intl.formatMessage(messages.logsSwitchLabel)}</div>
 
                 <Checkbox
                   themeId={IDENTIFIERS.SWITCH}
@@ -372,8 +363,10 @@ export default class BugReportDialog extends Component<Props, State> {
               {logsExist && (
                 <div className={attachedLogsClasses}>
                   <p className={styles.logPath}>{logsPath}</p>
-                  {map(fileNames, (fileName) => (
-                    <p className={styles.logFileName} key={fileName}>{fileName}</p>
+                  {map(fileNames, fileName => (
+                    <p className={styles.logFileName} key={fileName}>
+                      {fileName}
+                    </p>
                   ))}
                 </div>
               )}

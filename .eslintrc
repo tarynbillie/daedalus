@@ -36,6 +36,7 @@
     "function-paren-newline": 0,
     "generator-star-spacing": "off",
     "global-require": "off",
+    "implicit-arrow-linebreak": "off",
     "import/default": "error",
     "import/extensions": 0,
     "import/first": "error",

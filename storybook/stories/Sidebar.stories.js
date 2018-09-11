@@ -4,6 +4,7 @@ import { observable, runInAction } from 'mobx';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
+import type { SidebarMenus } from '../../source/renderer/app/components/sidebar/Sidebar';
 import Sidebar from '../../source/renderer/app/components/sidebar/Sidebar';
 import walletsIcon from '../../source/renderer/app/assets/images/sidebar/wallet-ic.inline.svg';
 import settingsIcon from '../../source/renderer/app/assets/images/sidebar/settings-ic.inline.svg';
@@ -23,12 +24,12 @@ const SIDEBAR_CATEGORIES = [
   }
 ];
 
-const sidebarMenus = observable({
+const sidebarMenus: SidebarMenus = {
   wallets: {
     items: [
-      { id: '1', title: 'First', info: '100 ADA', isConnected: true },
-      { id: '2', title: 'Second', info: '200 ADA', isConnected: true },
-      { id: '3', title: 'Third', info: '300 ADA', isConnected: true },
+      { id: '1', title: 'First', info: '100 ADA', isConnected: true, isRestoreActive: false, restoreProgress: 0 },
+      { id: '2', title: 'Second', info: '200 ADA', isConnected: true, isRestoreActive: false, restoreProgress: 0 },
+      { id: '3', title: 'Third', info: '300 ADA', isConnected: true, isRestoreActive: false, restoreProgress: 0 },
     ],
     activeWalletId: '1',
     actions: {
@@ -38,7 +39,7 @@ const sidebarMenus = observable({
       }
     }
   }
-});
+};
 
 let emptyMenus;
 
@@ -82,7 +83,7 @@ storiesOf('Sidebar', module)
     <Sidebar
       categories={SIDEBAR_CATEGORIES}
       activeSidebarCategory={SIDEBAR_CATEGORIES[0].route}
-      menus={sidebarMenus}
+      menus={observable(sidebarMenus)}
       onCategoryClicked={action('onCategoryClicked')}
       isShowingSubMenus
       isDialogOpen={() => false}

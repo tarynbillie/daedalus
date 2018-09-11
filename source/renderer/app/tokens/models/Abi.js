@@ -28,6 +28,8 @@ export const signatureOf = (abiEntry: ContractEventAbi | ContractFunctionAbi): s
 
 export const topicOf = (eventAbi: ContractEventAbi): string => utils.sha3(signatureOf(eventAbi));
 
-export const onlyFunctions = (abi: ContractAbi): ContractFunctionAbi[] => filter(member => member.type === 'function', abi);
+// $FlowIssue
+export const onlyFunctions: ContractMemberAbi[] => ContractFunctionAbi[] = filter(member => member.type === 'function');
 
-export const onlyEvents = (abi: ContractAbi): ContractEventAbi[] => filter(member => member.type === 'event', abi);
+// $FlowIssue
+export const onlyEvents: ContractMemberAbi[] => ContractFunctionAbi[] = filter(member => member.type === 'event');

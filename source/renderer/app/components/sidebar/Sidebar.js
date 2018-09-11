@@ -17,7 +17,7 @@ import SidebarCategory from './SidebarCategory';
 import SidebarWalletsMenu from './wallets/SidebarWalletsMenu';
 
 type Props = {
-  menus: SidebarMenus,
+  menus: ?SidebarMenus,
   categories: SidebarCategories,
   activeSidebarCategory: string,
   onCategoryClicked: Function,
@@ -27,7 +27,7 @@ type Props = {
   onSubmitSupportRequest: Function,
 };
 
-export type SidebarMenus = ?{
+export type SidebarMenus = {
   wallets: {
     items: Array<SidebarWalletType>,
     activeWalletId: ?string,

@@ -53,21 +53,7 @@ export type StoresMap = {
   tokens: TokenStores,
 };
 
-// Constant that does never change during lifetime
-const stores = observable({
-  profile: null,
-  router: null,
-  app: null,
-  sidebar: null,
-  walletBackup: null,
-  window: null,
-  uiDialogs: null,
-  uiNotifications: null,
-  networkStatus: null,
-  ada: null,
-  etc: null,
-  tokens: null,
-});
+const stores = observable({});
 
 const CHECK_INTERVAL = 2000;
 const getConnectionStatus = (ethRpc: EthRpc) => environment.isDev()
@@ -84,6 +70,7 @@ export default action(
     // All other stores have our lifecycle
     Object.keys(storeClasses).forEach(name => {
       if (stores[name]) stores[name].teardown();
+      // $FlowIssue
       stores[name] = new storeClasses[name](stores, api, actions);
       stores[name].initialize();
     });

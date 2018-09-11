@@ -1,6 +1,7 @@
 // @flow
+import createBrowserHistory from 'history/createBrowserHistory';
 import React from 'react';
-import { action, useStrict } from 'mobx';
+import { action } from 'mobx';
 import { render } from 'react-dom';
 import { addLocaleData } from 'react-intl';
 import en from 'react-intl/locale-data/en';
@@ -8,7 +9,6 @@ import de from 'react-intl/locale-data/de';
 import hr from 'react-intl/locale-data/hr';
 import ja from 'react-intl/locale-data/ja';
 import { RouterStore, syncHistoryWithStore } from 'mobx-react-router';
-import { hashHistory } from 'react-router';
 
 import environment from '../../common/environment';
 
@@ -21,16 +21,13 @@ import translations from './i18n/translations';
 import './themes/index.global.scss';
 import { setupApi } from './api/index';
 
-// run MobX in strict mode
-useStrict(true);
-
 // https://github.com/yahoo/react-intl/wiki#loading-locale-data
 addLocaleData([en, de, hr, ja]);
 
 const initializeDaedalus = () => {
   const api = setupApi();
   const router = new RouterStore();
-  const history = syncHistoryWithStore(hashHistory, router);
+  const history = syncHistoryWithStore(createBrowserHistory(), router);
   const stores = setupStores(api, actions, router);
 
   window.daedalus = {
