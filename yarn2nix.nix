@@ -26,19 +26,19 @@ let
     main = "main/index.js";
   };
   newPackagePath = builtins.toFile "package.json" (builtins.toJSON newPackage);
-  windowsElectronVersion = "3.0.14";
+  windowsElectronVersion = "4.1.0";
   windowsElectron = fetchurl {
     url = "https://github.com/electron/electron/releases/download/v${windowsElectronVersion}/electron-v${windowsElectronVersion}-win32-x64.zip";
-    sha256 = "0cqwjmv1ymwa309v025szs6681f891s6ks653jd5mh55hp1vpn0b";
+    sha256 = "12civ34di87w467g0ckv2v6prrh25kfciy24jw1js4brwvkbpn87";
   };
   checksums = fetchurl {
     url = "https://github.com/electron/electron/releases/download/v${windowsElectronVersion}/SHASUMS256.txt";
-    sha256 = "103m5kxgb64clx68qqfvxdz2pah249lk344mjxqj94i83v9bxd2j";
+    sha256 = "02lil23id40pdyjqgfrw5qnp7g7pqbzd7hq6scj719a1v1l84hnf";
   };
   electron-cache = runCommand "electron-cache" {} ''
     mkdir $out
-    ln -s ${windowsElectron} $out/electron-v3.0.14-win32-x64.zip
-    ln -s ${checksums} $out/SHASUMS256.txt-3.0.14
+    ln -s ${windowsElectron} $out/electron-v${windowsElectronVersion}-win32-x64.zip
+    ln -s ${checksums} $out/SHASUMS256.txt-${windowsElectronVersion}
   '';
   filter = name: type: let
     baseName = baseNameOf (toString name);
