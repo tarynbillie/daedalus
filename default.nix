@@ -216,7 +216,7 @@ let
     electron4 = pkgs.callPackage ./installers/nix/electron.nix {};
     electron3 = self.electron4.overrideAttrs (old: rec {
       name = "electron-${version}";
-      version = "3.1.6";
+      version = "4.1.0";
       src = {
         x86_64-linux = pkgs.fetchurl {
           url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-x64.zip";
