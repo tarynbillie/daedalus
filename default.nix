@@ -216,11 +216,11 @@ let
     electron4 = pkgs.callPackage ./installers/nix/electron.nix {};
     electron3 = self.electron4.overrideAttrs (old: rec {
       name = "electron-${version}";
-      version = "3.0.14";
+      version = "3.1.6";
       src = {
         x86_64-linux = pkgs.fetchurl {
           url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-x64.zip";
-          sha256 = "0wha13dbb8553h9c7kvpnrjj5c6wizr441s81ynmkfbfybg697p7";
+          sha256 = "17ni93m9sdqzyxn0472d24y9dwznhyhfmsy4w5n5j86ys3yrfrmi";
         };
       }.${pkgs.stdenv.hostPlatform.system} or throwSystem;
     });
