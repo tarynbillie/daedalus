@@ -109,8 +109,12 @@ export default class DelegationSetupWizardDialogContainer extends Component<
     this.handleContinue();
   };
 
-  handleActivate = () => {
+  handleActivate = (data) => {
     // @TODO - proceed activation data
+    const { staking } = this.props.stores;
+    const { selectedWalletId, selectedPoolId } = this.state;
+
+    staking.delegateWalletFunds(selectedWalletId, data.total, selectedPoolId);
     this.handleDialogClose();
   };
 
@@ -128,11 +132,14 @@ export default class DelegationSetupWizardDialogContainer extends Component<
     const { activeStep, selectedWalletId, selectedPoolId } = this.state;
     const { app, staking, wallets, profile } = this.props.stores;
     const { currentTheme } = profile;
-    const { stakePools, delegatingStakePools } = staking;
+    const { stakePools, delegatingStakePools, delegationData, delegatedFunds } = staking;
 
     let setupDisabled = true;
     const walletsData = map(wallets.all, wallet => {
       const value = formattedWalletAmount(wallet.amount);
+      const valueWithoutCurrency = formattedWalletAmount(wallet.amount, false);
+      const fee = parseFloat(valueWithoutCurrency.replace(/,/g, '')) * 0.000000123;
+
       const isAcceptableSetupWallet = parseFloat(value) > MIN_DELEGATION_FUNDS;
 
       // Setup enabled if at least one wallet has more that 1 ADA
@@ -144,6 +151,8 @@ export default class DelegationSetupWizardDialogContainer extends Component<
         id: wallet.id,
         label: wallet.name,
         value,
+        valueWithoutCurrency,
+        fee: fee.toFixed(6),
         isAcceptableSetupWallet,
         hasPassword: wallet.hasPassword,
       };

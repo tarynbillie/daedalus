@@ -45,8 +45,8 @@ type WindowOptionsType = {
 export const createMainWindow = (locale: string) => {
   const windowOptions: WindowOptionsType = {
     show: false,
-    width: 1150,
-    height: 870,
+    width: 1280,
+    height: 720,
     webPreferences: {
       nodeIntegration: isTest,
       webviewTag: false,
@@ -67,6 +67,7 @@ export const createMainWindow = (locale: string) => {
 
   const { minWindowsWidth, minWindowsHeight } = getContentMinimumSize(window);
   window.setMinimumSize(minWindowsWidth, minWindowsHeight);
+  window.setPosition(0, 0);
 
   // Initialize our ipc api methods that can be called by the render processes
   ipcApi({ window });

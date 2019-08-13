@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
+import { map, includes, find } from 'lodash';
 import { defineMessages, intlShape } from 'react-intl';
 import { rangeMap } from '../../../utils/rangeMap';
 import Wallet from '../../../domains/Wallet';
@@ -27,12 +28,12 @@ export default class DelegationCenterBody extends Component<Props> {
   };
 
   getIndex = (ranking: number) => {
-    const { wallets } = this.props;
+    const { wallets, delegatedWallets } = this.props;
 
     return rangeMap(
       ranking,
       1,
-      wallets.filter(wallet => wallet.isDelegated).length,
+      delegatedWallets.length,
       0,
       99
     );
@@ -40,7 +41,9 @@ export default class DelegationCenterBody extends Component<Props> {
 
   render() {
     const { intl } = this.context;
-    const { wallets, onDelegate } = this.props;
+    const { wallets, onDelegate, delegatedWallets, onSelectDelegatedWalletActionOption } = this.props;
+
+    const delegatedWalletsIds = map(delegatedWallets, wallet => wallet.walletId);
 
     const title = intl.formatMessage(messages.bodyTitle);
 
@@ -51,16 +54,22 @@ export default class DelegationCenterBody extends Component<Props> {
         </div>
         <div className={styles.mainContent}>
           {wallets.map(wallet => {
-            if (wallet.isDelegated && wallet.delegatedStakePool) {
-              const index = this.getIndex(wallet.delegatedStakePool.ranking);
-              return (
-                <WalletRow
-                  key={wallet.id}
-                  wallet={wallet}
-                  index={index}
-                  onDelegate={onDelegate}
-                />
-              );
+            const isDelegated = includes(delegatedWalletsIds, wallet.id);
+            if (isDelegated) {
+              const delegatedWallet = find(delegatedWallets, data => data.walletId === wallet.id);
+              if (delegatedWallet) {
+                return (
+                  <WalletRow
+                    key={wallet.id}
+                    wallet={wallet}
+                    index={delegatedWallet.selectedPool.ranking}
+                    isDelegated
+                    delegatedStakePool={delegatedWallet.selectedPool}
+                    onDelegate={onDelegate}
+                    onSelectDelegatedWalletActionOption={onSelectDelegatedWalletActionOption}
+                  />
+                );
+              }
             }
             return (
               <WalletRow

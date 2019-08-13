@@ -110,6 +110,7 @@ export default class DelegationSetupWizardDialog extends Component<Props> {
         content = (
           <DelegationStepsConfirmationDialog
             stepsList={stepsList}
+            selectedWallet={selectedWallet}
             isSpendingPasswordSet={selectedWalletHasPassword}
             onClose={onClose}
             onConfirm={onConfirm}
@@ -121,6 +122,7 @@ export default class DelegationSetupWizardDialog extends Component<Props> {
         content = (
           <DelegationStepsActivationDialog
             stepsList={stepsList}
+            selectedWallet={selectedWallet}
             isSpendingPasswordSet={selectedWalletHasPassword}
             onClose={onClose}
             onActivate={onActivate}

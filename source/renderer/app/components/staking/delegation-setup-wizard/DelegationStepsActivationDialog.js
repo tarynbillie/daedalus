@@ -152,13 +152,13 @@ export default class DelegationStepsActivationDialog extends Component<Props> {
   submit = () => {
     this.form.submit({
       onSuccess: form => {
-        const { isSpendingPasswordSet } = this.props;
+        const { isSpendingPasswordSet, selectedWallet } = this.props;
         const { spendingPassword } = form.values();
         const password = isSpendingPasswordSet ? spendingPassword : null;
         const data = {
-          fees: 12.042481,
-          amount: 3,
-          total: 15.042481,
+          fees: selectedWallet.fee,
+          amount: parseFloat(selectedWallet.valueWithoutCurrency) - selectedWallet.fee,
+          total: selectedWallet.valueWithoutCurrency,
           password,
         };
         this.props.onActivate(data);
@@ -173,7 +173,7 @@ export default class DelegationStepsActivationDialog extends Component<Props> {
   render() {
     const { form } = this;
     const { intl } = this.context;
-    const { isSpendingPasswordSet, onBack, onClose, stepsList } = this.props;
+    const { isSpendingPasswordSet, onBack, onClose, stepsList, selectedWallet } = this.props;
 
     const spendingPasswordField = form.$('spendingPassword');
 
@@ -206,6 +206,8 @@ export default class DelegationStepsActivationDialog extends Component<Props> {
         }}
       />
     );
+
+    const calculatedAmount = parseFloat(selectedWallet.valueWithoutCurrency.replace(/,/g, '')) - parseFloat(selectedWallet.fee);
 
     return (
       <Dialog
@@ -248,7 +250,7 @@ export default class DelegationStepsActivationDialog extends Component<Props> {
                 {intl.formatMessage(messages.amountLabel)}
               </p>
               <p className={styles.amount}>
-                3<span> ADA</span>
+                {calculatedAmount.toLocaleString('en')}<span> ADA</span>
               </p>
             </div>
 
@@ -257,7 +259,7 @@ export default class DelegationStepsActivationDialog extends Component<Props> {
                 {intl.formatMessage(messages.feesLabel)}
               </p>
               <p className={styles.amount}>
-                + 12.042481<span> ADA</span>
+                + {selectedWallet.fee}<span> ADA</span>
               </p>
             </div>
           </div>
@@ -267,7 +269,7 @@ export default class DelegationStepsActivationDialog extends Component<Props> {
               {intl.formatMessage(messages.totalLabel)}
             </p>
             <p className={styles.amount}>
-              15.042481<span> ADA</span>
+              {selectedWallet.valueWithoutCurrency}<span> ADA</span>
             </p>
           </div>
 

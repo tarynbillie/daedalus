@@ -94,6 +94,11 @@ export default class WalletRow extends Component<Props> {
     this.props.onDelegate(wallet.id);
   };
 
+  onSelectDelegatedWalletActionOption = (option) => {
+    const { wallet } = this.props;
+    this.props.onSelectDelegatedWalletActionOption(option, wallet.id);
+  };
+
   render() {
     const { intl } = this.context;
     const {
@@ -101,10 +106,10 @@ export default class WalletRow extends Component<Props> {
         name,
         amount,
         inactiveStakePercentage,
-        isDelegated,
-        delegatedStakePool,
       },
       index,
+      isDelegated,
+      delegatedStakePool,
     } = this.props;
 
     const inactiveStakePercentageValue = inactiveStakePercentage || 0;
@@ -171,7 +176,7 @@ export default class WalletRow extends Component<Props> {
                     <SVGInline svg={settingsIcon} className={styles.gearIcon} />
                   }
                   menuItems={delegatedWalletActionOptions}
-                  onMenuItemClick={() => null}
+                  onMenuItemClick={(item) => this.onSelectDelegatedWalletActionOption(item)}
                 />
               )}
             </div>

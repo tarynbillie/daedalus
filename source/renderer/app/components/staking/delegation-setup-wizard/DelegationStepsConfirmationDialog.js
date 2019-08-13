@@ -128,7 +128,7 @@ export default class DelegationStepsConfirmationDialog extends Component<Props> 
         const { spendingPassword } = form.values();
         const password = isSpendingPasswordSet ? spendingPassword : null;
         const data = {
-          fees: 0.172081,
+          fees: 1.02,
           password,
         };
         this.props.onConfirm(data);
@@ -142,7 +142,7 @@ export default class DelegationStepsConfirmationDialog extends Component<Props> 
   render() {
     const { form } = this;
     const { intl } = this.context;
-    const { isSpendingPasswordSet, onBack, onClose, stepsList } = this.props;
+    const { isSpendingPasswordSet, onBack, onClose, stepsList, selectedWallet } = this.props;
 
     const spendingPasswordField = form.$('spendingPassword');
 
@@ -206,7 +206,7 @@ export default class DelegationStepsConfirmationDialog extends Component<Props> 
               {intl.formatMessage(messages.feesLabel)}
             </p>
             <p className={styles.feesAmount}>
-              0.172081<span> ADA</span>
+              {selectedWallet.fee}<span> ADA</span>
             </p>
           </div>
 

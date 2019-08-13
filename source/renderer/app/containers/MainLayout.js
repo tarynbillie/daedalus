@@ -8,6 +8,7 @@ import NodeUpdatePage from './notifications/NodeUpdatePage';
 import PaperWalletCreateCertificatePage from './wallet/PaperWalletCreateCertificatePage';
 import type { InjectedContainerProps } from '../types/injectedPropsType';
 import { ROUTES } from '../routes-config';
+import { sidebarConfig } from '../config/sidebarConfig';
 
 @inject('stores', 'actions')
 @observer
@@ -21,7 +22,7 @@ export default class MainLayout extends Component<InjectedContainerProps> {
 
   render() {
     const { actions, stores } = this.props;
-    const { nodeUpdate, sidebar, wallets, profile } = stores;
+    const { nodeUpdate, sidebar, wallets, profile, staking } = stores;
     const { isUpdateAvailable, isUpdatePostponed } = nodeUpdate;
     const activeWallet = wallets.active;
     const activeWalletId = activeWallet ? activeWallet.id : null;
@@ -42,11 +43,14 @@ export default class MainLayout extends Component<InjectedContainerProps> {
           }
         : null;
 
+    // TODO - remove after testing
+    const categories = staking.activeDelegationCenterMenuItem === 0 ? sidebarConfig.CATEGORIES_WITH_DELEGATION_COUNTDOWN : sidebarConfig.CATEGORIES_WITHOUT_DELEGATION_COUNTDOWN
+
     const sidebarComponent = (
       <Sidebar
         menus={sidebarMenus}
         isShowingSubMenus={sidebar.isShowingSubMenus}
-        categories={sidebar.CATEGORIES}
+        categories={categories}
         activeSidebarCategory={sidebar.activeSidebarCategory}
         onCategoryClicked={category => {
           actions.sidebar.activateSidebarCategory.trigger({ category });
