@@ -68,6 +68,7 @@ export const createMainWindow = (locale: string) => {
   const { minWindowsWidth, minWindowsHeight } = getContentMinimumSize(window);
   window.setMinimumSize(minWindowsWidth, minWindowsHeight);
   window.setPosition(0, 0);
+  window.setSize(1280, 720);
 
   // Initialize our ipc api methods that can be called by the render processes
   ipcApi({ window });

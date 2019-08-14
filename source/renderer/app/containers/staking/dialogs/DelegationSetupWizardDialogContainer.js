@@ -140,7 +140,7 @@ export default class DelegationSetupWizardDialogContainer extends Component<
       const valueWithoutCurrency = formattedWalletAmount(wallet.amount, false);
       const fee = parseFloat(valueWithoutCurrency.replace(/,/g, '')) * 0.000000123;
 
-      const isAcceptableSetupWallet = parseFloat(value) > MIN_DELEGATION_FUNDS;
+      const isAcceptableSetupWallet = parseFloat(value) >= MIN_DELEGATION_FUNDS;
 
       // Setup enabled if at least one wallet has more that 1 ADA
       if (isAcceptableSetupWallet) {

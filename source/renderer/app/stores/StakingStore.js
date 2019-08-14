@@ -66,8 +66,8 @@ export default class StakingStore extends Store {
   }
 
   // TODO: Remove once testing is done
-  // 0 => Delegation Center Countdown
-  // 1 => Delegation Center
+  // 0 => Delegation Center - with countdown
+  // 1 => Delegation Center - without countdown
   @action _switchDelegationCenterMenuItem = (option) => {
     this.activeDelegationCenterMenuItem = option;
   };
