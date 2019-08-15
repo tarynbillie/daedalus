@@ -20,6 +20,7 @@ export default class StakingStore extends Store {
   // TODO: Remove once testing is done
   @observable activeDelegationCenterMenuItem = 0;
   @observable delegatedFunds = [];
+  @observable delegatingStakePools = [];
 
   setup() {
     const { staking } = this.actions;
@@ -43,10 +44,10 @@ export default class StakingStore extends Store {
     return STAKE_POOLS;
   }
 
-  @computed get delegatingStakePools(): Array<StakePool> {
-    // return this.stakePoolsRequest.result ? this.stakePoolsRequest.result : [];
-    return [STAKE_POOLS[1], STAKE_POOLS[3], STAKE_POOLS[20], STAKE_POOLS[36]];
-  }
+  // @computed get delegatingStakePools(): Array<StakePool> {
+  //   // return this.stakePoolsRequest.result ? this.stakePoolsRequest.result : [];
+  //   return this.delegatingStakePools;
+  // }
 
   @computed
   get isStakingDelegationCountdown(): boolean {
@@ -78,6 +79,8 @@ export default class StakingStore extends Store {
     selectedPoolId: string
   ) {
     const selectedPool = find(STAKE_POOLS, pool => pool.id === selectedPoolId);
+
+    this.delegatingStakePools.push(selectedPool);
 
     // Check if Wallet already delegated and reject current values
     const delegatedWallet = find(

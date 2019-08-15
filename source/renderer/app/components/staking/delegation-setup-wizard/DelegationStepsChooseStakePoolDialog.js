@@ -243,24 +243,26 @@ export default class DelegationStepsChooseStakePoolDialog extends Component<
           <div className={styles.delegatedStakePoolsWrapper}>
             {selectedPoolBlock(selectedPoolId)}
 
-            <div className={styles.delegatedStakePoolsList}>
-              <p className={styles.stakePoolsDelegatingListLabel}>
-                {intl.formatMessage(messages.delegatedPoolsLabel)}
-              </p>
-              <StakePoolsList
-                listName="stakePoolsDelegatingList"
-                stakePoolsList={stakePoolsDelegatingList}
-                onOpenExternalLink={onOpenExternalLink}
-                currentTheme={currentTheme}
-                isListActive={selectedList === 'stakePoolsDelegatingList'}
-                setListActive={this.handleSetListActive}
-                containerClassName="Dialog_content"
-                onSelect={this.handleSelect}
-                selectedPoolId={selectedPoolId}
-                showSelected
-                highlightOnHover
-              />
-            </div>
+            {stakePoolsDelegatingList.length > 0 && (
+              <div className={styles.delegatedStakePoolsList}>
+                <p className={styles.stakePoolsDelegatingListLabel}>
+                  {intl.formatMessage(messages.delegatedPoolsLabel)}
+                </p>
+                <StakePoolsList
+                  listName="stakePoolsDelegatingList"
+                  stakePoolsList={stakePoolsDelegatingList}
+                  onOpenExternalLink={onOpenExternalLink}
+                  currentTheme={currentTheme}
+                  isListActive={selectedList === 'stakePoolsDelegatingList'}
+                  setListActive={this.handleSetListActive}
+                  containerClassName="Dialog_content"
+                  onSelect={this.handleSelect}
+                  selectedPoolId={selectedPoolId}
+                  showSelected
+                  highlightOnHover
+                />
+              </div>
+            )}
           </div>
 
           <div className={styles.searchStakePoolsWrapper}>

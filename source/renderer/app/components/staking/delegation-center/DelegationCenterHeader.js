@@ -46,6 +46,10 @@ export default class DelegationCenterHeader extends Component<Props> {
     intl: intlShape.isRequired,
   };
 
+  with2Decimals = value => {
+    return value.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
+  };
+
   render() {
     const { intl } = this.context;
     const { adaValue, percentage } = this.props;
@@ -60,11 +64,17 @@ export default class DelegationCenterHeader extends Component<Props> {
       messages.descriptionFourthPart
     );
 
+    const percentageWith2Decimals = this.with2Decimals(percentage);
+
     return (
       <div className={styles.component}>
         <div className={styles.mainContent}>
           <div className={styles.progressRing}>
-            <DonutRing percentage={percentage} sqSize={44} strokeWidth={8} />
+            <DonutRing
+              percentage={percentageWith2Decimals}
+              sqSize={44}
+              strokeWidth={8}
+            />
           </div>
           <div className={styles.heading}>{heading}</div>
           <div className={styles.description}>
@@ -73,7 +83,7 @@ export default class DelegationCenterHeader extends Component<Props> {
                 {...messages.descriptionFirstPart}
                 values={{
                   adaValue: adaValue.toFormat(SIMPLE_DECIMAL_PLACES_IN_ADA),
-                  percentage,
+                  percentage: parseFloat(percentageWith2Decimals).toFixed(2),
                 }}
               />
             </p>
