@@ -15,7 +15,7 @@ export default class StakingStore extends Store {
   decentralizationProgress: number = 10;
   // adaValue: BigNumber = new BigNumber(82650.15);
   adaValue: BigNumber = new BigNumber(0);
-  percentage: number = 100;
+  percentage: number = 0;
 
   // TODO: Remove once testing is done
   @observable activeDelegationCenterMenuItem = 0;
@@ -125,7 +125,7 @@ export default class StakingStore extends Store {
       delegatedAmountsSum += parseFloat(item.amount.replace(/,/g, ''));
     });
 
-    this.percentage = 100 - (delegatedAmountsSum / walletsAmountsSum) * 100;
+    this.percentage = (delegatedAmountsSum / walletsAmountsSum) * 100;
     this.adaValue = new BigNumber(delegatedAmountsSum);
   };
 
