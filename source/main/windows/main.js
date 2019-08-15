@@ -67,7 +67,9 @@ export const createMainWindow = (locale: string) => {
 
   const { minWindowsWidth, minWindowsHeight } = getContentMinimumSize(window);
   window.setMinimumSize(minWindowsWidth, minWindowsHeight);
+  console.log('MIN ' + minWindowsWidth + ' MIN H ' + minWindowsHeight);
   window.setPosition(0, 0);
+  window.setSize(1280, 720);
 
   // Initialize our ipc api methods that can be called by the render processes
   ipcApi({ window });
@@ -111,7 +113,7 @@ export const createMainWindow = (locale: string) => {
 
   window.webContents.on('did-frame-finish-load', () => {
     if (isDev) {
-      window.webContents.openDevTools();
+      //window.webContents.openDevTools();
       // Focus the main window after dev tools opened
       window.webContents.on('devtools-opened', () => {
         window.focus();

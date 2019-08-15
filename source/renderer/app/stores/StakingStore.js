@@ -15,7 +15,7 @@ export default class StakingStore extends Store {
   decentralizationProgress: number = 10;
   // adaValue: BigNumber = new BigNumber(82650.15);
   adaValue: BigNumber = new BigNumber(0);
-  percentage: number = 0;
+  percentage: number = 100;
 
   // TODO: Remove once testing is done
   @observable activeDelegationCenterMenuItem = 0;
@@ -68,48 +68,66 @@ export default class StakingStore extends Store {
   // TODO: Remove once testing is done
   // 0 => Delegation Center Countdown
   // 1 => Delegation Center
-  @action _switchDelegationCenterMenuItem = (option) => {
+  @action _switchDelegationCenterMenuItem = option => {
     this.activeDelegationCenterMenuItem = option;
   };
 
-  @action delegateWalletFunds(walletId: string, amount: number, selectedPoolId: string) {
+  @action delegateWalletFunds(
+    walletId: string,
+    amount: number,
+    selectedPoolId: string
+  ) {
     const selectedPool = find(STAKE_POOLS, pool => pool.id === selectedPoolId);
 
     // Check if Wallet already delegated and reject current values
-    const delegatedWallet = find(this.delegatedFunds, wallet => wallet.walletId === walletId);
+    const delegatedWallet = find(
+      this.delegatedFunds,
+      wallet => wallet.walletId === walletId
+    );
     if (delegatedWallet) {
-      this.delegatedFunds = reject(this.delegatedFunds, (o) => o.walletId === walletId);
+      this.delegatedFunds = reject(
+        this.delegatedFunds,
+        o => o.walletId === walletId
+      );
     }
 
-    this.delegatedFunds = concat(this.delegatedFunds, [{
-      walletId,
-      amount,
-      selectedPool,
-    }]);
+    this.delegatedFunds = concat(this.delegatedFunds, [
+      {
+        walletId,
+        amount,
+        selectedPool,
+      },
+    ]);
     this._calculateDelegation(this.delegatedFunds);
   }
 
   @action removeDelegatedWallet = (walletId: string) => {
-    this.delegatedFunds = reject(this.delegatedFunds, (o) => o.walletId === walletId);
+    this.delegatedFunds = reject(
+      this.delegatedFunds,
+      o => o.walletId === walletId
+    );
     this._calculateDelegation(this.delegatedFunds);
-  }
+  };
 
-  _calculateDelegation = (delegatedFunds) => {
+  _calculateDelegation = delegatedFunds => {
     const wallets = this.stores.wallets.all;
     let walletsAmountsSum = 0;
     let delegatedAmountsSum = 0;
     map(wallets, wallet => {
-      const valueWithoutCurrency = formattedWalletAmount(wallet.amount, false).replace(/,/g, '');
+      const valueWithoutCurrency = formattedWalletAmount(
+        wallet.amount,
+        false
+      ).replace(/,/g, '');
       walletsAmountsSum += parseFloat(valueWithoutCurrency);
-    })
+    });
 
     map(this.delegatedFunds, item => {
       delegatedAmountsSum += parseFloat(item.amount.replace(/,/g, ''));
-    })
+    });
 
-    this.percentage = (delegatedAmountsSum / walletsAmountsSum) * 100;
+    this.percentage = 100 - (delegatedAmountsSum / walletsAmountsSum) * 100;
     this.adaValue = new BigNumber(delegatedAmountsSum);
-  }
+  };
 
   _goToStakingPage = () => {
     this.actions.router.goToRoute.trigger({
